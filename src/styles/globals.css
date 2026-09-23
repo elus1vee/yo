@@ -24,6 +24,7 @@
   --color-primary-light: var(--color-primary-light);
   --color-primary-tint: var(--color-primary-tint);
   --color-primary-tint-hover: var(--color-primary-tint-hover);
+  --color-primary-tint-active: var(--color-primary-tint-active);
 
   --color-dark-hover: var(--color-dark-hover);
 
@@ -71,6 +72,7 @@
 
   /* ---- Radii ---- */
   --radius-sm: var(--radius-sm);
+  --radius-field: var(--radius-field);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
   --radius-xl: var(--radius-xl);
@@ -81,6 +83,9 @@
   --shadow-md: var(--shadow-md);
   --shadow-hover: var(--shadow-hover);
   --shadow-lg: var(--shadow-lg);
+  --shadow-focus-button: var(--shadow-focus-button);
+  --shadow-focus-field: var(--shadow-focus-field);
+  --shadow-error-field: var(--shadow-error-field);
 
   /*
    * ---- Breakpoints ----

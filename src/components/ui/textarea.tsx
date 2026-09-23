@@ -4,8 +4,8 @@ import { type ComponentProps, type ReactNode } from "react";
 import { cn, type SafeProps } from "@/lib/utils";
 import { Field, fieldControlClass, useFieldA11y } from "./field";
 
-export interface InputProps extends SafeProps<
-  Omit<ComponentProps<"input">, "children">
+export interface TextareaProps extends SafeProps<
+  Omit<ComponentProps<"textarea">, "children">
 > {
   label?: ReactNode;
   hint?: string;
@@ -13,15 +13,16 @@ export interface InputProps extends SafeProps<
   error?: string;
 }
 
-export function Input({
+export function Textarea({
   label,
   hint,
   error,
   id,
+  rows = 4,
   className,
   "aria-describedby": describedBy,
   ...props
-}: InputProps) {
+}: TextareaProps) {
   const { fieldId, errorId, hintId, controlProps } = useFieldA11y({
     id,
     error,
@@ -38,12 +39,13 @@ export function Input({
       error={error}
       errorId={errorId}
     >
-      <input
+      <textarea
+        rows={rows}
         {...props}
         {...controlProps}
         className={cn(
           fieldControlClass(Boolean(error)),
-          "tablet:h-[52px] tablet:px-[18px] h-[50px] px-4",
+          "tablet:px-[18px] tablet:py-4 resize-none px-4 py-3.5",
           className,
         )}
       />

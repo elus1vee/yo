@@ -29,6 +29,7 @@
   --color-primary-light: #a3b194; /* accent on dark, tags */
   --color-primary-tint: #e3e8da; /* secondary buttons, active menu item */
   --color-primary-tint-hover: #d3dbc5;
+  --color-primary-tint-active: #c4cdb4; /* active of secondary button */
 
   --color-dark-hover: #2e2a24; /* hover of dark "Подробнее" button */
 
@@ -99,6 +100,7 @@
    * value per tier until components are built.
    */
   --radius-sm: 0.625rem; /* 10px · form fields, small pills */
+  --radius-field: 0.875rem; /* 14px · inputs, textareas, selects (README + real pages) */
   --radius-md: 1.5rem; /* 24px · cards, photos inside cards */
   --radius-lg: 2rem; /* 32px · large panels */
   --radius-xl: 2.75rem; /* 44px · section containers, footer */
@@ -112,6 +114,7 @@
 
   --shadow-focus-button: 0 0 0 3px #f5f0e6, 0 0 0 6px #5a7050;
   --shadow-focus-field: 0 0 0 3px #e3e8da;
+  --shadow-error-field: 0 0 0 3px #f4e3de;
 }
 
 /* Header shadow is slightly tighter on mobile per the handoff. */

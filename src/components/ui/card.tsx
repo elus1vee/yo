@@ -1,11 +1,33 @@
-import { type HTMLAttributes } from "react";
-import { cn } from "@/lib/utils";
+import { type ComponentProps } from "react";
+import { cn, type SafeProps } from "@/lib/utils";
 
-export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
+const shadowClasses = {
+  none: "",
+  sm: "shadow-sm",
+  md: "shadow-md",
+  lg: "shadow-lg",
+} as const;
+
+export interface CardProps extends SafeProps<ComponentProps<"div">> {
+  /** Resting shadow. The styleguide's cards have none until hovered. */
+  shadow?: keyof typeof shadowClasses;
+  /** Lifts the card (shadow-hover + translateY(-3px)) on hover. */
+  interactive?: boolean;
+}
+
+export function Card({
+  shadow = "none",
+  interactive = false,
+  className,
+  ...props
+}: CardProps) {
   return (
     <div
       className={cn(
-        "border-border bg-background rounded-lg border p-6",
+        "bg-surface rounded-lg p-4",
+        shadowClasses[shadow],
+        interactive &&
+          "hover:shadow-hover transition-[transform,box-shadow] duration-150 hover:-translate-y-[3px] motion-reduce:transition-none motion-reduce:hover:translate-y-0",
         className,
       )}
       {...props}
