@@ -1,0 +1,32 @@
+/**
+ * Design tokens: colors, radii and font family variables.
+ * Consumed by Tailwind via the `@theme inline` block in globals.css.
+ */
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  --color-accent: #2563eb;
+  --color-accent-foreground: #ffffff;
+
+  --color-muted: #f4f4f5;
+  --color-muted-foreground: #71717a;
+
+  --color-border: #e4e4e7;
+
+  --font-heading: var(--font-lora);
+  --font-body: var(--font-manrope);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+
+    --color-muted: #18181b;
+    --color-muted-foreground: #a1a1aa;
+
+    --color-border: #27272a;
+  }
+}
