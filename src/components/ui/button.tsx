@@ -2,8 +2,8 @@ import { type ComponentProps } from "react";
 import { cn, type SafeProps } from "@/lib/utils";
 
 /**
- * Variants: primary / secondary come from the design system. `ghost` is
- * not in the handoff — it's modelled on the menu-item pill (transparent,
+ * primary / secondary / dark are from the design system. `ghost` is not in
+ * the handoff — it's modelled on the menu-item pill (transparent,
  * surface-hover on hover) and is a draft until confirmed.
  */
 const variantClasses = {
@@ -14,6 +14,10 @@ const variantClasses = {
   secondary: {
     base: "bg-primary-tint text-text",
     interactive: "hover:bg-primary-tint-hover active:bg-primary-tint-active",
+  },
+  dark: {
+    base: "bg-surface-inverse text-text-inverse",
+    interactive: "hover:bg-dark-hover active:bg-dark-hover",
   },
   ghost: {
     base: "bg-transparent text-text",
@@ -27,11 +31,45 @@ const sizeClasses = {
   lg: "h-[58px] px-8 text-[16px]",
 } as const;
 
+export type ButtonVariant = keyof typeof variantClasses;
+export type ButtonSize = keyof typeof sizeClasses;
+
+interface ButtonClassOptions {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  loading?: boolean;
+  disabled?: boolean;
+  className?: string;
+}
+
+/** Shared by <Button> and <ButtonLink> so a link can look like a button. */
+export function buttonClassName({
+  variant = "primary",
+  size = "md",
+  loading = false,
+  disabled = false,
+  className,
+}: ButtonClassOptions = {}) {
+  const v = variantClasses[variant];
+  return cn(
+    "inline-flex items-center justify-center gap-2.5 rounded-full font-bold whitespace-nowrap transition-colors",
+    "focus-visible:shadow-focus-button focus-visible:outline-none",
+    sizeClasses[size],
+    disabled
+      ? cn(
+          "cursor-not-allowed text-disabled-text",
+          variant !== "ghost" && "bg-disabled-bg",
+        )
+      : cn(v.base, loading ? "cursor-wait opacity-85" : v.interactive),
+    className,
+  );
+}
+
 export interface ButtonProps extends SafeProps<
   Omit<ComponentProps<"button">, "children">
 > {
-  variant?: keyof typeof variantClasses;
-  size?: keyof typeof sizeClasses;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   /** Shows a spinner, blocks clicks and sets `aria-busy`. */
   loading?: boolean;
   /** Replaces the label while loading, e.g. "Отправка…". */
@@ -50,25 +88,18 @@ export function Button({
   children,
   ...props
 }: ButtonProps) {
-  const v = variantClasses[variant];
-
   return (
     <button
       type={type}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
-      className={cn(
-        "inline-flex items-center justify-center gap-2.5 rounded-full font-bold whitespace-nowrap transition-colors",
-        "focus-visible:shadow-focus-button focus-visible:outline-none",
-        sizeClasses[size],
-        disabled
-          ? cn(
-              "text-disabled-text cursor-not-allowed",
-              variant !== "ghost" && "bg-disabled-bg",
-            )
-          : cn(v.base, loading ? "cursor-wait opacity-85" : v.interactive),
+      className={buttonClassName({
+        variant,
+        size,
+        loading,
+        disabled,
         className,
-      )}
+      })}
       {...props}
     >
       {loading && (

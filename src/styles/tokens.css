@@ -51,6 +51,7 @@
   --color-border-subtle: #e6deca; /* field borders */
   --color-border-strong: #c9bfa6; /* outline-button border */
   --color-divider: #dcd3c0;
+  --color-divider-inverse: #5a544a; /* divider on dark surfaces (footer) */
 
   --color-disabled-bg: #e6e0d2;
   --color-disabled-text: #b5ac9b;

@@ -43,6 +43,7 @@
   --color-border-subtle: var(--color-border-subtle);
   --color-border-strong: var(--color-border-strong);
   --color-divider: var(--color-divider);
+  --color-divider-inverse: var(--color-divider-inverse);
 
   --color-disabled-bg: var(--color-disabled-bg);
   --color-disabled-text: var(--color-disabled-text);

@@ -53,17 +53,19 @@ function ButtonRow({
   variant,
   label,
 }: {
-  variant: "primary" | "secondary" | "ghost";
+  variant: "primary" | "secondary" | "dark" | "ghost";
   label: string;
 }) {
   const hover = {
     primary: "bg-primary-hover",
     secondary: "bg-primary-tint-hover",
+    dark: "bg-dark-hover",
     ghost: "bg-surface-hover",
   }[variant];
   const active = {
     primary: "bg-primary-active",
     secondary: "bg-primary-tint-active",
+    dark: "bg-dark-hover",
     ghost: "bg-surface-tint",
   }[variant];
 
@@ -127,6 +129,7 @@ export default function UiKitPage() {
           <h2 className="text-h2">Кнопки</h2>
           <ButtonRow variant="primary" label="Смотреть товары" />
           <ButtonRow variant="secondary" label="Подробнее" />
+          <ButtonRow variant="dark" label="Подробнее" />
           <ButtonRow variant="ghost" label="Все товары" />
           <Section title="Размеры">
             <div className="flex flex-wrap items-center gap-4">

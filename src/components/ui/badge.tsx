@@ -12,18 +12,23 @@ const toneClasses = {
     strong: "bg-surface-inverse text-text-inverse",
   },
   primary: {
-    tint: "bg-primary-tint text-text",
-    strong: "bg-primary text-text-inverse",
+    tint: "bg-primary-tint text-text-muted",
+    strong: "bg-primary-light text-text",
   },
-  peach: { tint: "bg-peach-tint text-text", strong: "bg-peach text-text" },
+  peach: {
+    tint: "bg-peach-tint text-text-muted",
+    strong: "bg-peach text-text",
+  },
   lavender: {
-    tint: "bg-lavender-tint text-text",
+    tint: "bg-lavender-tint text-text-muted",
     strong: "bg-lavender text-text",
   },
 } as const;
 
+export type BadgeTone = keyof typeof toneClasses;
+
 export interface BadgeProps extends SafeProps<ComponentProps<"span">> {
-  tone?: keyof typeof toneClasses;
+  tone?: BadgeTone;
   strong?: boolean;
   /** Greyed-out look, e.g. "Нет в наличии". */
   disabled?: boolean;
