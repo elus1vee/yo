@@ -13,6 +13,11 @@ export interface ImagePlaceholderProps {
   caption?: string;
   tint?: keyof typeof stripeClass;
   align?: "center" | "bottom";
+  /**
+   * "soft": white stripes with a faint tint (animal cards, hero);
+   * "tint": stripes in the tint color itself (product photos).
+   */
+  variant?: "soft" | "tint";
   /** Extra classes for the caption, e.g. to hide it on small screens. */
   captionClassName?: string;
   className?: string;
@@ -26,13 +31,17 @@ export function ImagePlaceholder({
   caption,
   tint = "neutral",
   align = "center",
+  variant = "soft",
   captionClassName,
   className,
 }: ImagePlaceholderProps) {
   return (
     <div
       className={cn(
-        "flex size-full bg-[repeating-linear-gradient(135deg,var(--color-surface)_0_10px,color-mix(in_oklab,var(--stripe)_45%,var(--color-surface))_10px_20px)]",
+        "flex size-full",
+        variant === "soft"
+          ? "bg-[repeating-linear-gradient(135deg,var(--color-surface)_0_10px,color-mix(in_oklab,var(--stripe)_45%,var(--color-surface))_10px_20px)]"
+          : "bg-[repeating-linear-gradient(135deg,var(--stripe)_0_10px,color-mix(in_oklab,var(--stripe)_45%,var(--color-surface))_10px_20px)]",
         stripeClass[tint],
         align === "center"
           ? "items-center justify-center"

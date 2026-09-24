@@ -3,7 +3,8 @@ import { cn, type SafeProps } from "@/lib/utils";
 
 /**
  * primary / secondary / dark are from the design system; `light` is the
- * plain surface-colored pill used for secondary CTAs on colored panels. `ghost` is not in
+ * plain surface-colored pill used for secondary CTAs on colored panels;
+ * `outline` is the bordered "Показать ещё" button. `ghost` is not in
  * the handoff — it's modelled on the menu-item pill (transparent,
  * surface-hover on hover) and is a draft until confirmed.
  */
@@ -22,6 +23,10 @@ const variantClasses = {
   },
   light: {
     base: "bg-surface text-text",
+    interactive: "hover:bg-surface-hover active:bg-surface-tint",
+  },
+  outline: {
+    base: "border border-border-strong bg-surface text-text",
     interactive: "hover:bg-surface-hover active:bg-surface-tint",
   },
   ghost: {

@@ -22,6 +22,8 @@ export interface SectionProps {
   action?: SectionAction;
   children: ReactNode;
   className?: string;
+  /** Extra classes for the inner container, e.g. a narrower `max-w-[1280px]`. */
+  containerClassName?: string;
 }
 
 /**
@@ -36,6 +38,7 @@ export function Section({
   action,
   children,
   className,
+  containerClassName,
 }: SectionProps) {
   return (
     <section
@@ -45,7 +48,12 @@ export function Section({
         className,
       )}
     >
-      <div className="tablet:gap-7 mx-auto flex max-w-[1360px] flex-col gap-4">
+      <div
+        className={cn(
+          "tablet:gap-7 mx-auto flex max-w-[1360px] flex-col gap-4",
+          containerClassName,
+        )}
+      >
         {title && (
           <div className="tablet:items-end flex items-baseline justify-between gap-6 px-2">
             <h2 className="font-heading text-h1">

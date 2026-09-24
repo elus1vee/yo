@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Chip } from "@/components/ui/chip";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
@@ -53,19 +54,23 @@ function ButtonRow({
   variant,
   label,
 }: {
-  variant: "primary" | "secondary" | "dark" | "ghost";
+  variant: "primary" | "secondary" | "dark" | "light" | "outline" | "ghost";
   label: string;
 }) {
   const hover = {
     primary: "bg-primary-hover",
     secondary: "bg-primary-tint-hover",
     dark: "bg-dark-hover",
+    light: "bg-surface-hover",
+    outline: "bg-surface-hover",
     ghost: "bg-surface-hover",
   }[variant];
   const active = {
     primary: "bg-primary-active",
     secondary: "bg-primary-tint-active",
     dark: "bg-dark-hover",
+    light: "bg-surface-tint",
+    outline: "bg-surface-tint",
     ghost: "bg-surface-tint",
   }[variant];
 
@@ -130,6 +135,8 @@ export default function UiKitPage() {
           <ButtonRow variant="primary" label="Смотреть товары" />
           <ButtonRow variant="secondary" label="Подробнее" />
           <ButtonRow variant="dark" label="Подробнее" />
+          <ButtonRow variant="light" label="Где купить" />
+          <ButtonRow variant="outline" label="Показать ещё" />
           <ButtonRow variant="ghost" label="Все товары" />
           <Section title="Размеры">
             <div className="flex flex-wrap items-center gap-4">
@@ -281,6 +288,20 @@ export default function UiKitPage() {
                 Лаванда
               </Badge>
               <Badge disabled>Нет в наличии</Badge>
+            </div>
+          </Section>
+        </div>
+
+        <div className="flex flex-col gap-12">
+          <h2 className="text-h2">Чипы-фильтры</h2>
+          <Section title="Chip">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <Chip>Кошки</Chip>
+              <Chip className="bg-surface-hover">Hover</Chip>
+              <Chip active>Собаки · active</Chip>
+              <Chip active className="bg-primary-hover">
+                Active hover
+              </Chip>
             </div>
           </Section>
         </div>
