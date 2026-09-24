@@ -1,4 +1,8 @@
-import type { CatalogProduct } from "@/components/blocks/catalog-browser";
+import type { CatalogProduct } from "@/components/blocks/catalog-product-card";
+import type { OptionGroup, SpecItem } from "@/components/blocks/product-info";
+import type { GalleryImage } from "@/components/blocks/product-gallery";
+import type { Copy } from "@/components/ui/responsive-text";
+import { animalOptions } from "@/content/catalog";
 import type { NewsCardProps } from "@/components/blocks/news-card";
 import type { ProductCardProps } from "@/components/blocks/product-card";
 
@@ -239,3 +243,142 @@ export const catalogProducts: CatalogProduct[] = [
     imageCaption: "упаковка",
   },
 ];
+
+/**
+ * Product page data, looked up by slug. Only "tofu-peach" carries the full
+ * copy from the Yo Product mockup; the other products get their gallery,
+ * specs and related items derived from the catalog entry (no description
+ * until the CMS provides one).
+ */
+export interface ProductDetail {
+  slug: string;
+  name: string;
+  /** Last breadcrumb, e.g. "Йо! TOFU". */
+  shortName: string;
+  /** Id from the catalog "types" options. */
+  type: string;
+  /** e.g. "для кошек" — goes after the type in the eyebrow. */
+  audience: string;
+  description?: Copy;
+  gallery: GalleryImage[];
+  groups: OptionGroup[];
+  specs: SpecItem[];
+  /** Slugs of similar products, in display order. */
+  related: string[];
+}
+
+const animalLabel = new Map(animalOptions.map((a) => [a.id, a.label]));
+const genitive: Record<string, string> = {
+  cats: "кошек",
+  dogs: "собак",
+  rodents: "грызунов",
+};
+
+function audienceOf(animals: string[]) {
+  if (animals.length >= 3) return "для всех питомцев";
+  return `для ${animals.map((a) => genitive[a] ?? a).join(" и ")}`;
+}
+
+function galleryOf(p: CatalogProduct): GalleryImage[] {
+  const gallery: GalleryImage[] = [
+    {
+      id: "main",
+      alt: p.name,
+      src: p.image?.src,
+      tint: p.tint,
+      caption: p.imageCaption ?? "упаковка",
+    },
+    {
+      id: "back",
+      alt: `${p.name} — упаковка сзади`,
+      tint: "neutral",
+      caption: "упаковка сзади",
+    },
+  ];
+  if (p.type === "litter") {
+    gallery.push({
+      id: "texture",
+      alt: `${p.name} — текстура гранул`,
+      tint: "neutral",
+      caption: "текстура гранул",
+    });
+  }
+  return gallery;
+}
+
+function relatedOf(p: CatalogProduct): string[] {
+  const others = catalogProducts.filter((o) => o.slug !== p.slug);
+  const sameType = others.filter((o) => o.type === p.type);
+  return [...sameType, ...others.filter((o) => o.type !== p.type)]
+    .slice(0, 4)
+    .map((o) => o.slug);
+}
+
+function detailOf(p: CatalogProduct): ProductDetail {
+  return {
+    slug: p.slug,
+    name: p.name,
+    shortName: p.name,
+    type: p.type,
+    audience: audienceOf(p.animals),
+    gallery: galleryOf(p),
+    groups: [],
+    specs: [
+      { label: "Объём / вес", value: p.volume },
+      {
+        label: "Для кого",
+        value: p.animals.map((a) => animalLabel.get(a) ?? a).join(", "),
+      },
+    ],
+    related: relatedOf(p),
+  };
+}
+
+const tofuPeach = catalogProducts.find((p) => p.slug === "tofu-peach")!;
+
+const peachDetail: ProductDetail = {
+  ...detailOf(tofuPeach),
+  name: "Наполнитель комкующийся Йо! TOFU Peach",
+  shortName: "Йо! TOFU",
+  description: {
+    desktop:
+      "Комкующийся наполнитель на основе тофу с ароматом персика. Быстро формирует плотные комки, не пылит и легко убирается совком. Подходит для ежедневного использования.",
+    mobile:
+      "Комкующийся наполнитель на основе тофу с мягким ароматом. Не пылит, легко убирается совком.",
+  },
+  groups: [
+    {
+      id: "volume",
+      label: "Объём",
+      options: [
+        { id: "6l", label: "6 л / 2,5 кг" },
+        { id: "12l", label: "12 л / 5 кг" },
+      ],
+    },
+  ],
+  specs: [
+    { label: "Объём / вес", fromGroup: "volume" },
+    { label: "Аромат", value: "Peach" },
+    { label: "Для кого", value: "Кошки" },
+  ],
+  related: ["silica-lavender", "wood-rodents", "bull-root", "balm"],
+};
+
+const productDetails: ProductDetail[] = catalogProducts.map((p) =>
+  p.slug === tofuPeach.slug ? peachDetail : detailOf(p),
+);
+
+/** Lookup by array search (not by object key), so odd slugs can't hit prototypes. */
+export function getProductDetail(slug: string): ProductDetail | undefined {
+  return productDetails.find((p) => p.slug === slug);
+}
+
+export function getProductSlugs(): string[] {
+  return productDetails.map((p) => p.slug);
+}
+
+export function getRelatedProducts(detail: ProductDetail): CatalogProduct[] {
+  return detail.related
+    .map((slug) => catalogProducts.find((p) => p.slug === slug))
+    .filter((p): p is CatalogProduct => Boolean(p));
+}

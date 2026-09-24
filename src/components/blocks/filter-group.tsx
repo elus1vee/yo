@@ -16,6 +16,8 @@ export interface FilterGroupProps {
   value: string | null;
   /** Called with the new id, or null when the active chip is clicked again. */
   onChange: (value: string | null) => void;
+  /** Clicking the active chip clears it (filters). Off for required choices. */
+  allowClear?: boolean;
 }
 
 /** Single-select group of chips; clicking the active chip clears it. */
@@ -24,6 +26,7 @@ export function FilterGroup({
   options,
   value,
   onChange,
+  allowClear = true,
 }: FilterGroupProps) {
   const labelId = useId();
 
@@ -44,7 +47,9 @@ export function FilterGroup({
           <Chip
             key={option.id}
             active={value === option.id}
-            onClick={() => onChange(value === option.id ? null : option.id)}
+            onClick={() =>
+              onChange(allowClear && value === option.id ? null : option.id)
+            }
           >
             {option.label}
           </Chip>

@@ -17,6 +17,8 @@ export interface SectionProps {
   id?: string;
   /** May be shorter on mobile: { desktop, mobile }. */
   title?: Copy;
+  /** `md` is the smaller heading (h2 token) used on inner pages. */
+  titleSize?: "lg" | "md";
   /** Short note to the right of the title (desktop only). */
   aside?: string;
   action?: SectionAction;
@@ -34,6 +36,7 @@ export interface SectionProps {
 export function Section({
   id,
   title,
+  titleSize = "lg",
   aside,
   action,
   children,
@@ -56,7 +59,12 @@ export function Section({
       >
         {title && (
           <div className="tablet:items-end flex items-baseline justify-between gap-6 px-2">
-            <h2 className="font-heading text-h1">
+            <h2
+              className={cn(
+                "font-heading",
+                titleSize === "lg" ? "text-h1" : "text-h2",
+              )}
+            >
               <ResponsiveText text={title} />
             </h2>
             {aside && (

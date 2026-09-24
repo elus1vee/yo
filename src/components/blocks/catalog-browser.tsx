@@ -1,32 +1,16 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { type BadgeTone } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { type Copy } from "@/components/ui/responsive-text";
 import { CardGrid } from "./card-grid";
 import { EmptyState } from "./empty-state";
 import { type FilterOption, FilterGroup } from "./filter-group";
-import { ProductCard } from "./product-card";
+import {
+  type CatalogProduct,
+  CatalogProductCard,
+} from "./catalog-product-card";
 import { Section } from "./section";
-import { type CardImage, type CardTint } from "./types";
-
-export interface CatalogProduct {
-  slug: string;
-  name: string;
-  /** Product page. */
-  href: string;
-  /** Ids from the "animals" filter options; a product can fit several. */
-  animals: string[];
-  /** Id from the "types" filter options. */
-  type: string;
-  volume: string;
-  tint: CardTint;
-  tagTone: BadgeTone;
-  tagStrong?: boolean;
-  image?: CardImage;
-  imageCaption?: string;
-}
 
 export interface CatalogCopy {
   animalsLabel: string;
@@ -167,22 +151,10 @@ export function CatalogBrowser({
         ) : (
           <CardGrid layout="catalog">
             {visible.map((product) => (
-              <ProductCard
+              <CatalogProductCard
                 key={product.slug}
-                variant="catalog"
-                name={product.name}
-                href={product.href}
-                eyebrow={typeLabel.get(product.type)}
-                tint={product.tint}
-                image={product.image}
-                imageCaption={product.imageCaption}
-                tags={[
-                  {
-                    label: product.volume,
-                    tone: product.tagTone,
-                    strong: product.tagStrong,
-                  },
-                ]}
+                product={product}
+                typeLabel={typeLabel.get(product.type)}
                 ctaLabel={copy.productCta}
               />
             ))}
