@@ -4,7 +4,7 @@ import { Header } from "@/components/blocks/header";
 import { NewsCard } from "@/components/blocks/news-card";
 import { ProductCard } from "@/components/blocks/product-card";
 import { contactForm, footer, header } from "@/content/site";
-import { news, products } from "@/content/demo";
+import { news, products } from "@/lib/mock-data";
 import { ContactFormDemo } from "./contact-form-demo";
 
 /**

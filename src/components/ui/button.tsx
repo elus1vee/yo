@@ -2,7 +2,8 @@ import { type ComponentProps } from "react";
 import { cn, type SafeProps } from "@/lib/utils";
 
 /**
- * primary / secondary / dark are from the design system. `ghost` is not in
+ * primary / secondary / dark are from the design system; `light` is the
+ * plain surface-colored pill used for secondary CTAs on colored panels. `ghost` is not in
  * the handoff — it's modelled on the menu-item pill (transparent,
  * surface-hover on hover) and is a draft until confirmed.
  */
@@ -18,6 +19,10 @@ const variantClasses = {
   dark: {
     base: "bg-surface-inverse text-text-inverse",
     interactive: "hover:bg-dark-hover active:bg-dark-hover",
+  },
+  light: {
+    base: "bg-surface text-text",
+    interactive: "hover:bg-surface-hover active:bg-surface-tint",
   },
   ghost: {
     base: "bg-transparent text-text",

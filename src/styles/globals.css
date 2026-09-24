@@ -35,6 +35,7 @@
   --color-lavender: var(--color-lavender);
   --color-lavender-tint: var(--color-lavender-tint);
   --color-lavender-hover: var(--color-lavender-hover);
+  --color-lavender-deep: var(--color-lavender-deep);
 
   --color-danger: var(--color-danger);
   --color-danger-tint: var(--color-danger-tint);

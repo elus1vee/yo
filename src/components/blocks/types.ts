@@ -37,3 +37,16 @@ export const cardTintClass: Record<CardTint, string> = {
   primary: "bg-primary-tint",
   neutral: "bg-surface-tint",
 };
+
+/** A heading split into parts so one word can be accented (italic). */
+export interface TitlePart {
+  text: string;
+  accent?: boolean;
+  /** Line break after this part from `tablet` up (the mockup's <br>). */
+  breakAfter?: boolean;
+}
+
+export interface LinkAction {
+  label: string;
+  href: string;
+}

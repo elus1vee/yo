@@ -4,6 +4,7 @@ import { type FormEvent, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { type Copy, ResponsiveText } from "@/components/ui/responsive-text";
 import { SafeLink } from "@/components/ui/safe-link";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -22,11 +23,12 @@ export type { ContactFormValues } from "@/lib/validate-contact";
 
 export interface ContactFormCopy {
   title: string;
-  description: string;
+  /** May be shorter on mobile: { desktop, mobile }. */
+  description: Copy;
   namePlaceholder: string;
   phonePlaceholder: string;
   messagePlaceholder: string;
-  consent: string;
+  consent: Copy;
   submit: string;
   submitting: string;
   errors: ContactErrorMessages;
@@ -122,9 +124,11 @@ export function ContactForm({
     <section className="bg-surface tablet:gap-14 tablet:rounded-xl tablet:p-14 mx-auto grid max-w-[1360px] gap-[18px] rounded-lg px-[22px] py-7 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
       <div className="flex flex-col gap-[18px]">
         <h2 className="font-heading text-h1">{copy.title}</h2>
-        <p className="text-text-muted tablet:text-[17px] max-w-[360px] text-[15px] leading-[1.6]">
-          {copy.description}
-        </p>
+        <ResponsiveText
+          as="p"
+          text={copy.description}
+          className="text-text-muted tablet:text-[17px] max-w-[360px] text-[15px] leading-[1.6]"
+        />
         {contacts.length > 0 && (
           <ul className="tablet:flex hidden flex-col gap-2.5 pt-2.5">
             {contacts.map((c) => (
@@ -197,9 +201,10 @@ export function ContactForm({
             error={errors.consent}
             onChange={(e) => update("consent", e.target.checked)}
             label={
-              <span className="text-text-muted tablet:text-[13px] text-xs leading-normal">
-                {copy.consent}
-              </span>
+              <ResponsiveText
+                text={copy.consent}
+                className="text-text-muted tablet:text-[13px] text-xs leading-normal"
+              />
             }
           />
         </div>

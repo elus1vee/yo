@@ -5,6 +5,7 @@ import "@/styles/globals.css";
 const lora = Lora({
   variable: "--font-lora",
   subsets: ["latin", "cyrillic"],
+  style: ["normal", "italic"], // italic accents in headings (e.g. "здоровье")
   display: "swap",
 });
 

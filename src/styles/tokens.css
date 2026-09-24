@@ -41,6 +41,7 @@
   --color-lavender: #baa8c3;
   --color-lavender-tint: #ece5ef;
   --color-lavender-hover: #ded2e6;
+  --color-lavender-deep: #8e7fa0; /* end of the pH scale */
 
   /* ---- Colors: feedback ---- */
   --color-danger: #b24c3e;
@@ -141,9 +142,11 @@
 /**
  * ---- Typography scale ----
  * Font size fluidly scales between the mobile (390px) and desktop (1440px)
- * reference frames from the handoff via clamp(); line-height fluidly
- * scales too where the handoff gives distinct mobile/desktop values,
- * otherwise it's a single fixed value.
+ * reference frames from the handoff via clamp(). Line-height can't be
+ * interpolated the same way (a unitless number can't be mixed with `vw`
+ * inside calc()), so where the handoff gives distinct mobile / desktop
+ * values they switch at the `tablet` breakpoint (768px), see the media
+ * query below.
  *
  * `--text-h4` has no source in the handoff (only display/h1/h2/h3 are
  * defined there) — it's interpolated between h3 and text-body-lg; treat
@@ -151,16 +154,16 @@
  */
 :root {
   --text-display: clamp(2.375rem, 1.7714rem + 2.48vw, 4rem); /* 38px -> 64px */
-  --text-display--line-height: clamp(1.05, 1.0911 - 0.0029vw, 1.08);
+  --text-display--line-height: 1.08;
   --text-display--letter-spacing: -0.02em;
   --text-display--font-weight: 500;
 
   --text-h1: clamp(1.875rem, 1.55rem + 1.33vw, 2.75rem); /* 30px -> 44px */
-  --text-h1--line-height: clamp(1.1, 1.1549 - 0.0038vw, 1.14);
+  --text-h1--line-height: 1.14;
   --text-h1--font-weight: 500;
 
   --text-h2: clamp(1.5rem, 1.3607rem + 0.57vw, 1.875rem); /* 24px -> 30px */
-  --text-h2--line-height: clamp(1.18, 1.2074 - 0.0019vw, 1.2);
+  --text-h2--line-height: 1.2;
   --text-h2--font-weight: 500;
 
   --text-h3: clamp(1.125rem, 1.0554rem + 0.29vw, 1.3125rem); /* 18px -> 21px */
@@ -173,7 +176,7 @@
   --text-h4--font-weight: 500;
 
   --text-body-lg: clamp(1rem, 0.9768rem + 0.1vw, 1.0625rem); /* 16px -> 17px */
-  --text-body-lg--line-height: clamp(1.6, 1.5443 + 0.0143vw, 1.75);
+  --text-body-lg--line-height: 1.6;
   --text-body-lg--font-weight: 400;
 
   --text-body: clamp(0.9375rem, 0.9143rem + 0.1vw, 1rem); /* 15px -> 16px */
@@ -202,4 +205,14 @@
   --text-button: 0.9375rem; /* 15px */
   --text-button--line-height: 1;
   --text-button--font-weight: 700;
+}
+
+/* Desktop line-heights from the styleguide (mobile values are above). */
+@media (min-width: 768px) {
+  :root {
+    --text-display--line-height: 1.05;
+    --text-h1--line-height: 1.1;
+    --text-h2--line-height: 1.18;
+    --text-body-lg--line-height: 1.75;
+  }
 }
