@@ -154,10 +154,27 @@ body {
   line-height: var(--text-body--line-height);
 }
 
-h1,
-h2,
-h3,
-h4 {
-  font-family: var(--font-heading);
-  color: var(--color-text);
+/*
+ * Base styles go in @layer base: unlayered rules beat every Tailwind
+ * utility, which is how a global `h2 { color }` used to override
+ * `text-text-inverse-muted` on the footer headings.
+ */
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    color: var(--color-text);
+  }
+
+  /* Tailwind v4's preflight no longer sets pointer on buttons. Disabled /
+     loading buttons keep their own cursor-not-allowed / cursor-wait. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  summary {
+    cursor: pointer;
+  }
 }
