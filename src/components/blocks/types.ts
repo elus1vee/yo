@@ -20,6 +20,8 @@ export interface Messenger {
   href: string;
   /** Accessible name, e.g. "Написать в Telegram". */
   label: string;
+  /** Visible name for buttons that show text, e.g. "Telegram". */
+  text?: string;
 }
 
 /** Photo for a card; `fill` layout, so no intrinsic size needed. */

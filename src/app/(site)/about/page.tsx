@@ -1,0 +1,62 @@
+import type { Metadata } from "next";
+import { CardGrid } from "@/components/blocks/card-grid";
+import { FeatureTile } from "@/components/blocks/feature-tile";
+import { PageIntro } from "@/components/blocks/page-intro";
+import { PartnerTile } from "@/components/blocks/partner-tile";
+import { PhotoCard } from "@/components/blocks/photo-card";
+import { Section } from "@/components/blocks/section";
+import {
+  WHERE_TO_BUY_ID,
+  aboutIntro,
+  certificates,
+  production,
+  whereToBuy,
+} from "@/content/about";
+
+export const metadata: Metadata = { title: "О компании" };
+
+export default function AboutPage() {
+  return (
+    <>
+      <PageIntro {...aboutIntro} />
+
+      <Section
+        title={production.title}
+        titleSize="md"
+        className="tablet:px-10 tablet:pt-0 tablet:pb-18 px-[18px] pt-2 pb-8"
+      >
+        <CardGrid layout="triple">
+          {production.items.map((item) => (
+            <PhotoCard key={item.tint} {...item} />
+          ))}
+        </CardGrid>
+      </Section>
+
+      <Section
+        title={certificates.title}
+        titleSize="md"
+        className="tablet:px-10 tablet:pt-0 tablet:pb-18 px-[18px] pt-2 pb-8"
+      >
+        <CardGrid layout="tiles">
+          {certificates.items.map((item) => (
+            <FeatureTile key={item.title} {...item} />
+          ))}
+        </CardGrid>
+      </Section>
+
+      <Section
+        id={WHERE_TO_BUY_ID}
+        title={whereToBuy.title}
+        titleSize="md"
+        aside={whereToBuy.aside}
+        className="tablet:px-10 tablet:pt-0 tablet:pb-24 px-[18px] pt-2 pb-10"
+      >
+        <CardGrid layout="partners">
+          {whereToBuy.items.map((item) => (
+            <PartnerTile key={item.name} {...item} />
+          ))}
+        </CardGrid>
+      </Section>
+    </>
+  );
+}

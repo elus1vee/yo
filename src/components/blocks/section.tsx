@@ -74,7 +74,13 @@ export function Section({
               <ResponsiveText text={title} />
             </h2>
             {aside && (
-              <p className="text-text-muted tablet:block hidden max-w-[340px] text-[15px] leading-[1.55]">
+              <p
+                className={cn(
+                  "text-text-muted tablet:block hidden leading-[1.55]",
+                  // home: short note in a narrow column; inner pages: one line
+                  titleSize === "lg" ? "max-w-[340px] text-[15px]" : "text-sm",
+                )}
+              >
                 {aside}
               </p>
             )}

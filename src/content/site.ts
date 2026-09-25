@@ -11,9 +11,10 @@ import { telHref } from "@/lib/safe-url";
  * handoff (the mockup links are "#") — fill in the real ones.
  */
 
-const PHONE_MAIN = "+375 29 657 93 71";
-const PHONE_SECOND = "+375 29 620 96 52";
-const EMAIL = "info@clarity.by";
+export const PHONE_MAIN = "+375 29 657 93 71";
+export const PHONE_SECOND = "+375 29 620 96 52";
+export const EMAIL = "info@clarity.by";
+export const ADDRESS = "г. Минск, ул. Лещинского, 8-2";
 
 const nav = [
   { label: "Товары", href: "/catalog" },
