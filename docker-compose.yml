@@ -1,0 +1,17 @@
+# Local PostgreSQL for Payload. `docker compose up -d`, then see .env.example.
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: yo
+      POSTGRES_PASSWORD: yo
+      POSTGRES_DB: yo
+    ports:
+      # 5433 on the host: 5432 is often taken by another local Postgres
+      - "5433:5432"
+    volumes:
+      - yo-postgres:/var/lib/postgresql/data
+
+volumes:
+  yo-postgres:

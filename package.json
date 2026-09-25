@@ -2,19 +2,33 @@
   "name": "yo",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "generate:types": "npm run payload -- generate:types",
+    "generate:importmap": "npm run payload -- generate:importmap"
   },
   "dependencies": {
+    "@payloadcms/db-postgres": "3.90.2",
+    "@payloadcms/next": "3.90.2",
+    "@payloadcms/plugin-form-builder": "3.90.2",
+    "@payloadcms/plugin-redirects": "3.90.2",
+    "@payloadcms/plugin-seo": "3.90.2",
+    "@payloadcms/richtext-lexical": "3.90.2",
+    "@payloadcms/ui": "3.90.2",
     "clsx": "^2.1.1",
+    "graphql": "16.14.2",
     "next": "16.3.6",
+    "payload": "3.90.2",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "sharp": "0.35.4",
     "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
@@ -22,6 +36,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.6",
     "eslint-config-prettier": "^10.1.8",

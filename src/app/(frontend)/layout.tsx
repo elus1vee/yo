@@ -1,21 +1,8 @@
 import type { Metadata } from "next";
-import { Lora, Manrope } from "next/font/google";
+import { lora, manrope } from "@/app/fonts";
 import { homeSeo } from "@/content/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 import "@/styles/globals.css";
-
-const lora = Lora({
-  variable: "--font-lora",
-  subsets: ["latin", "cyrillic"],
-  style: ["normal", "italic"], // italic accents in headings (e.g. "здоровье")
-  display: "swap",
-});
-
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin", "cyrillic"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
