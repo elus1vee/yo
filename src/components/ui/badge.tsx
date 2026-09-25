@@ -44,7 +44,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full px-[13px] py-[7px] text-xs font-bold whitespace-nowrap",
+        "inline-flex items-center rounded-full px-3.25 py-1.75 text-xs font-bold whitespace-nowrap",
         disabled
           ? "bg-disabled-bg text-disabled-text"
           : toneClasses[tone][strong ? "strong" : "tint"],

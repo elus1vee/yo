@@ -43,7 +43,7 @@ export function Input({
         {...controlProps}
         className={cn(
           fieldControlClass(Boolean(error)),
-          "tablet:h-[52px] tablet:px-[18px] h-[50px] px-4",
+          "tablet:h-[52px] tablet:px-4.5 h-[50px] px-4",
           className,
         )}
       />

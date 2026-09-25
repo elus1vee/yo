@@ -202,7 +202,7 @@ export default function DesignSystemPreview() {
             >
               Поверхности
             </span>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            <div className="split:grid-cols-5 grid grid-cols-2 gap-4 sm:grid-cols-3">
               {surfaceColors.map((c) => (
                 <ColorSwatch key={c.token} {...c} />
               ))}
@@ -241,7 +241,7 @@ export default function DesignSystemPreview() {
             >
               Линейки товаров
             </span>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+            <div className="split:grid-cols-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
               {lineColors.map((c) => (
                 <ColorSwatch key={c.token} {...c} />
               ))}

@@ -7,7 +7,7 @@ export function ArrowLink({ className, children, ...props }: SafeLinkProps) {
   return (
     <SafeLink
       className={cn(
-        "text-primary hover:text-text focus-visible:outline-primary inline-flex items-center gap-[7px] rounded-sm text-sm font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4",
+        "tap-area text-primary hover:text-text focus-visible:outline-primary inline-flex items-center gap-1.75 rounded-sm text-sm font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4",
         className,
       )}
       {...props}

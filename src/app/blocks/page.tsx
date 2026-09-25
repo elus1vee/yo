@@ -31,7 +31,7 @@ export default function BlocksPreview() {
 
       <main className="tablet:px-10 tablet:py-10 mx-auto flex w-full max-w-[1440px] flex-1 flex-col gap-14 px-3.5 py-6">
         <Section title="Любимое у покупателей">
-          <div className="tablet:grid-cols-2 tablet:gap-5 grid gap-3 lg:grid-cols-4">
+          <div className="tablet:grid-cols-2 tablet:gap-5 split:grid-cols-4 grid gap-3">
             {products.map((p) => (
               <ProductCard key={p.href} {...p} />
             ))}
@@ -39,7 +39,7 @@ export default function BlocksPreview() {
         </Section>
 
         <Section title="Что нового">
-          <div className="tablet:grid-cols-2 tablet:gap-5 grid gap-3 lg:grid-cols-3">
+          <div className="tablet:grid-cols-2 tablet:gap-5 split:grid-cols-3 grid gap-3">
             {news.map((n) => (
               <NewsCard key={n.href} {...n} />
             ))}
@@ -57,7 +57,7 @@ export default function BlocksPreview() {
             <code>javascript:alert(1)</code>. Текст должен отобразиться
             буквально, а ссылка — превратиться в «#» (проверьте href).
           </p>
-          <div className="tablet:grid-cols-2 tablet:gap-5 grid gap-3 lg:grid-cols-3">
+          <div className="tablet:grid-cols-2 tablet:gap-5 split:grid-cols-3 grid gap-3">
             <ProductCard
               name={XSS}
               href="javascript:alert(1)"

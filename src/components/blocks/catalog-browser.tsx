@@ -39,8 +39,6 @@ export interface CatalogBrowserProps {
 const knownId = (id: string | undefined, options: FilterOption[]) =>
   options.find((o) => o.id === id)?.id ?? null;
 
-const sectionClass = "px-[18px] tablet:px-10";
-
 /**
  * Catalog listing with two independent single-select filters (animal and
  * product type, combined with AND), a "load more" pager and an empty state.
@@ -93,7 +91,8 @@ export function CatalogBrowser({
   return (
     <>
       <Section
-        className={`${sectionClass} tablet:pb-10 pb-6`}
+        inset="page"
+        className="tablet:pb-10 pb-6"
         containerClassName="gap-4 tablet:gap-5"
       >
         <FilterGroup
@@ -113,11 +112,11 @@ export function CatalogBrowser({
             variant="light"
             size="sm"
             onClick={reset}
-            className="border-peach bg-peach-tint hover:bg-peach-hover tablet:h-10 tablet:gap-2 tablet:pr-[18px] tablet:pl-2 tablet:text-[13px] h-[38px] gap-[7px] self-start border pr-3.5 pl-1.5 text-xs"
+            className="border-peach bg-peach-tint hover:bg-peach-hover tablet:h-10 tablet:gap-2 tablet:pr-4.5 tablet:pl-2 tablet:text-[13px] h-[38px] gap-1.75 self-start border pr-3.5 pl-1.5 text-xs"
           >
             <span
               aria-hidden="true"
-              className="bg-surface text-danger tablet:size-[22px] tablet:text-sm flex size-5 items-center justify-center rounded-full text-[13px] leading-none"
+              className="bg-surface text-danger tablet:size-[22px] text-small flex size-5 items-center justify-center rounded-full leading-none"
             >
               ×
             </span>
@@ -127,7 +126,8 @@ export function CatalogBrowser({
       </Section>
 
       <Section
-        className={`${sectionClass} tablet:pb-24 pb-12`}
+        inset="page"
+        className="tablet:pb-24 pb-12"
         containerClassName="gap-0 tablet:gap-0"
       >
         <p role="status" className="sr-only">
@@ -143,7 +143,7 @@ export function CatalogBrowser({
               variant="primary"
               size="sm"
               onClick={reset}
-              className="tablet:h-12 tablet:px-[26px] tablet:text-[15px] h-[46px] px-[22px] text-sm"
+              className="tablet:h-12 tablet:px-6.5 tablet:text-[15px] h-[46px] px-5.5 text-sm"
             >
               {copy.reset}
             </Button>
@@ -166,7 +166,7 @@ export function CatalogBrowser({
             <Button
               variant="outline"
               onClick={() => setVisibleCount((n) => n + loadMoreStep)}
-              className="tablet:h-[54px] tablet:gap-2.5 tablet:px-8 tablet:text-[15px] h-[50px] gap-2 px-[26px] text-sm"
+              className="tablet:h-[54px] tablet:gap-2.5 tablet:px-8 tablet:text-[15px] h-[50px] gap-2 px-6.5 text-sm"
             >
               {copy.loadMore}
               <span className="text-text-muted font-semibold">

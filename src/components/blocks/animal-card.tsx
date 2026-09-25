@@ -27,12 +27,12 @@ export function AnimalCard({
     <SafeLink
       href={href}
       className={cn(
-        "text-text hover:shadow-hover focus-visible:shadow-focus-button flex items-center gap-4 rounded-[26px] p-4 transition-[transform,box-shadow] duration-150 hover:-translate-y-[3px] focus-visible:outline-none motion-reduce:transition-none motion-reduce:hover:translate-y-0",
-        "tablet:flex-col tablet:items-stretch tablet:gap-5 tablet:rounded-lg tablet:p-[26px]",
+        "text-text hover:shadow-hover rounded-panel-sm focus-ring flex items-center gap-4 p-4 transition-[transform,box-shadow] duration-150 hover:-translate-y-[3px] motion-reduce:transition-none motion-reduce:hover:translate-y-0",
+        "tablet:flex-col tablet:items-stretch tablet:gap-5 tablet:rounded-lg tablet:p-6.5",
         cardTintClass[tint],
       )}
     >
-      <div className="tablet:h-[200px] tablet:w-auto tablet:rounded-md relative h-20 w-24 shrink-0 overflow-hidden rounded-[18px]">
+      <div className="tablet:h-[200px] tablet:w-auto tablet:rounded-md rounded-photo relative h-20 w-24 shrink-0 overflow-hidden">
         {image ? (
           <Image
             src={image.src}

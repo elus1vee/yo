@@ -47,7 +47,7 @@ function toInt(value: number, fallback: number) {
 }
 
 const circle =
-  "inline-flex size-[38px] items-center justify-center rounded-full transition-colors focus-visible:shadow-focus-button focus-visible:outline-none tablet:size-11";
+  "inline-flex size-[38px] items-center justify-center rounded-full transition-colors focus-ring tablet:size-11";
 
 function Arrow({ direction }: { direction: "prev" | "next" }) {
   return (

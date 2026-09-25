@@ -30,7 +30,7 @@ export function AudiencePanel({
   return (
     <div
       className={cn(
-        "tablet:gap-6 tablet:rounded-[36px] tablet:p-11 flex flex-col gap-4 rounded-lg px-[22px] py-[26px]",
+        "tablet:gap-6 tablet:rounded-panel-lg tablet:p-11 flex flex-col gap-4 rounded-lg px-5.5 py-6.5",
         cardTintClass[tint],
       )}
     >
@@ -44,7 +44,7 @@ export function AudiencePanel({
         <ResponsiveText
           as="p"
           text={description}
-          className="text-text-muted tablet:text-base text-[15px] leading-[1.6]"
+          className="text-text-muted text-body"
         />
       )}
       {chips.length > 0 && (
@@ -52,7 +52,7 @@ export function AudiencePanel({
           {chips.map((chip) => (
             <li
               key={chip}
-              className="bg-surface tablet:h-[50px] tablet:px-[22px] tablet:text-sm flex h-11 items-center rounded-full px-[18px] text-[13px] font-bold"
+              className="bg-surface tablet:h-[50px] tablet:px-5.5 text-small flex h-11 items-center rounded-full px-4.5 font-bold"
             >
               {chip}
             </li>

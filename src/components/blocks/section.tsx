@@ -12,6 +12,30 @@ export interface SectionAction {
   href: string;
 }
 
+/** Horizontal gutters. The home mockup insets 14px on mobile, inner pages 18px. */
+const insets = {
+  home: "px-3.5 tablet:px-10",
+  page: "px-4.5 tablet:px-10",
+} as const;
+
+/**
+ * Vertical rhythm presets for the sections of inner pages (top / bottom
+ * padding, mobile → tablet+). `default` is the home page's.
+ */
+const rhythms = {
+  default: "pb-7 tablet:pb-18",
+  /** Sections stacked one after another (About). */
+  stack: "pt-2 pb-8 tablet:pt-0 tablet:pb-18",
+  /** Last of a stack, before the footer. */
+  "stack-end": "pt-2 pb-10 tablet:pt-0 tablet:pb-24",
+  /** Main block of a detail page (product), right below the breadcrumbs. */
+  detail: "pt-3.5 pb-0 tablet:pt-6 tablet:pb-18",
+  /** "Similar items" after a detail block. */
+  "detail-end": "pt-8 pb-10 tablet:pt-0 tablet:pb-24",
+  /** A form / details block right below the page intro (Contacts). */
+  form: "pt-0 pb-10 tablet:pt-4 tablet:pb-18",
+} as const;
+
 export interface SectionProps {
   /** Anchor target, e.g. for "#contact" links. */
   id?: string;
@@ -24,12 +48,16 @@ export interface SectionProps {
   action?: SectionAction;
   children: ReactNode;
   className?: string;
+  /** Horizontal gutters; see `insets`. */
+  inset?: keyof typeof insets;
+  /** Vertical padding preset; see `rhythms`. */
+  rhythm?: keyof typeof rhythms;
   /** Extra classes for the inner container, e.g. a narrower `max-w-[1280px]`. */
   containerClassName?: string;
 }
 
 /**
- * Page section: outer gutters (40px desktop / 14px mobile), a 1360px
+ * Page section: outer gutters (`inset`), vertical padding (`rhythm`), a 1360px
  * container, and an optional heading row. Every home-page block sits in one
  * so the page itself needs no layout classes.
  */
@@ -40,16 +68,15 @@ export function Section({
   aside,
   action,
   children,
+  inset = "home",
+  rhythm = "default",
   className,
   containerClassName,
 }: SectionProps) {
   return (
     <section
       id={id}
-      className={cn(
-        "tablet:px-10 tablet:pb-18 scroll-mt-24 px-3.5 pb-7",
-        className,
-      )}
+      className={cn("scroll-mt-24", insets[inset], rhythms[rhythm], className)}
     >
       <div
         className={cn(
@@ -90,7 +117,7 @@ export function Section({
                   href={action.href}
                   variant="light"
                   size="sm"
-                  className="tablet:inline-flex hidden h-12 px-[22px] text-[15px]"
+                  className="tablet:inline-flex hidden h-12 px-5.5 text-[15px]"
                 >
                   {action.label}
                   <ArrowIcon size={17} />

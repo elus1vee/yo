@@ -2,9 +2,8 @@ import Image from "next/image";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Card } from "@/components/ui/card";
 import { ImagePlaceholder } from "@/components/ui/image-placeholder";
-import { SafeLink } from "@/components/ui/safe-link";
 import { cn } from "@/lib/utils";
-import { MessengerIcon, messengerToneClass } from "./messenger-icon";
+import { MessengerLink } from "./messenger-link";
 import { Section } from "./section";
 import {
   type CardImage,
@@ -65,14 +64,14 @@ export function NewsArticle({
   const hasAside = Boolean(product) || share.length > 0;
 
   return (
-    <Section className="tablet:px-10 tablet:pt-5 tablet:pb-16 px-[18px] pt-3.5 pb-0">
+    <Section inset="page" className="tablet:pt-5 tablet:pb-16 pt-3.5 pb-0">
       <div
         className={cn(
           "tablet:gap-y-6 grid gap-x-16 gap-y-4",
-          hasAside && "lg:grid-cols-[minmax(0,1fr)_300px]",
+          hasAside && "split:grid-cols-[minmax(0,1fr)_300px]",
         )}
       >
-        <header className="tablet:gap-6 flex flex-col gap-3 lg:col-start-1 lg:row-start-2">
+        <header className="tablet:gap-6 split:col-start-1 split:row-start-2 flex flex-col gap-3">
           <p className="text-text-muted tablet:text-[13px] text-xs">
             <time dateTime={dateTime}>{date}</time>
             {category && <span> · {category}</span>}
@@ -84,7 +83,7 @@ export function NewsArticle({
 
         <div
           className={cn(
-            "tablet:h-[480px] tablet:rounded-lg relative h-60 overflow-hidden rounded-[24px] lg:col-span-full lg:row-start-1 lg:mb-5",
+            "tablet:h-[480px] tablet:rounded-lg split:col-span-full split:row-start-1 split:mb-5 relative h-60 overflow-hidden rounded-md",
             cardTintClass[tint],
           )}
         >
@@ -101,7 +100,7 @@ export function NewsArticle({
           )}
         </div>
 
-        <div className="tablet:mt-0 tablet:gap-5 tablet:text-[17px] tablet:leading-[1.75] mt-1 flex max-w-[640px] flex-col gap-4 text-[15px] leading-[1.65] lg:col-start-1 lg:row-start-3">
+        <div className="tablet:mt-0 tablet:gap-5 tablet:text-[17px] tablet:leading-[1.75] split:col-start-1 split:row-start-3 mt-1 flex max-w-[640px] flex-col gap-4 text-[15px] leading-[1.65]">
           {body.map((paragraph, i) => (
             <p key={i} className={i > 0 ? "text-text-muted" : undefined}>
               {paragraph}
@@ -110,7 +109,7 @@ export function NewsArticle({
         </div>
 
         {hasAside && (
-          <aside className="tablet:flex mt-4 hidden flex-col gap-5 lg:sticky lg:top-[110px] lg:col-start-2 lg:row-span-2 lg:row-start-2 lg:mt-0 lg:self-start">
+          <aside className="tablet:flex split:sticky split:top-27.5 split:col-start-2 split:row-span-2 split:row-start-2 split:mt-0 split:self-start mt-4 hidden flex-col gap-5">
             {product && (
               <Card className="flex flex-col gap-4 rounded-md p-6">
                 <p className={asideLabel}>{labels.aboutProduct}</p>
@@ -138,16 +137,7 @@ export function NewsArticle({
                 <ul className="flex gap-2">
                   {share.map((m) => (
                     <li key={m.kind}>
-                      <SafeLink
-                        href={m.href}
-                        aria-label={m.label}
-                        className={cn(
-                          "text-text focus-visible:shadow-focus-button flex size-10 items-center justify-center rounded-full transition-colors focus-visible:outline-none",
-                          messengerToneClass[m.kind],
-                        )}
-                      >
-                        <MessengerIcon kind={m.kind} />
-                      </SafeLink>
+                      <MessengerLink messenger={m} />
                     </li>
                   ))}
                 </ul>

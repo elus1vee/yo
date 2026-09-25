@@ -65,7 +65,7 @@ const emptyValues: ContactFormValues = {
 };
 
 const pillField =
-  "h-[54px] rounded-full px-5 text-[15px] tablet:h-[58px] tablet:px-[22px] tablet:text-[16px]";
+  "h-[54px] rounded-full px-5 text-[15px] tablet:h-[58px] tablet:px-5.5 tablet:text-[16px]";
 
 export function ContactForm({
   variant = "panel",
@@ -193,7 +193,7 @@ export function ContactForm({
         className={
           isCard
             ? undefined
-            : "tablet:rounded-[28px] tablet:px-[22px] tablet:py-5 tablet:text-[16px] rounded-[26px] px-5 py-[18px] text-[15px]"
+            : "tablet:rounded-panel tablet:px-5.5 tablet:py-5 tablet:text-[16px] rounded-panel-sm px-5 py-4.5 text-[15px]"
         }
       />
       <div className={isCard ? undefined : "px-1.5"}>
@@ -228,7 +228,7 @@ export function ContactForm({
       <form
         noValidate
         onSubmit={handleSubmit}
-        className="bg-surface tablet:gap-4 tablet:rounded-[28px] tablet:p-9 flex flex-col gap-3.5 rounded-[24px] p-[22px]"
+        className="bg-surface tablet:gap-4 tablet:rounded-panel tablet:p-9 flex flex-col gap-3.5 rounded-md p-5.5"
       >
         <h2 className="font-heading tablet:text-[26px] text-[22px] font-medium">
           {copy.title}
@@ -239,8 +239,8 @@ export function ContactForm({
   }
 
   return (
-    <section className="bg-surface tablet:gap-14 tablet:rounded-xl tablet:p-14 mx-auto grid max-w-[1360px] gap-[18px] rounded-lg px-[22px] py-7 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
-      <div className="flex flex-col gap-[18px]">
+    <section className="bg-surface tablet:gap-14 tablet:rounded-xl tablet:p-14 split:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] mx-auto grid max-w-[1360px] gap-4.5 rounded-lg px-5.5 py-7">
+      <div className="flex flex-col gap-4.5">
         <h2 className="font-heading text-h1">{copy.title}</h2>
         <ResponsiveText
           as="p"
@@ -253,7 +253,7 @@ export function ContactForm({
               <li key={c.href}>
                 <SafeLink
                   href={c.href}
-                  className="bg-primary-tint text-text hover:bg-primary-tint-hover focus-visible:shadow-focus-button flex h-[52px] items-center rounded-full px-6 text-base font-bold transition-colors focus-visible:outline-none"
+                  className="bg-primary-tint text-text hover:bg-primary-tint-hover focus-ring flex h-[52px] items-center rounded-full px-6 text-base font-bold transition-colors"
                 >
                   {c.label}
                 </SafeLink>

@@ -35,8 +35,8 @@ export function Footer({
 }: FooterProps) {
   return (
     <footer className="tablet:px-10 tablet:pb-10 px-3.5 pb-3.5">
-      <div className="bg-surface-inverse text-text-inverse tablet:gap-11 tablet:rounded-xl tablet:p-14 mx-auto flex max-w-[1360px] flex-col gap-6 rounded-lg px-[22px] py-7">
-        <div className="tablet:grid-cols-2 tablet:gap-10 grid grid-cols-1 gap-6 lg:grid-cols-[1.3fr_repeat(3,minmax(0,1fr))]">
+      <div className="bg-surface-inverse text-text-inverse tablet:gap-11 tablet:rounded-xl tablet:p-14 mx-auto flex max-w-[1360px] flex-col gap-6 rounded-lg px-5.5 py-7">
+        <div className="tablet:grid-cols-2 tablet:gap-10 split:grid-cols-[1.3fr_repeat(3,minmax(0,1fr))] grid grid-cols-1 gap-6">
           <div className="tablet:gap-5 flex flex-col gap-6">
             <Image
               src={yoLogo.src}
@@ -45,7 +45,7 @@ export function Footer({
               height={yoLogo.height}
               className="tablet:h-10 h-8 w-auto self-start"
             />
-            <address className="text-text-inverse-muted tablet:text-sm text-[13px] leading-[1.7] not-italic">
+            <address className="text-text-inverse-muted text-small leading-[1.7] not-italic">
               {requisites.map((line, i) => (
                 <Fragment key={line}>
                   {i > 0 && <br />}
@@ -79,7 +79,7 @@ export function Footer({
                 <SafeLink
                   key={`${link.href}-${link.label}`}
                   href={link.href}
-                  className="text-text-inverse hover:text-primary-light w-fit transition-colors"
+                  className="tap-area text-text-inverse hover:text-primary-light w-fit transition-colors"
                 >
                   {link.label}
                 </SafeLink>
@@ -88,13 +88,13 @@ export function Footer({
           ))}
         </div>
 
-        <div className="border-divider-inverse text-text-inverse-muted tablet:pt-6 tablet:text-[13px] flex flex-wrap justify-between gap-x-5 gap-y-2 border-t pt-[18px] text-xs">
+        <div className="border-divider-inverse text-text-inverse-muted tablet:pt-6 tablet:text-[13px] flex flex-wrap justify-between gap-x-5 gap-y-2 border-t pt-4.5 text-xs">
           <span>{copyright}</span>
           {legalLinks.map((link) => (
             <SafeLink
               key={link.href}
               href={link.href}
-              className="hover:text-text-inverse transition-colors"
+              className="tap-area hover:text-text-inverse transition-colors"
             >
               {link.label}
             </SafeLink>

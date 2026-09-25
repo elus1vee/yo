@@ -23,7 +23,8 @@ export default function AboutPage() {
       <Section
         title={production.title}
         titleSize="md"
-        className="tablet:px-10 tablet:pt-0 tablet:pb-18 px-[18px] pt-2 pb-8"
+        inset="page"
+        rhythm="stack"
       >
         <CardGrid layout="triple">
           {production.items.map((item) => (
@@ -35,7 +36,8 @@ export default function AboutPage() {
       <Section
         title={certificates.title}
         titleSize="md"
-        className="tablet:px-10 tablet:pt-0 tablet:pb-18 px-[18px] pt-2 pb-8"
+        inset="page"
+        rhythm="stack"
       >
         <CardGrid layout="tiles">
           {certificates.items.map((item) => (
@@ -49,7 +51,8 @@ export default function AboutPage() {
         title={whereToBuy.title}
         titleSize="md"
         aside={whereToBuy.aside}
-        className="tablet:px-10 tablet:pt-0 tablet:pb-24 px-[18px] pt-2 pb-10"
+        inset="page"
+        rhythm="stack-end"
       >
         <CardGrid layout="partners">
           {whereToBuy.items.map((item) => (

@@ -31,7 +31,21 @@ const twMerge = extendTailwindMerge({
           shadow: ["hover", "focus-button", "focus-field", "error-field"],
         },
       ],
-      rounded: [{ rounded: ["field"] }],
+      rounded: [
+        {
+          rounded: [
+            "xs",
+            "field",
+            "photo-sm",
+            "photo",
+            "tile",
+            "card-sm",
+            "panel-sm",
+            "panel",
+            "panel-lg",
+          ],
+        },
+      ],
     },
   },
 });

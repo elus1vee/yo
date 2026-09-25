@@ -21,7 +21,7 @@ export interface BreadcrumbsProps {
 /** Breadcrumb trail; scrolls sideways instead of wrapping on narrow screens. */
 export function Breadcrumbs({ label, items }: BreadcrumbsProps) {
   return (
-    <Section className="tablet:px-10 tablet:pt-5 tablet:pb-0 px-[18px] pt-4 pb-0">
+    <Section inset="page" className="tablet:pt-5 tablet:pb-0 pt-4 pb-0">
       <nav aria-label={label} className="px-2">
         <ol className="text-text-muted tablet:gap-2 tablet:text-[13px] flex items-center gap-1.5 overflow-x-auto text-[11px] whitespace-nowrap">
           {items.map((item, i) => (
@@ -35,7 +35,7 @@ export function Breadcrumbs({ label, items }: BreadcrumbsProps) {
               {item.href ? (
                 <SafeLink
                   href={item.href}
-                  className="hover:text-text focus-visible:shadow-focus-button transition-colors focus-visible:outline-none"
+                  className="hover:text-text focus-ring transition-colors"
                 >
                   <ResponsiveText text={item.label} />
                 </SafeLink>

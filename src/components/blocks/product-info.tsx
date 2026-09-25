@@ -73,7 +73,7 @@ export function ProductInfo({
           <ResponsiveText
             as="p"
             text={description}
-            className="text-text-muted tablet:text-base tablet:leading-[1.65] text-[15px] leading-[1.6]"
+            className="text-text-muted tablet:leading-[1.65] text-body"
           />
         )}
       </div>
@@ -103,7 +103,7 @@ export function ProductInfo({
       </ButtonLink>
 
       {shownSpecs.length > 0 && (
-        <Card className="tablet:rounded-md tablet:p-6 rounded-[22px] p-[18px]">
+        <Card className="tablet:rounded-md tablet:p-6 rounded-card-sm p-4.5">
           <dl className="tablet:grid-cols-3 tablet:gap-5 grid grid-cols-2 gap-4">
             {shownSpecs.map((spec, i) => (
               <div

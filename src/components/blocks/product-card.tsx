@@ -19,20 +19,20 @@ export interface ProductTag {
  */
 const variantStyles = {
   feature: {
-    card: "rounded-[28px] p-3 tablet:gap-4 tablet:rounded-lg tablet:p-4",
-    media: "w-[130px] rounded-[20px] tablet:h-[250px] tablet:rounded-md",
+    card: "rounded-panel p-3 tablet:gap-4 tablet:rounded-lg tablet:p-4",
+    media: "w-[130px] rounded-tile tablet:h-[250px] tablet:rounded-md",
     body: "gap-2 tablet:gap-3",
     title: "text-h3",
-    tag: "px-[11px] py-1.5 text-[11px] tablet:px-[13px] tablet:py-[7px] tablet:text-xs",
+    tag: "px-2.75 py-1.5 text-[11px] tablet:px-3.25 tablet:py-1.75 tablet:text-xs",
     cta: "text-[13px] tablet:h-[50px] tablet:text-[14px]",
   },
   catalog: {
-    card: "rounded-[22px] p-3 tablet:gap-3.5 tablet:rounded-md tablet:p-4",
-    media: "w-[120px] rounded-[16px] tablet:h-[210px] tablet:rounded-[18px]",
+    card: "rounded-card-sm p-3 tablet:gap-3.5 tablet:rounded-md tablet:p-4",
+    media: "w-[120px] rounded-photo-sm tablet:h-[210px] tablet:rounded-photo",
     body: "gap-2 tablet:gap-2.5",
     title:
       "text-base leading-[1.24] font-medium tablet:min-h-12 tablet:text-[19px]",
-    tag: "px-[11px] py-[5px] text-[11px] text-text tablet:px-3 tablet:py-1.5 tablet:text-xs",
+    tag: "px-2.75 py-1.25 text-[11px] text-text tablet:px-3 tablet:py-1.5 tablet:text-xs",
     cta: "h-[42px] text-[13px] tablet:h-12 tablet:text-[14px]",
   },
 } as const;

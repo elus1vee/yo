@@ -74,8 +74,16 @@
 
   /* ---- Radii ---- */
   --radius-sm: var(--radius-sm);
+  --radius-xs: var(--radius-xs);
   --radius-field: var(--radius-field);
+  --radius-photo-sm: var(--radius-photo-sm);
+  --radius-photo: var(--radius-photo);
+  --radius-tile: var(--radius-tile);
+  --radius-card-sm: var(--radius-card-sm);
   --radius-md: var(--radius-md);
+  --radius-panel-sm: var(--radius-panel-sm);
+  --radius-panel: var(--radius-panel);
+  --radius-panel-lg: var(--radius-panel-lg);
   --radius-lg: var(--radius-lg);
   --radius-xl: var(--radius-xl);
   --radius-full: var(--radius-full);
@@ -97,6 +105,8 @@
    * replacing them.
    */
   --breakpoint-tablet: 48rem; /* 768px */
+  --breakpoint-split: 64rem; /* 1024px · two-column layouts */
+  --breakpoint-nav: 80rem; /* 1280px · full header navigation */
   --breakpoint-desktop: 90rem; /* 1440px */
 
   /* ---- Typography scale ----
@@ -146,6 +156,27 @@
   --text-button--font-weight: var(--text-button--font-weight);
 }
 
+/* Enlarges the tap area of small text links (footer, phone numbers) to ~44px
+   without changing the layout: an invisible box around the link. */
+@utility tap-area {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -0.75rem -0.5rem;
+  }
+}
+
+/* Keyboard focus ring for buttons, links and chips (design system: 3px page-
+   colored gap + 3px primary ring). One definition instead of a repeated pair
+   of utilities. */
+@utility focus-ring {
+  &:focus-visible {
+    box-shadow: var(--shadow-focus-button);
+    outline: none;
+  }
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-text);
@@ -174,6 +205,11 @@ body {
   h4 {
     font-family: var(--font-heading);
     color: var(--color-text);
+    /* A single long word ("конфиденциальности") must wrap instead of pushing
+       the page wider on 320px screens. `anywhere` (unlike `break-word`) also
+       lowers the min-content width, so a heading inside a grid/flex item can
+       shrink. Only kicks in when the word doesn't fit. */
+    overflow-wrap: anywhere;
   }
 
   /* Tailwind v4's preflight no longer sets pointer on buttons. Disabled /

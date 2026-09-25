@@ -12,7 +12,7 @@ export interface EmptyStateProps {
 /** "Ничего не найдено" panel with a magnifier icon. */
 export function EmptyState({ title, description, children }: EmptyStateProps) {
   return (
-    <Card className="tablet:gap-4 tablet:rounded-lg tablet:px-10 tablet:py-20 flex flex-col items-center gap-3.5 rounded-[28px] px-6 py-12 text-center">
+    <Card className="tablet:gap-4 tablet:rounded-lg tablet:px-10 tablet:py-20 rounded-panel flex flex-col items-center gap-3.5 px-6 py-12 text-center">
       <div className="bg-surface-tint text-text-muted tablet:size-16 flex size-[52px] items-center justify-center rounded-full">
         <svg
           viewBox="0 0 24 24"

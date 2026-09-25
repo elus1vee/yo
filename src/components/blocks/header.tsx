@@ -6,7 +6,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { SafeLink } from "@/components/ui/safe-link";
 import { telHref } from "@/lib/safe-url";
 import { cn } from "@/lib/utils";
-import { MessengerIcon, messengerToneClass } from "./messenger-icon";
+import { MessengerLink } from "./messenger-link";
 import { type ImageAsset, type Messenger, type NavItem } from "./types";
 
 export interface HeaderProps {
@@ -32,8 +32,7 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-const focusRing =
-  "focus-visible:shadow-focus-button focus-visible:outline-none";
+const focusRing = "focus-ring";
 
 /**
  * Sticky floating-pill header. Below `xl` (1280px) the menu and phone move
@@ -79,14 +78,14 @@ export function Header({
   return (
     <header
       ref={rootRef}
-      className="sticky top-0 z-20 bg-[linear-gradient(var(--color-bg)_70%,transparent)] px-3.5 py-3 xl:bg-[linear-gradient(var(--color-bg)_60%,transparent)] xl:px-10 xl:py-4"
+      className="nav:bg-[linear-gradient(var(--color-bg)_60%,transparent)] nav:px-10 nav:py-4 sticky top-0 z-20 bg-[linear-gradient(var(--color-bg)_70%,transparent)] px-3.5 py-3"
     >
-      <div className="bg-surface relative mx-auto flex h-[60px] max-w-[1280px] items-center justify-between gap-7 rounded-full pr-2.5 pl-[18px] shadow-md xl:h-[76px] xl:pr-3.5 xl:pl-5">
+      <div className="bg-surface nav:h-[76px] nav:pr-3.5 nav:pl-5 relative mx-auto flex h-[60px] max-w-[1280px] items-center justify-between gap-7 rounded-full pr-2.5 pl-4.5 shadow-md">
         <SafeLink
           href={home.href}
           aria-label={home.label}
           className={cn(
-            "flex items-center gap-[9px] rounded-full xl:gap-3.5",
+            "nav:gap-3.5 flex items-center gap-2.25 rounded-full",
             focusRing,
           )}
         >
@@ -95,24 +94,24 @@ export function Header({
             alt={clarityLogo.alt}
             width={clarityLogo.width}
             height={clarityLogo.height}
-            className="size-11 xl:size-[52px]"
+            className="nav:size-[52px] size-11"
           />
           <span
             aria-hidden="true"
-            className="bg-divider h-[22px] w-px xl:h-[30px]"
+            className="bg-divider nav:h-[30px] h-[22px] w-px"
           />
           <Image
             src={yoLogo.src}
             alt={yoLogo.alt}
             width={yoLogo.width}
             height={yoLogo.height}
-            className="h-6 w-auto xl:h-[34px]"
+            className="nav:h-[34px] h-6 w-auto"
           />
         </SafeLink>
 
         <nav
           aria-label={labels.nav}
-          className="hidden gap-2 text-[15px] font-semibold xl:flex"
+          className="nav:flex hidden gap-2 text-[15px] font-semibold"
         >
           {nav.map((item) => {
             const active = isActive(pathname, item.href);
@@ -122,7 +121,7 @@ export function Header({
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "text-text rounded-full px-[18px] py-[9px] transition-colors",
+                  "text-text rounded-full px-4.5 py-2.25 transition-colors",
                   focusRing,
                   active ? "bg-primary-tint" : "hover:bg-surface-hover",
                 )}
@@ -137,7 +136,7 @@ export function Header({
           <SafeLink
             href={telHref(phone)}
             className={cn(
-              "text-text hidden rounded-full text-[15px] font-bold xl:inline",
+              "text-text nav:inline hidden rounded-full text-[15px] font-bold",
               focusRing,
             )}
           >
@@ -146,18 +145,11 @@ export function Header({
 
           <div className="flex gap-1.5">
             {messengers.map((m) => (
-              <SafeLink
+              <MessengerLink
                 key={m.kind}
-                href={m.href}
-                aria-label={m.label}
-                className={cn(
-                  "text-text flex size-11 items-center justify-center rounded-full transition-colors xl:size-10",
-                  messengerToneClass[m.kind],
-                  focusRing,
-                )}
-              >
-                <MessengerIcon kind={m.kind} />
-              </SafeLink>
+                messenger={m}
+                className="nav:size-10 size-11"
+              />
             ))}
 
             <button
@@ -168,7 +160,7 @@ export function Header({
               aria-label={open ? labels.closeMenu : labels.openMenu}
               onClick={() => setOpen((v) => !v)}
               className={cn(
-                "bg-surface-inverse flex size-11 flex-col items-center justify-center gap-[5px] rounded-full xl:hidden",
+                "bg-surface-inverse nav:hidden flex size-11 flex-col items-center justify-center gap-1.25 rounded-full",
                 focusRing,
               )}
             >
@@ -191,7 +183,7 @@ export function Header({
         {open && (
           <div
             id={menuId}
-            className="bg-surface absolute inset-x-0 top-full mt-2 rounded-lg p-3 shadow-md xl:hidden"
+            className="bg-surface nav:hidden absolute inset-x-0 top-full mt-2 rounded-lg p-3 shadow-md"
           >
             <nav aria-label={labels.nav}>
               <ul className="flex flex-col gap-1">
@@ -204,7 +196,7 @@ export function Header({
                         aria-current={active ? "page" : undefined}
                         onClick={() => setOpen(false)}
                         className={cn(
-                          "text-text block rounded-full px-[18px] py-3 text-[15px] font-semibold transition-colors",
+                          "text-text block rounded-full px-4.5 py-3 text-[15px] font-semibold transition-colors",
                           focusRing,
                           active ? "bg-primary-tint" : "hover:bg-surface-hover",
                         )}
@@ -219,7 +211,7 @@ export function Header({
             <SafeLink
               href={telHref(phone)}
               className={cn(
-                "bg-primary-tint text-text mt-2 flex rounded-full px-[18px] py-3 text-[15px] font-bold",
+                "bg-primary-tint text-text mt-2 flex rounded-full px-4.5 py-3 text-[15px] font-bold",
                 focusRing,
               )}
             >

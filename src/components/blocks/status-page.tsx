@@ -19,7 +19,7 @@ export function StatusPage({
   action,
 }: StatusPageProps) {
   return (
-    <main className="tablet:gap-6 flex flex-1 flex-col items-center justify-center gap-[18px] px-6 py-10 text-center">
+    <main className="tablet:gap-6 flex flex-1 flex-col items-center justify-center gap-4.5 px-6 py-10 text-center">
       <p className="font-heading text-primary-tint tablet:text-[120px] text-[76px] leading-none font-medium">
         {code}
       </p>
@@ -27,12 +27,12 @@ export function StatusPage({
       <ResponsiveText
         as="p"
         text={description}
-        className="text-text-muted tablet:text-base max-w-[440px] text-[15px] leading-[1.6]"
+        className="text-text-muted text-body max-w-[440px]"
       />
       <ButtonLink
         href={action.href}
         variant="primary"
-        className="tablet:h-14 tablet:px-8 tablet:text-base h-[52px] px-7 text-[15px]"
+        className="tablet:h-14 tablet:px-8 text-body h-[52px] px-7"
       >
         {action.label}
       </ButtonLink>

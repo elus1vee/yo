@@ -4,7 +4,7 @@ import { MailIcon, PhoneIcon, PinIcon } from "@/components/ui/icons";
 import { ImagePlaceholder } from "@/components/ui/image-placeholder";
 import { SafeLink } from "@/components/ui/safe-link";
 import { cn } from "@/lib/utils";
-import { MessengerIcon, messengerToneClass } from "./messenger-icon";
+import { MessengerLink } from "./messenger-link";
 import {
   type CardImage,
   type CardTint,
@@ -45,8 +45,8 @@ export function ContactDetails({
     "text-[11px] tracking-[0.1em] text-text-muted uppercase tablet:text-xs";
 
   return (
-    <div className="flex flex-col gap-6 lg:gap-4">
-      <Card className="tablet:gap-6 tablet:rounded-[28px] tablet:p-8 flex flex-col gap-5 rounded-[24px] p-[22px]">
+    <div className="split:gap-4 flex flex-col gap-6">
+      <Card className="tablet:gap-6 tablet:rounded-panel tablet:p-8 flex flex-col gap-5 rounded-md p-5.5">
         {items.map((item) => {
           const Icon = icons[item.icon];
           return (
@@ -66,7 +66,7 @@ export function ContactDetails({
                     <SafeLink
                       key={line.text}
                       href={line.href}
-                      className="font-heading text-text hover:text-primary tablet:text-lg w-fit text-base transition-colors"
+                      className="tap-area font-heading text-text hover:text-primary tablet:text-lg w-fit text-base transition-colors"
                     >
                       {line.text}
                     </SafeLink>
@@ -90,17 +90,7 @@ export function ContactDetails({
             <ul className="flex flex-wrap gap-2">
               {messengers.links.map((m) => (
                 <li key={m.kind}>
-                  <SafeLink
-                    href={m.href}
-                    aria-label={m.label}
-                    className={cn(
-                      "text-text focus-visible:shadow-focus-button flex h-11 items-center gap-2 rounded-full px-4 text-[13px] font-bold transition-colors focus-visible:outline-none",
-                      messengerToneClass[m.kind],
-                    )}
-                  >
-                    <MessengerIcon kind={m.kind} />
-                    {m.text ?? m.label}
-                  </SafeLink>
+                  <MessengerLink messenger={m} shape="pill" />
                 </li>
               ))}
             </ul>
@@ -108,7 +98,7 @@ export function ContactDetails({
         )}
       </Card>
 
-      <div className="tablet:h-[260px] tablet:rounded-[28px] relative h-[200px] overflow-hidden rounded-[24px]">
+      <div className="tablet:h-[260px] tablet:rounded-panel relative h-[200px] overflow-hidden rounded-md">
         {map.image ? (
           <Image
             src={map.image.src}

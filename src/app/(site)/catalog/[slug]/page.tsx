@@ -54,7 +54,7 @@ export default async function ProductPage(props: PageProps<"/catalog/[slug]">) {
         ]}
       />
 
-      <Section className="tablet:px-10 tablet:pt-6 tablet:pb-18 px-[18px] pt-3.5 pb-0">
+      <Section inset="page" rhythm="detail">
         <CardGrid layout="split">
           <ProductGallery
             images={product.gallery}
@@ -75,7 +75,8 @@ export default async function ProductPage(props: PageProps<"/catalog/[slug]">) {
         <Section
           title={productCopy.relatedTitle}
           titleSize="md"
-          className="tablet:px-10 tablet:pt-0 tablet:pb-24 px-[18px] pt-8 pb-10"
+          inset="page"
+          rhythm="detail-end"
         >
           <CardGrid layout="catalog">
             {related.map((item) => (

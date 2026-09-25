@@ -13,24 +13,25 @@ import { type CardImage, type CardTint, cardTintClass } from "./types";
  */
 const variantStyles = {
   feature: {
-    card: "items-center rounded-[28px] tablet:items-stretch tablet:rounded-lg",
-    media: "size-[100px] rounded-[20px] tablet:h-[190px] tablet:rounded-md",
+    card: "items-center rounded-panel tablet:items-stretch tablet:rounded-lg",
+    media: "size-[100px] rounded-tile tablet:h-[190px] tablet:rounded-md",
     body: "gap-2 pr-2 tablet:gap-2.5 tablet:px-2 tablet:pb-2.5",
     title: "text-h3",
     excerpt: "hidden tablet:block",
     readMore: "hidden tablet:flex",
   },
   list: {
-    card: "flex-col gap-3 rounded-[22px] tablet:gap-3.5 tablet:rounded-md",
-    media: "h-[170px] rounded-2xl tablet:h-[220px] tablet:rounded-[18px]",
+    card: "flex-col gap-3 rounded-card-sm tablet:gap-3.5 tablet:rounded-md",
+    media: "h-[170px] rounded-photo-sm tablet:h-[220px] tablet:rounded-photo",
     body: "gap-2 px-1 pb-1 tablet:gap-2.5 tablet:px-1.5 tablet:pb-1.5",
     title: "text-h3",
-    excerpt: "text-[13px] tablet:text-sm",
+    excerpt: "text-small",
     readMore: "flex",
   },
   compact: {
-    card: "rounded-[22px] tablet:items-stretch tablet:rounded-md",
-    media: "size-[110px] rounded-2xl tablet:h-[190px] tablet:rounded-[18px]",
+    card: "rounded-card-sm tablet:items-stretch tablet:rounded-md",
+    media:
+      "size-[110px] rounded-photo-sm tablet:h-[190px] tablet:rounded-photo",
     body: "gap-2 py-1 pr-1 tablet:gap-2.5 tablet:px-1.5 tablet:pb-1.5",
     title: "text-base font-medium leading-[1.25] tablet:text-[19px]",
     excerpt: "hidden",
@@ -131,7 +132,7 @@ export function NewsCard({
         <span
           aria-hidden="true"
           className={cn(
-            "text-primary tablet:gap-[7px] tablet:text-sm mt-auto items-center gap-1.5 text-[13px] font-bold",
+            "text-primary tablet:gap-1.75 text-small mt-auto items-center gap-1.5 font-bold",
             styles.readMore,
           )}
         >

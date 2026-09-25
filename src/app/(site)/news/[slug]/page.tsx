@@ -54,7 +54,8 @@ export default async function NewsArticlePage(
         <Section
           title={articleCopy.relatedTitle}
           titleSize="md"
-          className="tablet:px-10 tablet:pt-0 tablet:pb-24 px-[18px] pt-8 pb-10"
+          inset="page"
+          rhythm="detail-end"
         >
           <CardGrid layout="news">
             {article.related.map((item) => (

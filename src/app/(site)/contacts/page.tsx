@@ -16,7 +16,7 @@ export default function ContactsPage() {
   return (
     <>
       <PageIntro {...contactsIntro} />
-      <Section className="tablet:px-10 tablet:pt-4 tablet:pb-18 px-[18px] pt-0 pb-10">
+      <Section inset="page" rhythm="form">
         <CardGrid layout="contacts">
           <ContactDetails {...contactDetails} />
           <ContactForm variant="card" copy={contactsForm} />

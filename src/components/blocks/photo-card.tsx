@@ -16,10 +16,10 @@ export interface PhotoCardProps {
 /** Photo with a short caption underneath ("Производство и команда"). */
 export function PhotoCard({ text, tint, image }: PhotoCardProps) {
   return (
-    <Card className="tablet:gap-4 tablet:rounded-md tablet:p-6 flex flex-col gap-3 rounded-[22px] p-[18px]">
+    <Card className="tablet:gap-4 tablet:rounded-md tablet:p-6 rounded-card-sm flex flex-col gap-3 p-4.5">
       <div
         className={cn(
-          "tablet:h-[180px] tablet:rounded-[18px] relative h-[150px] overflow-hidden rounded-2xl",
+          "tablet:h-[180px] tablet:rounded-photo rounded-photo-sm relative h-[150px] overflow-hidden",
           cardTintClass[tint],
         )}
       >

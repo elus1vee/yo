@@ -102,8 +102,18 @@
    * value per tier until components are built.
    */
   --radius-sm: 0.625rem; /* 10px · form fields, small pills */
+  --radius-xs: 0.75rem; /* 12px · small tiles (partner logo, TOC item) */
   --radius-field: 0.875rem; /* 14px · inputs, textareas, selects (README + real pages) */
+  /* README tier "md 18–24": the mockups land on different values per component */
+  --radius-photo-sm: 1rem; /* 16px · photo inside a mobile card, thumbnails */
+  --radius-photo: 1.125rem; /* 18px · photo inside a desktop card */
+  --radius-tile: 1.25rem; /* 20px · info tiles, mobile card thumbnails */
+  --radius-card-sm: 1.375rem; /* 22px · mobile cards */
   --radius-md: 1.5rem; /* 24px · cards, photos inside cards */
+  /* README tier "lg 28–36" */
+  --radius-panel-sm: 1.625rem; /* 26px · large mobile photo, textarea */
+  --radius-panel: 1.75rem; /* 28px · contact panels */
+  --radius-panel-lg: 2.25rem; /* 36px · audience panels */
   --radius-lg: 2rem; /* 32px · large panels */
   --radius-xl: 2.75rem; /* 44px · section containers, footer */
   --radius-full: 999px; /* buttons, chips, pills, icons */
@@ -136,6 +146,8 @@
 :root {
   --bp-mobile: 390px;
   --bp-tablet: 768px;
+  --bp-split: 1024px; /* two-column layouts (hero, forms, sidebars) */
+  --bp-nav: 1280px; /* header switches from burger to full navigation */
   --bp-desktop: 1440px;
 }
 

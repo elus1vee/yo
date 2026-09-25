@@ -45,7 +45,7 @@ export function Textarea({
         {...controlProps}
         className={cn(
           fieldControlClass(Boolean(error)),
-          "tablet:px-[18px] tablet:py-4 resize-none px-4 py-3.5",
+          "tablet:px-4.5 tablet:py-4 resize-none px-4 py-3.5",
           className,
         )}
       />

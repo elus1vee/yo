@@ -61,7 +61,7 @@ export function ProductGallery({ images, label }: ProductGalleryProps) {
     <div className="tablet:gap-3.5 flex flex-col gap-3">
       <div
         className={cn(
-          "tablet:h-[440px] tablet:rounded-lg relative h-[340px] overflow-hidden rounded-[26px]",
+          "tablet:h-[440px] tablet:rounded-lg rounded-panel-sm relative h-[340px] overflow-hidden",
           cardTintClass[active.tint],
         )}
       >
@@ -80,8 +80,8 @@ export function ProductGallery({ images, label }: ProductGalleryProps) {
                 aria-pressed={image.id === active.id}
                 onClick={() => setActiveId(image.id)}
                 className={cn(
-                  "tablet:size-[100px] block size-[76px] rounded-2xl border-2 p-0 transition-colors",
-                  "focus-visible:shadow-focus-button focus-visible:outline-none",
+                  "tablet:size-[100px] rounded-photo-sm block size-[76px] border-2 p-0 transition-colors",
+                  "focus-ring",
                   image.id === active.id
                     ? "border-primary"
                     : "hover:border-border-strong border-transparent",
@@ -89,7 +89,7 @@ export function ProductGallery({ images, label }: ProductGalleryProps) {
               >
                 <span
                   className={cn(
-                    "tablet:rounded-[14px] relative block size-full overflow-hidden rounded-[10px]",
+                    "tablet:rounded-field relative block size-full overflow-hidden rounded-sm",
                     cardTintClass[image.tint],
                   )}
                 >

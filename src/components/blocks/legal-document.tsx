@@ -61,26 +61,24 @@ export function LegalDocument({
   return (
     <>
       <Section
-        className="tablet:px-10 tablet:pb-4 px-[18px] pt-2 pb-4"
+        inset="page"
+        className="tablet:pb-4 pt-2 pb-4"
         containerClassName="gap-2 tablet:gap-2"
       >
         <h1 className="font-heading text-h1">{title}</h1>
-        {updated && (
-          <p className="text-text-muted tablet:text-sm text-[13px]">
-            {updated}
-          </p>
-        )}
+        {updated && <p className="text-text-muted text-small">{updated}</p>}
       </Section>
 
       <Section
-        className="tablet:px-10 tablet:pt-6 tablet:pb-24 px-[18px] pt-2 pb-10"
-        containerClassName="gap-4 lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start lg:gap-x-14"
+        inset="page"
+        className="tablet:pt-6 tablet:pb-24 pt-2 pb-10"
+        containerClassName="gap-4 split:grid split:grid-cols-[280px_minmax(0,1fr)] split:items-start split:gap-x-14"
       >
         <nav
           aria-label={tocLabel}
-          className="lg:bg-surface flex gap-2 overflow-x-auto pb-1 lg:sticky lg:top-[110px] lg:flex-col lg:gap-1 lg:overflow-visible lg:rounded-md lg:p-5 lg:pb-5"
+          className="split:bg-surface split:sticky split:top-27.5 split:flex-col split:gap-1 split:overflow-visible split:rounded-md split:p-5 split:pb-5 flex gap-2 overflow-x-auto pb-1"
         >
-          <span className="text-text-muted hidden px-3 pb-2.5 text-[11px] font-bold tracking-[0.12em] uppercase lg:block">
+          <span className="text-text-muted split:block hidden px-3 pb-2.5 text-[11px] font-bold tracking-[0.12em] uppercase">
             {tocLabel}
           </span>
           {sections.map((section) => (
@@ -88,9 +86,9 @@ export function LegalDocument({
               key={section.id}
               href={`#${section.id}`}
               className={cn(
-                "bg-surface text-text flex-none rounded-full px-3.5 py-[9px] text-xs font-semibold whitespace-nowrap transition-colors",
-                "focus-visible:shadow-focus-button focus-visible:outline-none",
-                "lg:hover:bg-surface-hover lg:rounded-xl lg:bg-transparent lg:px-3 lg:py-2.5 lg:text-sm lg:whitespace-normal",
+                "bg-surface text-text flex-none rounded-full px-3.5 py-2.25 text-xs font-semibold whitespace-nowrap transition-colors",
+                "focus-ring",
+                "split:hover:bg-surface-hover split:rounded-xs split:bg-transparent split:px-3 split:py-2.5 split:text-sm split:whitespace-normal",
               )}
             >
               {section.title}
@@ -98,7 +96,7 @@ export function LegalDocument({
           ))}
         </nav>
 
-        <div className="tablet:gap-8 flex flex-col gap-[26px]">
+        <div className="tablet:gap-8 flex flex-col gap-6.5">
           {sections.map((section, i) => (
             <section
               key={section.id}
@@ -113,7 +111,7 @@ export function LegalDocument({
                 <p
                   key={j}
                   className={cn(
-                    "tablet:text-base tablet:leading-[1.75] text-[15px] leading-[1.65]",
+                    "tablet:leading-[1.75] text-body leading-[1.65]",
                     j > 0 && "text-text-muted",
                   )}
                 >

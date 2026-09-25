@@ -36,7 +36,7 @@ const variantClasses = {
 } as const;
 
 const sizeClasses = {
-  sm: "h-11 px-[22px] text-[14px]",
+  sm: "h-11 px-5.5 text-[14px]",
   md: "h-[52px] px-7 text-button",
   lg: "h-[58px] px-8 text-[16px]",
 } as const;
@@ -63,7 +63,7 @@ export function buttonClassName({
   const v = variantClasses[variant];
   return cn(
     "inline-flex items-center justify-center gap-2.5 rounded-full font-bold whitespace-nowrap transition-colors",
-    "focus-visible:shadow-focus-button focus-visible:outline-none",
+    "focus-ring",
     sizeClasses[size],
     disabled
       ? cn(

@@ -60,7 +60,7 @@ export function Select({
           {...controlProps}
           className={cn(
             fieldControlClass(Boolean(error)),
-            "tablet:h-[52px] tablet:pl-[18px] h-[50px] cursor-pointer appearance-none pr-11 pl-4",
+            "tablet:h-[52px] tablet:pl-4.5 h-[50px] cursor-pointer appearance-none pr-11 pl-4",
             className,
           )}
         >

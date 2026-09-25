@@ -42,12 +42,12 @@ export function Hero({
 }: HeroProps) {
   return (
     <Section className="tablet:pt-2 tablet:pb-16 pt-1.5">
-      <div className="bg-peach-tint tablet:rounded-xl tablet:px-14 tablet:py-16 relative flex flex-col gap-5 overflow-hidden rounded-lg px-[22px] py-7 lg:grid lg:grid-cols-2 lg:items-center lg:gap-x-12">
+      <div className="bg-peach-tint tablet:rounded-xl tablet:px-14 tablet:py-16 split:grid split:grid-cols-2 split:items-center split:gap-x-12 relative flex flex-col gap-5 overflow-hidden rounded-lg px-5.5 py-7">
         {/* `contents` on mobile so the photo can slot between text and actions */}
-        <div className="contents lg:flex lg:flex-col lg:items-start lg:gap-[26px]">
+        <div className="split:flex split:flex-col split:items-start split:gap-6.5 contents">
           <ResponsiveText
             text={eyebrow}
-            className="bg-surface tablet:px-[18px] tablet:py-[9px] tablet:text-[13px] self-start rounded-full px-4 py-2 text-xs font-bold"
+            className="bg-surface tablet:px-4.5 tablet:py-2.25 tablet:text-[13px] self-start rounded-full px-4 py-2 text-xs font-bold"
           />
           <h1 className="font-heading text-display text-pretty">
             <TitleParts parts={title} accentClassName="italic text-primary" />
@@ -57,14 +57,14 @@ export function Hero({
             text={description}
             className="text-text-muted tablet:text-lg max-w-[430px] text-base leading-[1.6]"
           />
-          <div className="order-2 flex flex-col gap-2.5 lg:order-none lg:flex-row lg:items-center lg:gap-3.5">
+          <div className="split:order-none split:flex-row split:items-center split:gap-3.5 order-2 flex flex-col gap-2.5">
             {actions.map((action) => (
               <ButtonLink
                 key={action.href + action.label}
                 href={action.href}
                 variant={action.variant}
                 size="lg"
-                className="tablet:h-[58px] h-[54px] w-full lg:w-auto"
+                className="tablet:h-[58px] split:w-auto h-[54px] w-full"
               >
                 {action.label}
               </ButtonLink>
@@ -72,8 +72,8 @@ export function Hero({
           </div>
         </div>
 
-        <div className="order-1 flex flex-col gap-4 lg:order-none">
-          <div className="tablet:h-[380px] tablet:rounded-lg relative h-[280px] overflow-hidden rounded-[24px]">
+        <div className="split:order-none order-1 flex flex-col gap-4">
+          <div className="tablet:h-[380px] tablet:rounded-lg relative h-[280px] overflow-hidden rounded-md">
             {media ? (
               <Image
                 src={media.src}
@@ -90,7 +90,7 @@ export function Hero({
             <ul className="tablet:flex hidden gap-3">
               {facts.map((fact) => (
                 <li key={fact.value} className="flex-1">
-                  <Card className="flex h-full flex-col gap-1 rounded-[22px] px-5 py-[18px]">
+                  <Card className="rounded-card-sm flex h-full flex-col gap-1 px-5 py-4.5">
                     <span className="font-heading text-[26px]">
                       {fact.value}
                     </span>

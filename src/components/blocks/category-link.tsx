@@ -22,7 +22,7 @@ export function CategoryLink({ label, href, dot }: CategoryLinkProps) {
   return (
     <SafeLink
       href={href}
-      className="bg-surface text-text hover:bg-surface-hover focus-visible:shadow-focus-button tablet:gap-3.5 tablet:px-[26px] tablet:py-5 tablet:text-[17px] flex items-center gap-2.5 rounded-full px-[18px] py-4 text-sm font-bold transition-colors focus-visible:outline-none"
+      className="bg-surface text-text hover:bg-surface-hover tablet:gap-3.5 tablet:px-6.5 tablet:py-5 tablet:text-[17px] focus-ring flex items-center gap-2.5 rounded-full px-4.5 py-4 text-sm font-bold transition-colors"
     >
       <span
         aria-hidden="true"

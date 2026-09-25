@@ -45,7 +45,7 @@ export function ImagePlaceholder({
         stripeClass[tint],
         align === "center"
           ? "items-center justify-center"
-          : "tablet:p-[22px] items-end p-[18px]",
+          : "tablet:p-5.5 items-end p-4.5",
         className,
       )}
     >

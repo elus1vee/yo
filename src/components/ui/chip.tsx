@@ -19,7 +19,7 @@ export function Chip({
       aria-pressed={active}
       className={cn(
         "inline-flex h-10 items-center rounded-full px-4 text-[13px] font-semibold whitespace-nowrap transition-colors",
-        "focus-visible:shadow-focus-button tablet:h-11 tablet:px-[18px] tablet:text-sm focus-visible:outline-none",
+        "tablet:h-11 tablet:px-4.5 tablet:text-sm focus-ring",
         active
           ? "bg-primary text-text-inverse hover:bg-primary-hover"
           : "bg-surface text-text hover:bg-surface-hover",

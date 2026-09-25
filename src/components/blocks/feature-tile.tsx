@@ -13,7 +13,7 @@ export interface FeatureTileProps {
 /** Certificate / standard tile: shield icon, name, one-line explanation. */
 export function FeatureTile({ title, description, tint }: FeatureTileProps) {
   return (
-    <Card className="tablet:gap-3.5 tablet:rounded-md tablet:p-6 flex flex-col items-start gap-2.5 rounded-[20px] p-[18px]">
+    <Card className="tablet:gap-3.5 tablet:rounded-md tablet:p-6 rounded-tile flex flex-col items-start gap-2.5 p-4.5">
       <div
         className={cn(
           "text-text tablet:size-[52px] flex size-11 items-center justify-center rounded-full",

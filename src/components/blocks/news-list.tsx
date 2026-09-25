@@ -43,7 +43,7 @@ export function NewsList({
   };
 
   return (
-    <Section className="tablet:px-10 tablet:pt-4 tablet:pb-10 px-[18px] pt-2 pb-8">
+    <Section inset="page" className="tablet:pt-4 tablet:pb-10 pt-2 pb-8">
       <div ref={listRef} className="scroll-mt-28">
         <CardGrid layout="news">
           {visible.map((item) => (
