@@ -160,6 +160,14 @@ body {
  * `text-text-inverse-muted` on the footer headings.
  */
 @layer base {
+  /* Reserve the scrollbar's width on every page. Without it, moving between a
+     short page (no scrollbar) and a long one (scrollbar) shifts the whole
+     layout sideways by the scrollbar's width, and `vw`-based fluid type
+     changes size slightly too. */
+  html {
+    scrollbar-gutter: stable;
+  }
+
   h1,
   h2,
   h3,
