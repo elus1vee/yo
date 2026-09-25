@@ -1,8 +1,9 @@
 import type { CatalogProduct } from "@/components/blocks/catalog-product-card";
 import type { OptionGroup, SpecItem } from "@/components/blocks/product-info";
 import type { GalleryImage } from "@/components/blocks/product-gallery";
+import type { CardTint } from "@/components/blocks/types";
 import type { Copy } from "@/components/ui/responsive-text";
-import { animalOptions } from "@/content/catalog";
+import { animalOptions, typeOptions } from "@/content/catalog";
 import type { NewsCardProps } from "@/components/blocks/news-card";
 import type { ProductCardProps } from "@/components/blocks/product-card";
 
@@ -67,32 +68,175 @@ export const products: ProductCardProps[] = [
   },
 ];
 
-export const news: NewsCardProps[] = [
+/**
+ * News (7 items from the Yo News List mockup, newest first). Only the first
+ * article has the full text from the Yo News Article mockup; the others fall
+ * back to their teaser as the only paragraph until the CMS provides a body.
+ */
+export interface NewsArticleData {
+  slug: string;
+  title: string;
+  date: string;
+  dateTime: string;
+  category: string;
+  excerpt: string;
+  tint: CardTint;
+  body: string[];
+  /** Catalog slug of the product the article is about. */
+  productSlug?: string;
+}
+
+const articles: NewsArticleData[] = [
   {
+    slug: "tofu-three-scents",
     title: "Йо! TOFU выходит в трёх ароматах",
-    href: "/news/tofu-three-scents",
     date: "12 сентября 2026",
     dateTime: "2026-09-12",
+    category: "продукт",
+    excerpt:
+      "К классическому TOFU добавились Lavender и Green Tea — мягче, чем прежде.",
     tint: "peach",
-    readMoreLabel: "Читать",
+    body: [
+      "Комкующийся наполнитель Йо! TOFU уже несколько лет остаётся одним из самых спокойных решений в линейке — мягкая текстура, минимум пыли и быстрое формирование комков. С этого месяца к классическому аромату добавляются ещё два: Lavender и Green Tea.",
+      "Оба новых аромата подбирались с расчётом на чувствительных животных — без резких парфюмерных нот, только лёгкий природный оттенок. Формула самого наполнителя не изменилась: тот же состав на основе тофу, та же скорость впитывания.",
+      "Обновлённая линейка уже поступает в зоомагазины-партнёры и будет доступна на маркетплейсах в течение сентября. Объём упаковки остаётся прежним — 6 л / 2,5 кг.",
+    ],
+    productSlug: "tofu-peach",
   },
   {
+    slug: "ph-litter-tests",
     title: "Наполнитель-индикатор pH: первые тесты",
-    href: "/news/ph-litter-tests",
     date: "28 августа 2026",
     dateTime: "2026-08-28",
+    category: "разработка",
+    excerpt:
+      "Показываем ранние образцы наполнителя, меняющего цвет по pH мочи.",
     tint: "primary",
-    readMoreLabel: "Читать",
+    body: [],
   },
   {
+    slug: "expo-minsk",
     title: "«Йо!» на выставке зоотоваров в Минске",
-    href: "/news/expo-minsk",
     date: "15 августа 2026",
     dateTime: "2026-08-15",
+    category: "событие",
+    excerpt: "Показали новую линейку косметики и пообщались с зоомагазинами.",
     tint: "lavender",
-    readMoreLabel: "Читать",
+    body: [],
+  },
+  {
+    slug: "dog-treats-batch",
+    title: "Новая партия лакомств для собак",
+    date: "3 августа 2026",
+    dateTime: "2026-08-03",
+    category: "продукт",
+    excerpt: "Бычий корень теперь в двух форматах — 100 г и 250 г.",
+    tint: "neutral",
+    body: [],
+    productSlug: "bull-root",
+  },
+  {
+    slug: "kitten-litter-guide",
+    title: "Как выбрать наполнитель для котёнка",
+    date: "22 июля 2026",
+    dateTime: "2026-07-22",
+    category: "советы",
+    excerpt:
+      "Разбираем разницу между комкующимся и силикагелевым наполнителем.",
+    tint: "peach",
+    body: [],
+  },
+  {
+    slug: "korona-network",
+    title: "Йо! теперь в сети «Корона»",
+    date: "9 июля 2026",
+    dateTime: "2026-07-09",
+    category: "дистрибуция",
+    excerpt: "Полная линейка наполнителей и лакомств доступна в 40 магазинах.",
+    tint: "primary",
+    body: [],
+  },
+  {
+    slug: "derm-test",
+    title: "Косметика Йо! прошла дерматологический тест",
+    date: "18 июня 2026",
+    dateTime: "2026-06-18",
+    category: "продукт",
+    excerpt:
+      "Бальзам-кондиционер и шампунь протестированы независимой лабораторией.",
+    tint: "lavender",
+    body: [],
+    productSlug: "balm",
   },
 ];
+
+const READ_MORE = "Читать";
+
+function newsCardOf(a: NewsArticleData, withCategory: boolean): NewsCardProps {
+  return {
+    title: a.title,
+    href: `/news/${a.slug}`,
+    date: a.date,
+    dateTime: a.dateTime,
+    category: withCategory ? a.category : undefined,
+    excerpt: a.excerpt,
+    tint: a.tint,
+    readMoreLabel: READ_MORE,
+  };
+}
+
+/** Latest three, for the home page (no teaser / category shown there). */
+export const news: NewsCardProps[] = articles
+  .slice(0, 3)
+  .map((a) => ({ ...newsCardOf(a, false), excerpt: undefined }));
+
+/** Everything, for the news list (with category and teaser). */
+export const newsList: NewsCardProps[] = articles.map((a) =>
+  newsCardOf(a, true),
+);
+
+export interface NewsArticlePage extends NewsArticleData {
+  product?: { name: string; meta: string; href: string };
+  related: NewsCardProps[];
+}
+
+export function getNewsSlugs(): string[] {
+  return articles.map((a) => a.slug);
+}
+
+/** Lookup by array search (not by object key), so odd slugs can't hit prototypes. */
+export function getNewsArticle(slug: string): NewsArticlePage | undefined {
+  const article = articles.find((a) => a.slug === slug);
+  if (!article) return undefined;
+
+  const linked = article.productSlug
+    ? catalogProducts.find((p) => p.slug === article.productSlug)
+    : undefined;
+  const detail = article.productSlug
+    ? getProductDetail(article.productSlug)
+    : undefined;
+  const typeLabel = typeOptions
+    .find((t) => t.id === linked?.type)
+    ?.label.toLowerCase();
+
+  return {
+    ...article,
+    // Without a written body the teaser stands in for it.
+    body: article.body.length > 0 ? article.body : [article.excerpt],
+    product:
+      linked && detail
+        ? {
+            name: detail.shortName,
+            meta: [linked.volume, typeLabel].filter(Boolean).join(" · "),
+            href: linked.href,
+          }
+        : undefined,
+    related: articles
+      .filter((a) => a.slug !== slug)
+      .slice(0, 3)
+      .map((a) => ({ ...newsCardOf(a, false), excerpt: undefined })),
+  };
+}
 
 /**
  * Catalog listing (12 products from the Yo Catalog mockup). `animals` and

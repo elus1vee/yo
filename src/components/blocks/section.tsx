@@ -58,7 +58,13 @@ export function Section({
         )}
       >
         {title && (
-          <div className="tablet:items-end flex items-baseline justify-between gap-6 px-2">
+          <div
+            className={cn(
+              "tablet:items-end flex items-baseline justify-between gap-6",
+              // the home page nudges its title row in by 8px; inner pages don't
+              titleSize === "lg" && "px-2",
+            )}
+          >
             <h2
               className={cn(
                 "font-heading",

@@ -6,13 +6,8 @@ import { useEffect, useId, useRef, useState } from "react";
 import { SafeLink } from "@/components/ui/safe-link";
 import { telHref } from "@/lib/safe-url";
 import { cn } from "@/lib/utils";
-import { MessengerIcon } from "./messenger-icon";
-import {
-  type ImageAsset,
-  type Messenger,
-  type MessengerKind,
-  type NavItem,
-} from "./types";
+import { MessengerIcon, messengerToneClass } from "./messenger-icon";
+import { type ImageAsset, type Messenger, type NavItem } from "./types";
 
 export interface HeaderProps {
   /** Logo link target and its accessible name, e.g. { href: "/", label: "На главную" }. */
@@ -30,12 +25,6 @@ export interface HeaderProps {
     closeMenu: string;
   };
 }
-
-const messengerClass: Record<MessengerKind, string> = {
-  telegram: "bg-primary-tint hover:bg-primary-tint-hover",
-  whatsapp: "bg-peach-tint hover:bg-peach-hover",
-  viber: "bg-lavender-tint hover:bg-lavender-hover",
-};
 
 function isActive(pathname: string, href: string) {
   if (!href.startsWith("/")) return false;
@@ -163,7 +152,7 @@ export function Header({
                 aria-label={m.label}
                 className={cn(
                   "text-text flex size-11 items-center justify-center rounded-full transition-colors xl:size-10",
-                  messengerClass[m.kind],
+                  messengerToneClass[m.kind],
                   focusRing,
                 )}
               >

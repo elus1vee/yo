@@ -13,6 +13,13 @@ const paths: Record<MessengerKind, string> = {
     "M8.4 3.6 10.3 7c.2.5.1 1-.3 1.3L8.5 9.5c.9 2.1 2.6 3.8 4.7 4.7l1.2-1.5c.3-.4.9-.5 1.3-.3l3.4 1.9c.5.3.7.9.5 1.4l-.9 2c-.3.6-.9.9-1.5.8-6.1-.9-10.9-5.7-11.8-11.8-.1-.6.2-1.2.8-1.5l2-.9c.5-.2 1.1 0 1.4.5Z",
 };
 
+/** Pastel button colors per messenger, with hover. */
+export const messengerToneClass: Record<MessengerKind, string> = {
+  telegram: "bg-primary-tint hover:bg-primary-tint-hover",
+  whatsapp: "bg-peach-tint hover:bg-peach-hover",
+  viber: "bg-lavender-tint hover:bg-lavender-hover",
+};
+
 export function MessengerIcon({ kind }: { kind: MessengerKind }) {
   return (
     <svg

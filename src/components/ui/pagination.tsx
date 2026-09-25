@@ -47,7 +47,7 @@ function toInt(value: number, fallback: number) {
 }
 
 const circle =
-  "inline-flex size-11 items-center justify-center rounded-full transition-colors focus-visible:shadow-focus-button focus-visible:outline-none";
+  "inline-flex size-[38px] items-center justify-center rounded-full transition-colors focus-visible:shadow-focus-button focus-visible:outline-none tablet:size-11";
 
 function Arrow({ direction }: { direction: "prev" | "next" }) {
   return (
@@ -62,17 +62,7 @@ function Arrow({ direction }: { direction: "prev" | "next" }) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      {direction === "next" ? (
-        <>
-          <path d="M4 12h15" />
-          <path d="m13 6 6 6-6 6" />
-        </>
-      ) : (
-        <>
-          <path d="M20 12H5" />
-          <path d="m11 6-6 6 6 6" />
-        </>
-      )}
+      <path d={direction === "next" ? "m9 6 6 6-6 6" : "M15 6 9 12l6 6"} />
     </svg>
   );
 }
@@ -115,7 +105,7 @@ export function Pagination({
 
   return (
     <nav aria-label="Пагинация" className={className}>
-      <ul className="flex flex-wrap items-center gap-2">
+      <ul className="tablet:gap-2 flex flex-wrap items-center justify-center gap-1.5">
         <li>{arrow("prev")}</li>
         {items.map((item) =>
           typeof item === "string" ? (
@@ -135,7 +125,7 @@ export function Pagination({
                 onClick={() => onPageChange(item)}
                 className={cn(
                   circle,
-                  "text-[15px] font-bold",
+                  "tablet:text-[15px] text-sm font-bold",
                   item === current
                     ? "bg-primary text-text-inverse hover:bg-primary-hover"
                     : "bg-surface text-text hover:bg-surface-hover",

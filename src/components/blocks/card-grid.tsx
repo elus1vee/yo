@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
  *   stretching (README: "фото не должно терять качество"), so 1–2 products
  *   don't blow up. Card basis = (100% − 3 gaps) / 4, min 260px.
  * - catalog:  like products, capped at 310px per card.
+ * - news:     like products, 3 per row, cards 280–400px.
  * - triple:   3 columns from `desktop` (animals, news).
  * - pair:     2 columns from `lg`.
  * - split:    two equal columns from `lg` (product gallery | info).
@@ -20,6 +21,8 @@ const layouts = {
   /* Catalog: same, but cards never grow past 310px (README). */
   catalog:
     "flex flex-col gap-3.5 tablet:flex-row tablet:flex-wrap tablet:gap-5 tablet:[&>*]:max-w-[310px] tablet:[&>*]:min-w-[260px] tablet:[&>*]:flex-[0_1_calc((100%_-_60px)/4)]",
+  /* News: wrapping row, cards 280–400px wide (README/mockup). */
+  news: "flex flex-col gap-3.5 tablet:flex-row tablet:flex-wrap tablet:gap-5 tablet:[&>*]:max-w-[400px] tablet:[&>*]:min-w-[280px] tablet:[&>*]:flex-[0_1_calc((100%_-_40px)/3)]",
   triple: "grid gap-3 tablet:grid-cols-2 tablet:gap-5 desktop:grid-cols-3",
   pair: "grid gap-3 tablet:gap-5 lg:grid-cols-2",
   /* Two halves (gallery | info), 56px apart from `lg`. */
