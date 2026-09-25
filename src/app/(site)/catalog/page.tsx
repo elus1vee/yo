@@ -1,6 +1,4 @@
 import { CatalogBrowser } from "@/components/blocks/catalog-browser";
-import { Footer } from "@/components/blocks/footer";
-import { Header } from "@/components/blocks/header";
 import { PageIntro } from "@/components/blocks/page-intro";
 import {
   animalOptions,
@@ -8,7 +6,6 @@ import {
   catalogIntro,
   typeOptions,
 } from "@/content/catalog";
-import { footer, header } from "@/content/site";
 import { catalogProducts } from "@/lib/mock-data";
 
 const firstValue = (value: string | string[] | undefined) =>
@@ -20,19 +17,15 @@ export default async function CatalogPage(props: PageProps<"/catalog">) {
 
   return (
     <>
-      <Header {...header} />
-      <main>
-        <PageIntro {...catalogIntro} />
-        <CatalogBrowser
-          products={catalogProducts}
-          animals={animalOptions}
-          types={typeOptions}
-          copy={catalogCopy}
-          initialAnimal={firstValue(animal)}
-          initialType={firstValue(type)}
-        />
-      </main>
-      <Footer {...footer} />
+      <PageIntro {...catalogIntro} />
+      <CatalogBrowser
+        products={catalogProducts}
+        animals={animalOptions}
+        types={typeOptions}
+        copy={catalogCopy}
+        initialAnimal={firstValue(animal)}
+        initialType={firstValue(type)}
+      />
     </>
   );
 }
