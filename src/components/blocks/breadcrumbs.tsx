@@ -1,9 +1,11 @@
+import { type Copy, ResponsiveText } from "@/components/ui/responsive-text";
 import { SafeLink } from "@/components/ui/safe-link";
 import { cn } from "@/lib/utils";
 import { Section } from "./section";
 
 export interface BreadcrumbItem {
-  label: string;
+  /** May be shorter on mobile: { desktop, mobile }. */
+  label: Copy;
   /** Omit on the last item: it renders as the current page. */
   href?: string;
   /** Dropped below `tablet` (the mobile mockup shortens the trail). */
@@ -24,7 +26,7 @@ export function Breadcrumbs({ label, items }: BreadcrumbsProps) {
         <ol className="text-text-muted tablet:gap-2 tablet:text-[13px] flex items-center gap-1.5 overflow-x-auto text-[11px] whitespace-nowrap">
           {items.map((item, i) => (
             <li
-              key={`${item.label}-${i}`}
+              key={i}
               className={cn(
                 "tablet:gap-2 flex items-center gap-1.5",
                 item.hideOnMobile && "tablet:flex hidden",
@@ -35,11 +37,11 @@ export function Breadcrumbs({ label, items }: BreadcrumbsProps) {
                   href={item.href}
                   className="hover:text-text focus-visible:shadow-focus-button transition-colors focus-visible:outline-none"
                 >
-                  {item.label}
+                  <ResponsiveText text={item.label} />
                 </SafeLink>
               ) : (
                 <span aria-current="page" className="text-text font-semibold">
-                  {item.label}
+                  <ResponsiveText text={item.label} />
                 </span>
               )}
               {i < items.length - 1 && <span aria-hidden="true">/</span>}

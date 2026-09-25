@@ -7,7 +7,7 @@ import { telHref } from "@/lib/safe-url";
  * Site-wide content for the layout blocks. Text, phone numbers and the
  * requisites come from the design handoff (Yo-C-Vitrina.dc.html).
  *
- * TODO: the messenger / social URLs and the /privacy path are not in the
+ * TODO: the messenger / social URLs and the privacy-policy path are not in the
  * handoff (the mockup links are "#") — fill in the real ones.
  */
 
@@ -80,7 +80,9 @@ export const footer: FooterProps = {
     },
   ],
   copyright: "© 2026 «Йо!»",
-  legalLinks: [{ label: "Политика конфиденциальности", href: "/privacy" }],
+  legalLinks: [
+    { label: "Политика конфиденциальности", href: "/legal/privacy" },
+  ],
 };
 
 export const contactForm: {

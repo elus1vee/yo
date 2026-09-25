@@ -32,7 +32,7 @@ export function PageIntro({
         media && "tablet:pb-10 pb-6",
       )}
       containerClassName={cn(
-        "gap-3.5",
+        "gap-3.5 tablet:gap-3.5",
         media && "lg:grid lg:grid-cols-2 lg:items-center lg:gap-x-14",
       )}
     >

@@ -1,6 +1,7 @@
 import type { CatalogProduct } from "@/components/blocks/catalog-product-card";
 import type { OptionGroup, SpecItem } from "@/components/blocks/product-info";
 import type { GalleryImage } from "@/components/blocks/product-gallery";
+import type { LegalSectionData } from "@/components/blocks/legal-document";
 import type { CardTint } from "@/components/blocks/types";
 import type { Copy } from "@/components/ui/responsive-text";
 import { animalOptions, typeOptions } from "@/content/catalog";
@@ -525,4 +526,75 @@ export function getRelatedProducts(detail: ProductDetail): CatalogProduct[] {
   return detail.related
     .map((slug) => catalogProducts.find((p) => p.slug === slug))
     .filter((p): p is CatalogProduct => Boolean(p));
+}
+
+/**
+ * Legal pages (text from the Yo Legal mockup, desktop wording — legal text
+ * shouldn't differ between devices, so the mockup's shortened mobile
+ * variants are not used).
+ */
+export interface LegalPageData {
+  slug: string;
+  title: string;
+  updated: string;
+  sections: LegalSectionData[];
+}
+
+const legalPages: LegalPageData[] = [
+  {
+    slug: "privacy",
+    title: "Политика конфиденциальности",
+    updated: "Действует с 1 января 2026 года",
+    sections: [
+      {
+        id: "collection",
+        title: "Какие данные мы собираем",
+        paragraphs: [
+          "Мы собираем имя, номер телефона и текст обращения, которые вы указываете в формах на сайте — например, в форме обратной связи или заявке на партнёрство.",
+          "Дополнительно фиксируются технические данные посещения: тип устройства и браузера, для улучшения работы сайта.",
+        ],
+      },
+      {
+        id: "purpose",
+        title: "Цели обработки",
+        paragraphs: [
+          "Данные используются для ответа на обращения, обработки заявок зоомагазинов-партнёров и информирования о новых товарах, если вы дали на это согласие.",
+        ],
+      },
+      {
+        id: "storage",
+        title: "Хранение и защита",
+        paragraphs: [
+          "Персональные данные хранятся на серверах ООО «Клэрити» и защищены от несанкционированного доступа. Срок хранения — не более 3 лет с момента последнего обращения.",
+        ],
+      },
+      {
+        id: "rights",
+        title: "Ваши права",
+        paragraphs: [
+          "Вы можете запросить удаление или уточнение своих данных, написав на info@clarity.by. Мы отвечаем на такие запросы в течение 10 рабочих дней.",
+        ],
+      },
+      {
+        id: "contacts",
+        title: "Контакты",
+        paragraphs: [
+          [
+            "ООО «Клэрити», УНП 191878316, г. Минск, ул. Лещинского, 8-2. Email: ",
+            { text: "info@clarity.by", href: "mailto:info@clarity.by" },
+            ".",
+          ],
+        ],
+      },
+    ],
+  },
+];
+
+export function getLegalSlugs(): string[] {
+  return legalPages.map((p) => p.slug);
+}
+
+/** Lookup by array search (not by object key), so odd slugs can't hit prototypes. */
+export function getLegalPage(slug: string): LegalPageData | undefined {
+  return legalPages.find((p) => p.slug === slug);
 }
