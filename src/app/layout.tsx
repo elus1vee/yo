@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Lora, Manrope } from "next/font/google";
+import { homeSeo } from "@/content/seo";
+import { SITE_NAME, SITE_URL } from "@/lib/seo";
 import "@/styles/globals.css";
 
 const lora = Lora({
@@ -16,8 +18,12 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "yo",
-  description: "yo",
+  metadataBase: new URL(SITE_URL),
+  title: { default: homeSeo.title, template: `%s — ${SITE_NAME}` },
+  description: homeSeo.description,
+  applicationName: SITE_NAME,
+  openGraph: { type: "website", siteName: SITE_NAME, locale: "ru_BY" },
+  twitter: { card: "summary" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

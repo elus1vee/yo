@@ -7,6 +7,8 @@ import { NewsCard, type NewsCardProps } from "./news-card";
 import { Section } from "./section";
 
 export interface NewsListProps {
+  /** Hidden h2 above the grid (keeps the heading outline intact). */
+  title: string;
   /** All items, newest first; the list slices them into pages. */
   items: NewsCardProps[];
   /** Cards per page (the mockup shows 3, production is meant to use 9). */
@@ -20,6 +22,7 @@ export interface NewsListProps {
  * to `?page=` (replaceState, no navigation) so a page can be shared.
  */
 export function NewsList({
+  title,
   items,
   pageSize = 9,
   initialPage = 1,
@@ -43,7 +46,11 @@ export function NewsList({
   };
 
   return (
-    <Section inset="page" className="tablet:pt-4 tablet:pb-10 pt-2 pb-8">
+    <Section
+      srTitle={title}
+      inset="page"
+      className="tablet:pt-4 tablet:pb-10 pt-2 pb-8"
+    >
       <div ref={listRef} className="scroll-mt-28">
         <CardGrid layout="news">
           {visible.map((item) => (

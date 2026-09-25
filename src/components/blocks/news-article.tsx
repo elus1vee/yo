@@ -65,7 +65,7 @@ export function NewsArticle({
 
   return (
     <Section inset="page" className="tablet:pt-5 tablet:pb-16 pt-3.5 pb-0">
-      <div
+      <article
         className={cn(
           "tablet:gap-y-6 grid gap-x-16 gap-y-4",
           hasAside && "split:grid-cols-[minmax(0,1fr)_300px]",
@@ -145,7 +145,7 @@ export function NewsArticle({
             )}
           </aside>
         )}
-      </div>
+      </article>
     </Section>
   );
 }

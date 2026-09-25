@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { AnimalCard } from "@/components/blocks/animal-card";
 import { AudiencePanel } from "@/components/blocks/audience-panel";
 import { CardGrid } from "@/components/blocks/card-grid";
@@ -11,14 +12,19 @@ import { Section } from "@/components/blocks/section";
 import {
   animals,
   audiences,
+  audiencesTitle,
   categories,
   hero,
   newsSection,
   phPromo,
   productsSection,
 } from "@/content/home";
+import { homeSeo } from "@/content/seo";
 import { contactForm } from "@/content/site";
 import { news, products } from "@/lib/mock-data";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({ ...homeSeo, absolute: true });
 
 export default function Home() {
   return (
@@ -48,7 +54,7 @@ export default function Home() {
 
       <PhPromo {...phPromo} />
 
-      <Section>
+      <Section srTitle={audiencesTitle}>
         <CardGrid layout="pair">
           {audiences.map((audience) => (
             <AudiencePanel key={audience.eyebrow} {...audience} />

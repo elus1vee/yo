@@ -18,7 +18,8 @@ interface ResponsiveTextProps {
 
 /**
  * Renders the right wording per breakpoint (the mockups shorten some
- * texts on mobile). A plain string renders once; a missing side renders
+ * texts on mobile). A plain string renders once; a mobile text that is a
+ * prefix of the desktop one renders once with a hidden tail; a missing side renders
  * nothing on that side, so no empty element is left behind.
  */
 export function ResponsiveText({
@@ -32,6 +33,19 @@ export function ResponsiveText({
 
   if (desktop === mobile) {
     return desktop ? <Tag className={className}>{desktop}</Tag> : null;
+  }
+
+  // "Любимое" / "Любимое у покупателей": keep one continuous string in the
+  // DOM (crawlers, copy/paste) and only hide the tail on mobile.
+  if (mobile && desktop && desktop.startsWith(mobile)) {
+    return (
+      <Tag className={className}>
+        {mobile}
+        <span className="tablet:inline hidden">
+          {desktop.slice(mobile.length)}
+        </span>
+      </Tag>
+    );
   }
 
   return (

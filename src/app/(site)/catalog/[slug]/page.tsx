@@ -9,10 +9,15 @@ import { Section } from "@/components/blocks/section";
 import { typeOptions } from "@/content/catalog";
 import { productCopy } from "@/content/product";
 import {
+  type ProductDetail,
   getProductDetail,
   getProductSlugs,
   getRelatedProducts,
 } from "@/lib/mock-data";
+import { pageMetadata } from "@/lib/seo";
+
+const descriptionText = (copy: ProductDetail["description"]) =>
+  typeof copy === "string" ? copy : copy?.desktop;
 
 export function generateStaticParams() {
   return getProductSlugs().map((slug) => ({ slug }));
@@ -23,7 +28,14 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const product = getProductDetail(slug);
-  return product ? { title: product.name } : {};
+  if (!product) return {};
+  // the product name already carries the brand, so no "— Йо!" suffix
+  return pageMetadata({
+    title: product.name,
+    description: descriptionText(product.description),
+    path: `/catalog/${product.slug}`,
+    absolute: true,
+  });
 }
 
 export default async function ProductPage(props: PageProps<"/catalog/[slug]">) {

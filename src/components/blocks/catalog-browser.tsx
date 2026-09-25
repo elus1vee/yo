@@ -13,6 +13,8 @@ import {
 import { Section } from "./section";
 
 export interface CatalogCopy {
+  /** Hidden h2 above the product grid (keeps the heading outline intact). */
+  resultsTitle: string;
   animalsLabel: string;
   typesLabel: string;
   reset: string;
@@ -126,6 +128,7 @@ export function CatalogBrowser({
       </Section>
 
       <Section
+        srTitle={copy.resultsTitle}
         inset="page"
         className="tablet:pb-24 pb-12"
         containerClassName="gap-0 tablet:gap-0"

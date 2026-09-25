@@ -9,8 +9,10 @@ import {
   contactsForm,
   contactsIntro,
 } from "@/content/contacts";
+import { contactsSeo } from "@/content/seo";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Контакты" };
+export const metadata: Metadata = pageMetadata(contactsSeo);
 
 export default function ContactsPage() {
   return (

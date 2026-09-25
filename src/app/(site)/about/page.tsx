@@ -12,8 +12,10 @@ import {
   production,
   whereToBuy,
 } from "@/content/about";
+import { aboutSeo } from "@/content/seo";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "О компании" };
+export const metadata: Metadata = pageMetadata(aboutSeo);
 
 export default function AboutPage() {
   return (

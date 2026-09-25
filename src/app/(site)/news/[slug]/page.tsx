@@ -7,6 +7,7 @@ import { NewsCard } from "@/components/blocks/news-card";
 import { Section } from "@/components/blocks/section";
 import { articleCopy, shareLinks } from "@/content/news";
 import { getNewsArticle, getNewsSlugs } from "@/lib/mock-data";
+import { pageMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
   return getNewsSlugs().map((slug) => ({ slug }));
@@ -17,7 +18,14 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const article = getNewsArticle(slug);
-  return article ? { title: article.title, description: article.excerpt } : {};
+  if (!article) return {};
+  return pageMetadata({
+    title: article.title,
+    description: article.excerpt,
+    path: `/news/${article.slug}`,
+    type: "article",
+    publishedTime: article.dateTime,
+  });
 }
 
 export default async function NewsArticlePage(

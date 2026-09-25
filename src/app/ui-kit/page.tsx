@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { type ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,12 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { PaginationDemo } from "./pagination-demo";
+
+// Internal preview page: keep it out of search results.
+export const metadata: Metadata = {
+  title: "ui-kit",
+  robots: { index: false, follow: false },
+};
 
 /**
  * UI kit preview — every component in every state, laid out like the

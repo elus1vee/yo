@@ -12,6 +12,8 @@ export const newsIntro: PageIntroProps = {
   },
 };
 
+export const newsListTitle = "Все новости";
+
 /** Mockup shows 3 per page to demo the pager; production is meant to be 9. */
 export const NEWS_PAGE_SIZE = 3;
 

@@ -72,9 +72,9 @@ export function Footer({
                   "tablet:flex-col tablet:flex-nowrap flex-row flex-wrap gap-x-4",
               )}
             >
-              <h2 className="text-text-inverse-muted tablet:block hidden text-[11px] tracking-[0.14em] uppercase">
+              <p className="font-heading text-text-inverse-muted tablet:block hidden text-[11px] tracking-[0.14em] uppercase">
                 {column.title}
-              </h2>
+              </p>
               {column.links.map((link) => (
                 <SafeLink
                   key={`${link.href}-${link.label}`}

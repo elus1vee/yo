@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+// Internal preview page: keep it out of search results.
+export const metadata: Metadata = {
+  title: "design-system",
+  robots: { index: false, follow: false },
+};
 /**
  * Token preview / QA page — not part of the site navigation.
  *

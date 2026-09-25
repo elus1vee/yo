@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { type ReactNode, useId } from "react";
 import { ArrowIcon } from "@/components/ui/icons";
 import { ArrowLink } from "@/components/ui/arrow-link";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -41,6 +41,11 @@ export interface SectionProps {
   id?: string;
   /** May be shorter on mobile: { desktop, mobile }. */
   title?: Copy;
+  /**
+   * Heading that only screen readers and crawlers get, for sections whose
+   * mockup has no visible title (keeps h1 → h2 → h3 unbroken).
+   */
+  srTitle?: string;
   /** `md` is the smaller heading (h2 token) used on inner pages. */
   titleSize?: "lg" | "md";
   /** Short note to the right of the title (desktop only). */
@@ -64,6 +69,7 @@ export interface SectionProps {
 export function Section({
   id,
   title,
+  srTitle,
   titleSize = "lg",
   aside,
   action,
@@ -73,9 +79,13 @@ export function Section({
   className,
   containerClassName,
 }: SectionProps) {
+  const headingId = useId();
+  const labelled = Boolean(title || srTitle);
+
   return (
     <section
       id={id}
+      aria-labelledby={labelled ? headingId : undefined}
       className={cn("scroll-mt-24", insets[inset], rhythms[rhythm], className)}
     >
       <div
@@ -84,6 +94,11 @@ export function Section({
           containerClassName,
         )}
       >
+        {srTitle && !title && (
+          <h2 id={headingId} className="sr-only">
+            {srTitle}
+          </h2>
+        )}
         {title && (
           <div
             className={cn(
@@ -93,6 +108,7 @@ export function Section({
             )}
           >
             <h2
+              id={headingId}
               className={cn(
                 "font-heading",
                 titleSize === "lg" ? "text-h1" : "text-h2",

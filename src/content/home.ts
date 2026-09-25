@@ -43,6 +43,9 @@ export const hero: HeroProps = {
   ],
 };
 
+/** Hidden h2 above the "Где купить / Стать партнёром" panels. */
+export const audiencesTitle = "Покупателям и партнёрам";
+
 export const animals: {
   title: string;
   aside: string;

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { type ReactNode } from "react";
 import { Footer } from "@/components/blocks/footer";
 import { Header } from "@/components/blocks/header";
@@ -6,6 +7,12 @@ import { ProductCard } from "@/components/blocks/product-card";
 import { contactForm, footer, header } from "@/content/site";
 import { news, products } from "@/lib/mock-data";
 import { ContactFormDemo } from "./contact-form-demo";
+
+// Internal preview page: keep it out of search results.
+export const metadata: Metadata = {
+  title: "blocks",
+  robots: { index: false, follow: false },
+};
 
 /**
  * Preview of the composite blocks with the home page mockup's data

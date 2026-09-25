@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { CatalogBrowser } from "@/components/blocks/catalog-browser";
 import { PageIntro } from "@/components/blocks/page-intro";
 import {
@@ -6,7 +7,12 @@ import {
   catalogIntro,
   typeOptions,
 } from "@/content/catalog";
+import { catalogSeo } from "@/content/seo";
 import { catalogProducts } from "@/lib/mock-data";
+import { pageMetadata } from "@/lib/seo";
+
+// Filters live in the query string; the canonical URL is the unfiltered list.
+export const metadata: Metadata = pageMetadata(catalogSeo);
 
 const firstValue = (value: string | string[] | undefined) =>
   Array.isArray(value) ? value[0] : value;

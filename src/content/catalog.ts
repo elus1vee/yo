@@ -33,6 +33,7 @@ export const typeOptions: FilterOption[] = [
 ];
 
 export const catalogCopy: CatalogCopy = {
+  resultsTitle: "Каталог товаров",
   animalsLabel: "по животным",
   typesLabel: "по типу товара",
   reset: "Сбросить фильтры",

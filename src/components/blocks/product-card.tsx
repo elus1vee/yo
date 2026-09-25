@@ -84,6 +84,7 @@ export function ProductCard({
 
   return (
     <Card
+      as="article"
       interactive
       className={cn(
         "tablet:flex-col relative flex gap-3.5",

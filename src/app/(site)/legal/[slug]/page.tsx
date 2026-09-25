@@ -4,6 +4,7 @@ import { Breadcrumbs } from "@/components/blocks/breadcrumbs";
 import { LegalDocument } from "@/components/blocks/legal-document";
 import { legalCopy } from "@/content/legal";
 import { getLegalPage, getLegalSlugs } from "@/lib/mock-data";
+import { pageMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
   return getLegalSlugs().map((slug) => ({ slug }));
@@ -14,7 +15,12 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const page = getLegalPage(slug);
-  return page ? { title: page.title } : {};
+  if (!page) return {};
+  return pageMetadata({
+    title: page.title,
+    description: page.updated,
+    path: `/legal/${page.slug}`,
+  });
 }
 
 export default async function LegalPage(props: PageProps<"/legal/[slug]">) {

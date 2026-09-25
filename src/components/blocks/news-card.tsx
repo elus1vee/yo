@@ -77,6 +77,7 @@ export function NewsCard({
 
   return (
     <Card
+      as="article"
       interactive
       className={cn(
         "has-focus-visible:shadow-focus-button tablet:flex-col tablet:gap-4 tablet:p-4 relative flex gap-3.5 p-3",
