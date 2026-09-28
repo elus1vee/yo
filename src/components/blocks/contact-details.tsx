@@ -31,11 +31,27 @@ export interface ContactDetailsProps {
   map: {
     /** Accessible name of the map / placeholder caption, e.g. "карта: …". */
     caption: string;
-    /** Shows a live Yandex Maps embed centered on this address. */
+    /**
+     * Shows a live Yandex Maps embed. With `coordinates` the pin drops
+     * exactly there; without it, `address` is used as a text search (finds
+     * the right spot for a clean address, but isn't guaranteed to).
+     */
     address?: string;
-    /** Takes priority over `address` if both are given. */
+    coordinates?: { lat: number; lng: number };
+    /** Takes priority over the live map if given. */
     image?: CardImage;
   };
+}
+
+function yandexMapSrc(map: ContactDetailsProps["map"]): string | undefined {
+  if (map.coordinates) {
+    const { lat, lng } = map.coordinates;
+    return `https://yandex.ru/map-widget/v1/?ll=${lng},${lat}&z=17&pt=${lng},${lat},pm2rdm`;
+  }
+  if (map.address) {
+    return `https://yandex.ru/map-widget/v1/?mode=search&text=${encodeURIComponent(map.address)}&z=16`;
+  }
+  return undefined;
 }
 
 /** Left column of the contacts page: details card and map. */
@@ -46,6 +62,7 @@ export function ContactDetails({
 }: ContactDetailsProps) {
   const label =
     "text-[11px] tracking-[0.1em] text-text-muted uppercase tablet:text-xs";
+  const mapSrc = yandexMapSrc(map);
 
   return (
     <div className="split:gap-4 flex flex-col gap-6">
@@ -110,10 +127,10 @@ export function ContactDetails({
             sizes="(min-width: 1024px) 620px, 100vw"
             className="object-cover"
           />
-        ) : map.address ? (
+        ) : mapSrc ? (
           <iframe
             title={map.caption}
-            src={`https://yandex.ru/map-widget/v1/?mode=search&text=${encodeURIComponent(map.address)}&z=16`}
+            src={mapSrc}
             className="size-full border-0"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"

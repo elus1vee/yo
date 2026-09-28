@@ -29,7 +29,23 @@ export const Contacts: GlobalConfig = {
       name: "mapCaption",
       label: "Подпись карты",
       type: "text",
-      admin: { description: "Пока карта — заглушка; используется как подпись" },
+      admin: {
+        description:
+          "Название карты для читалок с экрана; на сайте не показывается",
+      },
+    },
+    {
+      name: "mapCoordinates",
+      label: "Точка на карте",
+      type: "group",
+      admin: {
+        description:
+          "Без координат метка ищется по адресу — с ними появляется сразу, в нужном месте. Чтобы узнать: откройте yandex.ru/maps, найдите нужную точку, кликните по ней правой кнопкой и выберите «Что здесь?» — внизу появятся координаты. Первое число — широта (поле «Широта»), второе — долгота (поле «Долгота»).",
+      },
+      fields: [
+        { name: "lat", label: "Широта (latitude)", type: "number" },
+        { name: "lng", label: "Долгота (longitude)", type: "number" },
+      ],
     },
   ],
 };

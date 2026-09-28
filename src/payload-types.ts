@@ -1142,9 +1142,16 @@ export interface Contact {
   phoneSecond?: string | null;
   email: string;
   /**
-   * Пока карта — заглушка; используется как подпись
+   * Название карты для читалок с экрана; на сайте не показывается
    */
   mapCaption?: string | null;
+  /**
+   * Без координат метка ищется по адресу — с ними появляется сразу, в нужном месте. Чтобы узнать: откройте yandex.ru/maps, найдите нужную точку, кликните по ней правой кнопкой и выберите «Что здесь?» — внизу появятся координаты. Первое число — широта (поле «Широта»), второе — долгота (поле «Долгота»).
+   */
+  mapCoordinates?: {
+    lat?: number | null;
+    lng?: number | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1275,6 +1282,12 @@ export interface ContactsSelect<T extends boolean = true> {
   phoneSecond?: T;
   email?: T;
   mapCaption?: T;
+  mapCoordinates?:
+    | T
+    | {
+        lat?: T;
+        lng?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -62,6 +62,14 @@ export function contactsToView(
       map: {
         caption: contacts.mapCaption ?? `Карта: ${contacts.address}`,
         address: contacts.address,
+        coordinates:
+          contacts.mapCoordinates?.lat != null &&
+          contacts.mapCoordinates?.lng != null
+            ? {
+                lat: contacts.mapCoordinates.lat,
+                lng: contacts.mapCoordinates.lng,
+              }
+            : undefined,
       },
     },
   };
