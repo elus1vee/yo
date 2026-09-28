@@ -57,6 +57,12 @@ export default buildConfig({
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URI },
     migrationDir: path.resolve(dirname, "migrations"),
+    // We keep the schema in migrations (npm run payload -- migrate); the
+    // adapter's own dev-mode auto-push (default outside NODE_ENV=production)
+    // otherwise applies schema edits to the DB directly, ahead of and
+    // without a migration file, which then makes `migrate` fail with
+    // "column already exists" the next time it runs.
+    push: false,
   }),
   sharp,
   typescript: { outputFile: path.resolve(dirname, "payload-types.ts") },

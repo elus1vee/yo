@@ -155,10 +155,12 @@ async function main() {
     categoryType: "litter" | "treats" | "food" | "care" | "home";
     tint: "peach" | "lavender" | "primary" | "neutral";
     subtitle?: string;
+    /** One aroma per product — the same base product in another scent is a separate document. */
+    scent?: string;
     badge?: string;
     images?: number[];
     description?: Product["description"];
-    variants?: { volume?: string; scent?: string }[];
+    variants?: { volume?: string }[];
     specs?: { weight?: string; volume?: string };
   }[] = [
     {
@@ -169,15 +171,13 @@ async function main() {
       categoryType: "litter",
       tint: "peach",
       subtitle: "комкующийся",
+      scent: "Peach",
       badge: "Хит",
       images: [peachPhoto.id],
       description: paragraphs(
         "Комкующийся наполнитель на основе тофу с ароматом персика. Быстро формирует плотные комки, не пылит и легко убирается совком. Подходит для ежедневного использования.",
       ),
-      variants: [
-        { volume: "6 л / 2,5 кг", scent: "Peach" },
-        { volume: "12 л / 5 кг", scent: "Peach" },
-      ],
+      variants: [{ volume: "6 л / 2,5 кг" }, { volume: "12 л / 5 кг" }],
       specs: { volume: "6 л / 2,5 кг" },
     },
     {
@@ -187,7 +187,8 @@ async function main() {
       categoryType: "litter",
       tint: "lavender",
       subtitle: "комкующийся",
-      variants: [{ volume: "6 л / 2,5 кг", scent: "Lavender" }],
+      scent: "Lavender",
+      variants: [{ volume: "6 л / 2,5 кг" }],
       specs: { volume: "6 л / 2,5 кг" },
     },
     {
@@ -197,7 +198,8 @@ async function main() {
       categoryType: "litter",
       tint: "primary",
       subtitle: "комкующийся",
-      variants: [{ volume: "6 л / 2,5 кг", scent: "Green tea" }],
+      scent: "Green tea",
+      variants: [{ volume: "6 л / 2,5 кг" }],
       specs: { volume: "6 л / 2,5 кг" },
     },
     {

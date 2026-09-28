@@ -77,6 +77,15 @@ export const Products: CollectionConfig = {
       admin: { description: 'Короткое пояснение, например "комкующийся"' },
     },
     {
+      name: "scent",
+      label: "Аромат",
+      type: "text",
+      admin: {
+        description:
+          "Один аромат на товар; товар в другом аромате — отдельная карточка",
+      },
+    },
+    {
       name: "badge",
       label: "Плашка на карточке",
       type: "text",
@@ -95,12 +104,9 @@ export const Products: CollectionConfig = {
     { name: "description", label: "Описание", type: "richText" },
     {
       name: "variants",
-      label: "Варианты (объём / аромат)",
+      label: "Варианты объёма / веса",
       type: "array",
-      fields: [
-        { name: "volume", label: "Объём или вес", type: "text" },
-        { name: "scent", label: "Аромат", type: "text" },
-      ],
+      fields: [{ name: "volume", label: "Объём или вес", type: "text" }],
     },
     {
       name: "specs",

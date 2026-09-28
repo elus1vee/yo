@@ -28,14 +28,11 @@ export const mediaImage = (media: Media | number | null | undefined) =>
     ? { src: media.url, alt: media.alt }
     : undefined;
 
-/** Distinct, non-empty values of a variant field, in first-seen order. */
-export function variantValues(
-  variants: Product["variants"],
-  field: "volume" | "scent",
-) {
+/** Distinct, non-empty volumes/weights, in first-seen order. */
+export function volumeValues(variants: Product["variants"]) {
   const seen = new Set<string>();
   for (const v of variants ?? []) {
-    const value = v[field]?.trim();
+    const value = v.volume?.trim();
     if (value) seen.add(value);
   }
   return [...seen];
@@ -43,9 +40,7 @@ export function variantValues(
 
 /** Product card for the "Любимое у покупателей" grid (home page). */
 export function productCardOf(product: Product): ProductCardProps {
-  const scents = variantValues(product.variants, "scent");
-  const volumes = variantValues(product.variants, "volume");
-  const tagValues = scents.length > 1 ? scents : volumes;
+  const volumes = volumeValues(product.variants);
 
   return {
     name: product.title,
@@ -55,7 +50,7 @@ export function productCardOf(product: Product): ProductCardProps {
     tint: product.tint,
     image: mediaImage(product.images?.[0]),
     badge: product.badge ?? undefined,
-    tags: tagValues.map((label, i) => ({
+    tags: volumes.map((label, i) => ({
       label,
       tone: product.tint,
       strong: i === 0,
@@ -73,10 +68,7 @@ export function catalogProductOf(product: Product): CatalogProduct {
     href: `/catalog/${product.slug}`,
     animals: product.categoryAnimal,
     type: product.categoryType,
-    volume:
-      product.specs?.volume ??
-      variantValues(product.variants, "volume")[0] ??
-      "",
+    volume: product.specs?.volume ?? volumeValues(product.variants)[0] ?? "",
     tint: product.tint,
     tagTone: product.tint,
     tagStrong: true,
@@ -109,26 +101,18 @@ export function galleryOf(product: Product): GalleryImage[] {
 
 export function groupsOf(product: Product): OptionGroup[] {
   const groups: OptionGroup[] = [];
-  const volumes = variantValues(product.variants, "volume");
-  const scents = variantValues(product.variants, "scent");
+  const volumes = volumeValues(product.variants);
   if (volumes.length > 1)
     groups.push({
       id: "volume",
       label: "Объём",
       options: volumes.map((v) => ({ id: v, label: v })),
     });
-  if (scents.length > 1)
-    groups.push({
-      id: "scent",
-      label: "Аромат",
-      options: scents.map((s) => ({ id: s, label: s })),
-    });
   return groups;
 }
 
 export function specsOf(product: Product, groups: OptionGroup[]): SpecItem[] {
   const hasVolumeGroup = groups.some((g) => g.id === "volume");
-  const hasScentGroup = groups.some((g) => g.id === "scent");
   const specs: SpecItem[] = [];
 
   if (hasVolumeGroup) specs.push({ label: "Объём", fromGroup: "volume" });
@@ -138,11 +122,7 @@ export function specsOf(product: Product, groups: OptionGroup[]): SpecItem[] {
   if (product.specs?.weight)
     specs.push({ label: "Вес", value: product.specs.weight });
 
-  if (hasScentGroup) specs.push({ label: "Аромат", fromGroup: "scent" });
-  else {
-    const scent = variantValues(product.variants, "scent")[0];
-    if (scent) specs.push({ label: "Аромат", value: scent });
-  }
+  if (product.scent) specs.push({ label: "Аромат", value: product.scent });
 
   specs.push({
     label: "Для кого",

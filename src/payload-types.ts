@@ -164,6 +164,10 @@ export interface Product {
    */
   subtitle?: string | null;
   /**
+   * Один аромат на товар; товар в другом аромате — отдельная карточка
+   */
+  scent?: string | null;
+  /**
    * Например "Хит"; пусто — плашки нет
    */
   badge?: string | null;
@@ -186,7 +190,6 @@ export interface Product {
   variants?:
     | {
         volume?: string | null;
-        scent?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -675,6 +678,7 @@ export interface ProductsSelect<T extends boolean = true> {
   categoryType?: T;
   tint?: T;
   subtitle?: T;
+  scent?: T;
   badge?: T;
   images?: T;
   description?: T;
@@ -682,7 +686,6 @@ export interface ProductsSelect<T extends boolean = true> {
     | T
     | {
         volume?: T;
-        scent?: T;
         id?: T;
       };
   specs?:
