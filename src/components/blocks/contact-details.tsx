@@ -28,11 +28,14 @@ export interface ContactDetailsProps {
   items: ContactDetailItem[];
   /** Messenger buttons with visible names (`Messenger.text`). */
   messengers: { label: string; links: Messenger[] };
-  /**
-   * Map area. TODO: it is a striped placeholder, as in the mockup — connect
-   * Yandex / Google Maps (or pass a static `image`).
-   */
-  map: { caption: string; image?: CardImage };
+  map: {
+    /** Accessible name of the map / placeholder caption, e.g. "карта: …". */
+    caption: string;
+    /** Shows a live Yandex Maps embed centered on this address. */
+    address?: string;
+    /** Takes priority over `address` if both are given. */
+    image?: CardImage;
+  };
 }
 
 /** Left column of the contacts page: details card and map. */
@@ -106,6 +109,14 @@ export function ContactDetails({
             fill
             sizes="(min-width: 1024px) 620px, 100vw"
             className="object-cover"
+          />
+        ) : map.address ? (
+          <iframe
+            title={map.caption}
+            src={`https://yandex.ru/map-widget/v1/?mode=search&text=${encodeURIComponent(map.address)}&z=16`}
+            className="size-full border-0"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
           />
         ) : (
           <ImagePlaceholder

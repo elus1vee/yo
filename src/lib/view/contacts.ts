@@ -60,9 +60,8 @@ export function contactsToView(
       ],
       messengers: { label: "Написать в мессенджер", links: messengers },
       map: {
-        caption:
-          contacts.mapCaption ??
-          `карта: ${contacts.address.replace(/^г\. Минск,\s*/, "")}`,
+        caption: contacts.mapCaption ?? `Карта: ${contacts.address}`,
+        address: contacts.address,
       },
     },
   };
