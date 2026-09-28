@@ -3,48 +3,52 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/blocks/breadcrumbs";
 import { CardGrid } from "@/components/blocks/card-grid";
 import { CatalogProductCard } from "@/components/blocks/catalog-product-card";
-import { ProductGallery } from "@/components/blocks/product-gallery";
-import { ProductInfo } from "@/components/blocks/product-info";
 import { Section } from "@/components/blocks/section";
+import { ProductDetailLive } from "@/components/live/product-detail-live";
 import { typeOptions } from "@/content/catalog";
 import { productCopy } from "@/content/product";
 import {
-  type ProductDetail,
   getProductDetail,
   getProductSlugs,
-  getRelatedProducts,
+  getRawProduct,
 } from "@/lib/mock-data";
+import { richTextToPlainText } from "@/lib/rich-text";
 import { pageMetadata } from "@/lib/seo";
+import { mediaImage, productToView } from "@/lib/view/product";
 
-const descriptionText = (copy: ProductDetail["description"]) =>
-  typeof copy === "string" ? copy : copy?.desktop;
-
-export function generateStaticParams() {
-  return getProductSlugs().map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  return (await getProductSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata(
   props: PageProps<"/catalog/[slug]">,
 ): Promise<Metadata> {
   const { slug } = await props.params;
-  const product = getProductDetail(slug);
-  if (!product) return {};
-  // the product name already carries the brand, so no "— Йо!" suffix
+  const raw = await getRawProduct(slug);
+  if (!raw) return {};
+  const product = productToView(raw);
+  // Editors can override the auto title/description/image on the SEO tab;
+  // fall back to the product's own fields when they leave it empty.
   return pageMetadata({
-    title: product.name,
-    description: descriptionText(product.description),
+    title: raw.meta?.title || product.name,
+    description: raw.meta?.description || richTextToPlainText(raw.description),
+    image: mediaImage(raw.meta?.image)?.src ?? mediaImage(raw.images?.[0])?.src,
     path: `/catalog/${product.slug}`,
+    // the product name always carries the brand ("Йо! TOFU ..."), so no
+    // "— Йо!" template suffix — same for a custom SEO title
     absolute: true,
   });
 }
 
 export default async function ProductPage(props: PageProps<"/catalog/[slug]">) {
   const { slug } = await props.params;
-  const product = getProductDetail(slug);
-  if (!product) notFound();
+  const [raw, product] = await Promise.all([
+    getRawProduct(slug),
+    getProductDetail(slug),
+  ]);
+  if (!raw || !product) notFound();
 
   const typeLabel = typeOptions.find((t) => t.id === product.type)?.label;
-  const related = getRelatedProducts(product);
 
   return (
     <>
@@ -67,23 +71,14 @@ export default async function ProductPage(props: PageProps<"/catalog/[slug]">) {
       />
 
       <Section inset="page" rhythm="detail">
-        <CardGrid layout="split">
-          <ProductGallery
-            images={product.gallery}
-            label={productCopy.galleryLabel}
-          />
-          <ProductInfo
-            eyebrow={[typeLabel, product.audience].filter(Boolean).join(" · ")}
-            title={product.name}
-            description={product.description}
-            groups={product.groups}
-            specs={product.specs}
-            cta={productCopy.cta}
-          />
-        </CardGrid>
+        <ProductDetailLive
+          initialProduct={raw}
+          galleryLabel={productCopy.galleryLabel}
+          cta={productCopy.cta}
+        />
       </Section>
 
-      {related.length > 0 && (
+      {product.related.length > 0 && (
         <Section
           title={productCopy.relatedTitle}
           titleSize="md"
@@ -91,7 +86,7 @@ export default async function ProductPage(props: PageProps<"/catalog/[slug]">) {
           rhythm="detail-end"
         >
           <CardGrid layout="catalog">
-            {related.map((item) => (
+            {product.related.map((item) => (
               <CatalogProductCard
                 key={item.slug}
                 product={item}

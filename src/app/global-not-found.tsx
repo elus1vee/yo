@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Header } from "@/components/blocks/header";
 import { StatusPage } from "@/components/blocks/status-page";
 import { notFoundCopy } from "@/content/legal";
-import { header } from "@/content/site";
+import { getHeaderContent } from "@/lib/cms-content";
 import { lora, manrope } from "./fonts";
 import "@/styles/globals.css";
 
@@ -13,7 +13,8 @@ export const metadata: Metadata = { title: "Страница не найдена
  * (site and Payload admin), so there is no single layout to compose it from
  * — it renders its own <html>. Same content as (frontend)/not-found.tsx.
  */
-export default function GlobalNotFound() {
+export default async function GlobalNotFound() {
+  const header = await getHeaderContent();
   return (
     <html
       lang="ru"

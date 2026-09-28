@@ -2,27 +2,40 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/blocks/breadcrumbs";
 import { CardGrid } from "@/components/blocks/card-grid";
-import { NewsArticle } from "@/components/blocks/news-article";
 import { NewsCard } from "@/components/blocks/news-card";
 import { Section } from "@/components/blocks/section";
+import { NewsArticleLive } from "@/components/live/news-article-live";
 import { articleCopy, shareLinks } from "@/content/news";
-import { getNewsArticle, getNewsSlugs } from "@/lib/mock-data";
+import {
+  getNewsArticle,
+  getNewsSlugs,
+  getRawNewsArticle,
+} from "@/lib/mock-data";
 import { pageMetadata } from "@/lib/seo";
+import { newsToView } from "@/lib/view/news";
+import { mediaImage } from "@/lib/view/product";
 
-export function generateStaticParams() {
-  return getNewsSlugs().map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  return (await getNewsSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata(
   props: PageProps<"/news/[slug]">,
 ): Promise<Metadata> {
   const { slug } = await props.params;
-  const article = getNewsArticle(slug);
-  if (!article) return {};
+  const raw = await getRawNewsArticle(slug);
+  if (!raw) return {};
+  const article = newsToView(raw);
+  // Editors can override the auto title/description/image on the SEO tab;
+  // fall back to the article's own fields when they leave it empty.
   return pageMetadata({
-    title: article.title,
-    description: article.excerpt,
+    title: raw.meta?.title || article.title,
+    description: raw.meta?.description || article.excerpt,
+    image: mediaImage(raw.meta?.image)?.src ?? mediaImage(raw.cover)?.src,
     path: `/news/${article.slug}`,
+    // an editor-written SEO title already has its own wording; avoid piling
+    // the " — Йо!" template suffix on top of it
+    absolute: Boolean(raw.meta?.title),
     type: "article",
     publishedTime: article.dateTime,
   });
@@ -32,8 +45,11 @@ export default async function NewsArticlePage(
   props: PageProps<"/news/[slug]">,
 ) {
   const { slug } = await props.params;
-  const article = getNewsArticle(slug);
-  if (!article) notFound();
+  const [raw, article] = await Promise.all([
+    getRawNewsArticle(slug),
+    getNewsArticle(slug),
+  ]);
+  if (!raw || !article) notFound();
 
   return (
     <>
@@ -46,14 +62,8 @@ export default async function NewsArticlePage(
         ]}
       />
 
-      <NewsArticle
-        title={article.title}
-        date={article.date}
-        dateTime={article.dateTime}
-        category={article.category}
-        tint={article.tint}
-        body={article.body}
-        product={article.product}
+      <NewsArticleLive
+        initialArticle={raw}
         share={shareLinks}
         labels={articleCopy.labels}
       />

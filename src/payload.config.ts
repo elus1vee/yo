@@ -12,9 +12,12 @@ import { News } from "./collections/News";
 import { Pages } from "./collections/Pages";
 import { Products } from "./collections/Products";
 import { Users } from "./collections/Users";
+import { About } from "./globals/About";
+import { Contacts } from "./globals/Contacts";
 import { Footer } from "./globals/Footer";
 import { Header } from "./globals/Header";
 import { Partners } from "./globals/Partners";
+import { SITE_URL } from "./lib/seo";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -25,9 +28,30 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
+    // Shows a "Live Preview" tab on documents/globals with their own page,
+    // rendering it in an iframe that live-updates as fields are edited
+    // (before saving or publishing) via postMessage — see useLivePreview in
+    // the corresponding "*-live.tsx" client components.
+    livePreview: {
+      collections: ["products", "news"],
+      globals: ["about", "contacts"],
+      url: ({ data, collectionConfig, globalConfig }) => {
+        if (collectionConfig?.slug === "products")
+          return `${SITE_URL}/catalog/${data.slug}`;
+        if (collectionConfig?.slug === "news")
+          return `${SITE_URL}/news/${data.slug}`;
+        if (globalConfig?.slug === "about") return `${SITE_URL}/about`;
+        if (globalConfig?.slug === "contacts") return `${SITE_URL}/contacts`;
+        return SITE_URL;
+      },
+      breakpoints: [
+        { name: "mobile", label: "Телефон", width: 390, height: 844 },
+        { name: "desktop", label: "Десктоп", width: 1440, height: 900 },
+      ],
+    },
   },
   collections: [Products, News, Pages, Media, Users],
-  globals: [Header, Footer, Partners],
+  globals: [Header, Footer, Partners, About, Contacts],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET ?? "",
   db: postgresAdapter({

@@ -4,8 +4,13 @@ import { Footer } from "@/components/blocks/footer";
 import { Header } from "@/components/blocks/header";
 import { NewsCard } from "@/components/blocks/news-card";
 import { ProductCard } from "@/components/blocks/product-card";
-import { contactForm, footer, header } from "@/content/site";
-import { news, products } from "@/lib/mock-data";
+import { homeContactFormCopy } from "@/content/site";
+import {
+  getContactFacts,
+  getFooterContent,
+  getHeaderContent,
+} from "@/lib/cms-content";
+import { getFeaturedProducts, getLatestNews } from "@/lib/mock-data";
 import { ContactFormDemo } from "./contact-form-demo";
 
 // Internal preview page: keep it out of search results.
@@ -15,9 +20,10 @@ export const metadata: Metadata = {
 };
 
 /**
- * Preview of the composite blocks with the home page mockup's data
- * (Yo-C-Vitrina.dc.html). Resize the window (or open at 390px) to see the
- * mobile layouts. The last section feeds hostile strings through the blocks.
+ * Preview of the composite blocks with real Payload content (whatever is
+ * currently published in Products / News). Resize the window (or open at
+ * 390px) to see the mobile layouts. The last section feeds hostile strings
+ * through the blocks.
  */
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
@@ -31,7 +37,15 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 
 const XSS = '<img src=x onerror="alert(1)">';
 
-export default function BlocksPreview() {
+export default async function BlocksPreview() {
+  const [header, footer, products, news, contacts] = await Promise.all([
+    getHeaderContent(),
+    getFooterContent(),
+    getFeaturedProducts(),
+    getLatestNews(),
+    getContactFacts(),
+  ]);
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header {...header} />
@@ -53,10 +67,7 @@ export default function BlocksPreview() {
           </div>
         </Section>
 
-        <ContactFormDemo
-          copy={contactForm.copy}
-          contacts={contactForm.contacts}
-        />
+        <ContactFormDemo copy={homeContactFormCopy} contacts={contacts} />
 
         <Section title="XSS-проверка">
           <p className="text-body text-text-muted max-w-[760px] px-2">

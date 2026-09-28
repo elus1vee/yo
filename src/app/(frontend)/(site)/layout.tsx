@@ -1,6 +1,6 @@
 import { Footer } from "@/components/blocks/footer";
 import { Header } from "@/components/blocks/header";
-import { footer, header } from "@/content/site";
+import { getFooterContent, getHeaderContent } from "@/lib/cms-content";
 
 /**
  * Shared frame of the public site: sticky header, growing <main>, footer.
@@ -8,11 +8,15 @@ import { footer, header } from "@/content/site";
  * on short pages. Dev/preview routes (/ui-kit, /design-system, /blocks)
  * live outside this group and render without it.
  */
-export default function SiteLayout({
+export default async function SiteLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [header, footer] = await Promise.all([
+    getHeaderContent(),
+    getFooterContent(),
+  ]);
   return (
     <>
       <Header {...header} />

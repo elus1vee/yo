@@ -8,7 +8,7 @@ import {
   typeOptions,
 } from "@/content/catalog";
 import { catalogSeo } from "@/content/seo";
-import { catalogProducts } from "@/lib/mock-data";
+import { getCatalogProducts } from "@/lib/mock-data";
 import { pageMetadata } from "@/lib/seo";
 
 // Filters live in the query string; the canonical URL is the unfiltered list.
@@ -19,7 +19,10 @@ const firstValue = (value: string | string[] | undefined) =>
 
 export default async function CatalogPage(props: PageProps<"/catalog">) {
   // `/catalog?animal=rodents` opens the catalog with that filter applied.
-  const { animal, type } = await props.searchParams;
+  const [{ animal, type }, catalogProducts] = await Promise.all([
+    props.searchParams,
+    getCatalogProducts(),
+  ]);
 
   return (
     <>

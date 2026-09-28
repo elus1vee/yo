@@ -3,11 +3,23 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    CREATE TYPE "public"."enum_products_category_animal" AS ENUM('cats', 'dogs', 'rodents');
-  CREATE TYPE "public"."enum_products_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum_products_category_type" AS ENUM('litter', 'treats', 'food', 'care', 'home');
+  CREATE TYPE "public"."enum_products_tint" AS ENUM('peach', 'lavender', 'primary', 'neutral');
+  CREATE TYPE "public"."enum_products_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum__products_v_version_category_animal" AS ENUM('cats', 'dogs', 'rodents');
+  CREATE TYPE "public"."enum__products_v_version_category_type" AS ENUM('litter', 'treats', 'food', 'care', 'home');
+  CREATE TYPE "public"."enum__products_v_version_tint" AS ENUM('peach', 'lavender', 'primary', 'neutral');
+  CREATE TYPE "public"."enum__products_v_version_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum_news_tint" AS ENUM('peach', 'lavender', 'primary', 'neutral');
+  CREATE TYPE "public"."enum_news_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum__news_v_version_tint" AS ENUM('peach', 'lavender', 'primary', 'neutral');
+  CREATE TYPE "public"."enum__news_v_version_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum_forms_confirmation_type" AS ENUM('message', 'redirect');
   CREATE TYPE "public"."enum_redirects_to_type" AS ENUM('reference', 'custom');
   CREATE TYPE "public"."enum_header_messengers_kind" AS ENUM('telegram', 'whatsapp', 'viber');
+  CREATE TYPE "public"."enum_partners_partners_tint" AS ENUM('peach', 'lavender', 'primary', 'neutral');
+  CREATE TYPE "public"."enum_about_production_items_tint" AS ENUM('peach', 'lavender', 'primary', 'neutral');
+  CREATE TYPE "public"."enum_about_certificates_items_tint" AS ENUM('peach', 'lavender', 'primary', 'neutral');
   CREATE TABLE "products_category_animal" (
   	"order" integer NOT NULL,
   	"parent_id" integer NOT NULL,
@@ -25,10 +37,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   
   CREATE TABLE "products" (
   	"id" serial PRIMARY KEY NOT NULL,
-  	"title" varchar NOT NULL,
-  	"slug" varchar NOT NULL,
-  	"status" "enum_products_status" DEFAULT 'draft' NOT NULL,
-  	"category_type" "enum_products_category_type" NOT NULL,
+  	"title" varchar,
+  	"slug" varchar,
+  	"featured" boolean DEFAULT false,
+  	"category_type" "enum_products_category_type",
+  	"tint" "enum_products_tint" DEFAULT 'primary',
+  	"subtitle" varchar,
+  	"badge" varchar,
   	"description" jsonb,
   	"specs_weight" varchar,
   	"specs_volume" varchar,
@@ -36,7 +51,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"meta_description" varchar,
   	"meta_image_id" integer,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"_status" "enum_products_status" DEFAULT 'draft'
   );
   
   CREATE TABLE "products_rels" (
@@ -47,18 +63,94 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"media_id" integer
   );
   
+  CREATE TABLE "_products_v_version_category_animal" (
+  	"order" integer NOT NULL,
+  	"parent_id" integer NOT NULL,
+  	"value" "enum__products_v_version_category_animal",
+  	"id" serial PRIMARY KEY NOT NULL
+  );
+  
+  CREATE TABLE "_products_v_version_variants" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"volume" varchar,
+  	"scent" varchar,
+  	"_uuid" varchar
+  );
+  
+  CREATE TABLE "_products_v" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"parent_id" integer,
+  	"version_title" varchar,
+  	"version_slug" varchar,
+  	"version_featured" boolean DEFAULT false,
+  	"version_category_type" "enum__products_v_version_category_type",
+  	"version_tint" "enum__products_v_version_tint" DEFAULT 'primary',
+  	"version_subtitle" varchar,
+  	"version_badge" varchar,
+  	"version_description" jsonb,
+  	"version_specs_weight" varchar,
+  	"version_specs_volume" varchar,
+  	"version_meta_title" varchar,
+  	"version_meta_description" varchar,
+  	"version_meta_image_id" integer,
+  	"version_updated_at" timestamp(3) with time zone,
+  	"version_created_at" timestamp(3) with time zone,
+  	"version__status" "enum__products_v_version_status" DEFAULT 'draft',
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"latest" boolean
+  );
+  
+  CREATE TABLE "_products_v_rels" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"order" integer,
+  	"parent_id" integer NOT NULL,
+  	"path" varchar NOT NULL,
+  	"media_id" integer
+  );
+  
   CREATE TABLE "news" (
   	"id" serial PRIMARY KEY NOT NULL,
-  	"title" varchar NOT NULL,
-  	"slug" varchar NOT NULL,
-  	"published_at" timestamp(3) with time zone NOT NULL,
+  	"title" varchar,
+  	"slug" varchar,
+  	"excerpt" varchar,
+  	"category" varchar,
+  	"tint" "enum_news_tint" DEFAULT 'primary',
+  	"published_at" timestamp(3) with time zone,
+  	"related_product_id" integer,
   	"cover_id" integer,
   	"content" jsonb,
   	"meta_title" varchar,
   	"meta_description" varchar,
   	"meta_image_id" integer,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"_status" "enum_news_status" DEFAULT 'draft'
+  );
+  
+  CREATE TABLE "_news_v" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"parent_id" integer,
+  	"version_title" varchar,
+  	"version_slug" varchar,
+  	"version_excerpt" varchar,
+  	"version_category" varchar,
+  	"version_tint" "enum__news_v_version_tint" DEFAULT 'primary',
+  	"version_published_at" timestamp(3) with time zone,
+  	"version_related_product_id" integer,
+  	"version_cover_id" integer,
+  	"version_content" jsonb,
+  	"version_meta_title" varchar,
+  	"version_meta_description" varchar,
+  	"version_meta_image_id" integer,
+  	"version_updated_at" timestamp(3) with time zone,
+  	"version_created_at" timestamp(3) with time zone,
+  	"version__status" "enum__news_v_version_status" DEFAULT 'draft',
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"latest" boolean
   );
   
   CREATE TABLE "pages" (
@@ -400,7 +492,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"_parent_id" integer NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
   	"name" varchar NOT NULL,
-  	"logo_id" integer NOT NULL,
+  	"logo_id" integer,
+  	"tint" "enum_partners_partners_tint" DEFAULT 'primary' NOT NULL,
   	"url" varchar
   );
   
@@ -410,13 +503,68 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"created_at" timestamp(3) with time zone
   );
   
+  CREATE TABLE "about_production_items" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"tint" "enum_about_production_items_tint" NOT NULL,
+  	"text" varchar NOT NULL
+  );
+  
+  CREATE TABLE "about_certificates_items" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"title" varchar NOT NULL,
+  	"description" varchar NOT NULL,
+  	"tint" "enum_about_certificates_items_tint" NOT NULL
+  );
+  
+  CREATE TABLE "about" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"intro_eyebrow" varchar,
+  	"intro_title" varchar NOT NULL,
+  	"intro_description" varchar NOT NULL,
+  	"production_title" varchar NOT NULL,
+  	"certificates_title" varchar NOT NULL,
+  	"where_to_buy_title" varchar NOT NULL,
+  	"where_to_buy_aside" varchar NOT NULL,
+  	"updated_at" timestamp(3) with time zone,
+  	"created_at" timestamp(3) with time zone
+  );
+  
+  CREATE TABLE "contacts" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"intro_eyebrow" varchar,
+  	"intro_title" varchar NOT NULL,
+  	"intro_description" varchar NOT NULL,
+  	"address" varchar NOT NULL,
+  	"phone" varchar NOT NULL,
+  	"phone_second" varchar,
+  	"email" varchar NOT NULL,
+  	"map_caption" varchar,
+  	"updated_at" timestamp(3) with time zone,
+  	"created_at" timestamp(3) with time zone
+  );
+  
   ALTER TABLE "products_category_animal" ADD CONSTRAINT "products_category_animal_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "products_variants" ADD CONSTRAINT "products_variants_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "products" ADD CONSTRAINT "products_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "products_rels" ADD CONSTRAINT "products_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "products_rels" ADD CONSTRAINT "products_rels_media_fk" FOREIGN KEY ("media_id") REFERENCES "public"."media"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_products_v_version_category_animal" ADD CONSTRAINT "_products_v_version_category_animal_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."_products_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_products_v_version_variants" ADD CONSTRAINT "_products_v_version_variants_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_products_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_products_v" ADD CONSTRAINT "_products_v_parent_id_products_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."products"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_products_v" ADD CONSTRAINT "_products_v_version_meta_image_id_media_id_fk" FOREIGN KEY ("version_meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_products_v_rels" ADD CONSTRAINT "_products_v_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."_products_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_products_v_rels" ADD CONSTRAINT "_products_v_rels_media_fk" FOREIGN KEY ("media_id") REFERENCES "public"."media"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "news" ADD CONSTRAINT "news_related_product_id_products_id_fk" FOREIGN KEY ("related_product_id") REFERENCES "public"."products"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "news" ADD CONSTRAINT "news_cover_id_media_id_fk" FOREIGN KEY ("cover_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "news" ADD CONSTRAINT "news_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_news_v" ADD CONSTRAINT "_news_v_parent_id_news_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."news"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_news_v" ADD CONSTRAINT "_news_v_version_related_product_id_products_id_fk" FOREIGN KEY ("version_related_product_id") REFERENCES "public"."products"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_news_v" ADD CONSTRAINT "_news_v_version_cover_id_media_id_fk" FOREIGN KEY ("version_cover_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_news_v" ADD CONSTRAINT "_news_v_version_meta_image_id_media_id_fk" FOREIGN KEY ("version_meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "pages" ADD CONSTRAINT "pages_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "users_sessions" ADD CONSTRAINT "users_sessions_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "forms_blocks_checkbox" ADD CONSTRAINT "forms_blocks_checkbox_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
@@ -453,6 +601,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "footer_socials" ADD CONSTRAINT "footer_socials_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."footer"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "partners_partners" ADD CONSTRAINT "partners_partners_logo_id_media_id_fk" FOREIGN KEY ("logo_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "partners_partners" ADD CONSTRAINT "partners_partners_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."partners"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "about_production_items" ADD CONSTRAINT "about_production_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."about"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "about_certificates_items" ADD CONSTRAINT "about_certificates_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."about"("id") ON DELETE cascade ON UPDATE no action;
   CREATE INDEX "products_category_animal_order_idx" ON "products_category_animal" USING btree ("order");
   CREATE INDEX "products_category_animal_parent_idx" ON "products_category_animal" USING btree ("parent_id");
   CREATE INDEX "products_variants_order_idx" ON "products_variants" USING btree ("_order");
@@ -461,15 +611,46 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "products_meta_meta_image_idx" ON "products" USING btree ("meta_image_id");
   CREATE INDEX "products_updated_at_idx" ON "products" USING btree ("updated_at");
   CREATE INDEX "products_created_at_idx" ON "products" USING btree ("created_at");
+  CREATE INDEX "products__status_idx" ON "products" USING btree ("_status");
   CREATE INDEX "products_rels_order_idx" ON "products_rels" USING btree ("order");
   CREATE INDEX "products_rels_parent_idx" ON "products_rels" USING btree ("parent_id");
   CREATE INDEX "products_rels_path_idx" ON "products_rels" USING btree ("path");
   CREATE INDEX "products_rels_media_id_idx" ON "products_rels" USING btree ("media_id");
+  CREATE INDEX "_products_v_version_category_animal_order_idx" ON "_products_v_version_category_animal" USING btree ("order");
+  CREATE INDEX "_products_v_version_category_animal_parent_idx" ON "_products_v_version_category_animal" USING btree ("parent_id");
+  CREATE INDEX "_products_v_version_variants_order_idx" ON "_products_v_version_variants" USING btree ("_order");
+  CREATE INDEX "_products_v_version_variants_parent_id_idx" ON "_products_v_version_variants" USING btree ("_parent_id");
+  CREATE INDEX "_products_v_parent_idx" ON "_products_v" USING btree ("parent_id");
+  CREATE INDEX "_products_v_version_version_slug_idx" ON "_products_v" USING btree ("version_slug");
+  CREATE INDEX "_products_v_version_meta_version_meta_image_idx" ON "_products_v" USING btree ("version_meta_image_id");
+  CREATE INDEX "_products_v_version_version_updated_at_idx" ON "_products_v" USING btree ("version_updated_at");
+  CREATE INDEX "_products_v_version_version_created_at_idx" ON "_products_v" USING btree ("version_created_at");
+  CREATE INDEX "_products_v_version_version__status_idx" ON "_products_v" USING btree ("version__status");
+  CREATE INDEX "_products_v_created_at_idx" ON "_products_v" USING btree ("created_at");
+  CREATE INDEX "_products_v_updated_at_idx" ON "_products_v" USING btree ("updated_at");
+  CREATE INDEX "_products_v_latest_idx" ON "_products_v" USING btree ("latest");
+  CREATE INDEX "_products_v_rels_order_idx" ON "_products_v_rels" USING btree ("order");
+  CREATE INDEX "_products_v_rels_parent_idx" ON "_products_v_rels" USING btree ("parent_id");
+  CREATE INDEX "_products_v_rels_path_idx" ON "_products_v_rels" USING btree ("path");
+  CREATE INDEX "_products_v_rels_media_id_idx" ON "_products_v_rels" USING btree ("media_id");
   CREATE UNIQUE INDEX "news_slug_idx" ON "news" USING btree ("slug");
+  CREATE INDEX "news_related_product_idx" ON "news" USING btree ("related_product_id");
   CREATE INDEX "news_cover_idx" ON "news" USING btree ("cover_id");
   CREATE INDEX "news_meta_meta_image_idx" ON "news" USING btree ("meta_image_id");
   CREATE INDEX "news_updated_at_idx" ON "news" USING btree ("updated_at");
   CREATE INDEX "news_created_at_idx" ON "news" USING btree ("created_at");
+  CREATE INDEX "news__status_idx" ON "news" USING btree ("_status");
+  CREATE INDEX "_news_v_parent_idx" ON "_news_v" USING btree ("parent_id");
+  CREATE INDEX "_news_v_version_version_slug_idx" ON "_news_v" USING btree ("version_slug");
+  CREATE INDEX "_news_v_version_version_related_product_idx" ON "_news_v" USING btree ("version_related_product_id");
+  CREATE INDEX "_news_v_version_version_cover_idx" ON "_news_v" USING btree ("version_cover_id");
+  CREATE INDEX "_news_v_version_meta_version_meta_image_idx" ON "_news_v" USING btree ("version_meta_image_id");
+  CREATE INDEX "_news_v_version_version_updated_at_idx" ON "_news_v" USING btree ("version_updated_at");
+  CREATE INDEX "_news_v_version_version_created_at_idx" ON "_news_v" USING btree ("version_created_at");
+  CREATE INDEX "_news_v_version_version__status_idx" ON "_news_v" USING btree ("version__status");
+  CREATE INDEX "_news_v_created_at_idx" ON "_news_v" USING btree ("created_at");
+  CREATE INDEX "_news_v_updated_at_idx" ON "_news_v" USING btree ("updated_at");
+  CREATE INDEX "_news_v_latest_idx" ON "_news_v" USING btree ("latest");
   CREATE UNIQUE INDEX "pages_slug_idx" ON "pages" USING btree ("slug");
   CREATE INDEX "pages_meta_meta_image_idx" ON "pages" USING btree ("meta_image_id");
   CREATE INDEX "pages_updated_at_idx" ON "pages" USING btree ("updated_at");
@@ -565,7 +746,11 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "footer_socials_parent_id_idx" ON "footer_socials" USING btree ("_parent_id");
   CREATE INDEX "partners_partners_order_idx" ON "partners_partners" USING btree ("_order");
   CREATE INDEX "partners_partners_parent_id_idx" ON "partners_partners" USING btree ("_parent_id");
-  CREATE INDEX "partners_partners_logo_idx" ON "partners_partners" USING btree ("logo_id");`)
+  CREATE INDEX "partners_partners_logo_idx" ON "partners_partners" USING btree ("logo_id");
+  CREATE INDEX "about_production_items_order_idx" ON "about_production_items" USING btree ("_order");
+  CREATE INDEX "about_production_items_parent_id_idx" ON "about_production_items" USING btree ("_parent_id");
+  CREATE INDEX "about_certificates_items_order_idx" ON "about_certificates_items" USING btree ("_order");
+  CREATE INDEX "about_certificates_items_parent_id_idx" ON "about_certificates_items" USING btree ("_parent_id");`)
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
@@ -574,7 +759,12 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "products_variants" CASCADE;
   DROP TABLE "products" CASCADE;
   DROP TABLE "products_rels" CASCADE;
+  DROP TABLE "_products_v_version_category_animal" CASCADE;
+  DROP TABLE "_products_v_version_variants" CASCADE;
+  DROP TABLE "_products_v" CASCADE;
+  DROP TABLE "_products_v_rels" CASCADE;
   DROP TABLE "news" CASCADE;
+  DROP TABLE "_news_v" CASCADE;
   DROP TABLE "pages" CASCADE;
   DROP TABLE "media" CASCADE;
   DROP TABLE "users_sessions" CASCADE;
@@ -609,10 +799,26 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "footer" CASCADE;
   DROP TABLE "partners_partners" CASCADE;
   DROP TABLE "partners" CASCADE;
+  DROP TABLE "about_production_items" CASCADE;
+  DROP TABLE "about_certificates_items" CASCADE;
+  DROP TABLE "about" CASCADE;
+  DROP TABLE "contacts" CASCADE;
   DROP TYPE "public"."enum_products_category_animal";
-  DROP TYPE "public"."enum_products_status";
   DROP TYPE "public"."enum_products_category_type";
+  DROP TYPE "public"."enum_products_tint";
+  DROP TYPE "public"."enum_products_status";
+  DROP TYPE "public"."enum__products_v_version_category_animal";
+  DROP TYPE "public"."enum__products_v_version_category_type";
+  DROP TYPE "public"."enum__products_v_version_tint";
+  DROP TYPE "public"."enum__products_v_version_status";
+  DROP TYPE "public"."enum_news_tint";
+  DROP TYPE "public"."enum_news_status";
+  DROP TYPE "public"."enum__news_v_version_tint";
+  DROP TYPE "public"."enum__news_v_version_status";
   DROP TYPE "public"."enum_forms_confirmation_type";
   DROP TYPE "public"."enum_redirects_to_type";
-  DROP TYPE "public"."enum_header_messengers_kind";`)
+  DROP TYPE "public"."enum_header_messengers_kind";
+  DROP TYPE "public"."enum_partners_partners_tint";
+  DROP TYPE "public"."enum_about_production_items_tint";
+  DROP TYPE "public"."enum_about_certificates_items_tint";`)
 }

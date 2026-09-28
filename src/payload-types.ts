@@ -103,11 +103,15 @@ export interface Config {
     header: Header;
     footer: Footer;
     partners: Partner;
+    about: About;
+    contacts: Contact;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     partners: PartnersSelect<false> | PartnersSelect<true>;
+    about: AboutSelect<false> | AboutSelect<true>;
+    contacts: ContactsSelect<false> | ContactsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -148,9 +152,21 @@ export interface Product {
    * Латиницей: буквы, цифры и дефисы, например tofu-peach
    */
   slug: string;
-  status: 'draft' | 'published';
+  /**
+   * Блок «Любимое у покупателей» на главной странице
+   */
+  featured?: boolean | null;
   categoryAnimal: ('cats' | 'dogs' | 'rodents')[];
   categoryType: 'litter' | 'treats' | 'food' | 'care' | 'home';
+  tint: 'peach' | 'lavender' | 'primary' | 'neutral';
+  /**
+   * Короткое пояснение, например "комкующийся"
+   */
+  subtitle?: string | null;
+  /**
+   * Например "Хит"; пусто — плашки нет
+   */
+  badge?: string | null;
   images?: (number | Media)[] | null;
   description?: {
     root: {
@@ -188,6 +204,7 @@ export interface Product {
   };
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -237,9 +254,19 @@ export interface News {
    * Латиницей: буквы, цифры и дефисы, например tofu-peach
    */
   slug: string;
+  /**
+   * Короткий тизер для карточек списка новостей
+   */
+  excerpt: string;
+  /**
+   * Например "продукт", "событие"
+   */
+  category?: string | null;
+  tint: 'peach' | 'lavender' | 'primary' | 'neutral';
   publishedAt: string;
+  relatedProduct?: (number | null) | Product;
   cover?: (number | null) | Media;
-  content?: {
+  content: {
     root: {
       type: string;
       children: {
@@ -253,7 +280,7 @@ export interface News {
       version: number;
     };
     [k: string]: unknown;
-  } | null;
+  };
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -264,6 +291,7 @@ export interface News {
   };
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -642,9 +670,12 @@ export interface PayloadMigration {
 export interface ProductsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  status?: T;
+  featured?: T;
   categoryAnimal?: T;
   categoryType?: T;
+  tint?: T;
+  subtitle?: T;
+  badge?: T;
   images?: T;
   description?: T;
   variants?:
@@ -669,6 +700,7 @@ export interface ProductsSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -677,7 +709,11 @@ export interface ProductsSelect<T extends boolean = true> {
 export interface NewsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  excerpt?: T;
+  category?: T;
+  tint?: T;
   publishedAt?: T;
+  relatedProduct?: T;
   cover?: T;
   content?: T;
   meta?:
@@ -689,6 +725,7 @@ export interface NewsSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1035,11 +1072,79 @@ export interface Partner {
   partners?:
     | {
         name: string;
-        logo: number | Media;
+        /**
+         * Без логотипа плитка показывает первые буквы названия
+         */
+        logo?: (number | null) | Media;
+        tint: 'peach' | 'lavender' | 'primary' | 'neutral';
         url?: string | null;
         id?: string | null;
       }[]
     | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about".
+ */
+export interface About {
+  id: number;
+  intro: {
+    eyebrow?: string | null;
+    title: string;
+    description: string;
+  };
+  production: {
+    title: string;
+    items?:
+      | {
+          tint: 'peach' | 'lavender' | 'primary' | 'neutral';
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  certificates: {
+    title: string;
+    items?:
+      | {
+          title: string;
+          description: string;
+          tint: 'peach' | 'lavender' | 'primary' | 'neutral';
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * Сами плитки партнёров — в глобале «Партнёры»
+   */
+  whereToBuy: {
+    title: string;
+    aside: string;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contacts".
+ */
+export interface Contact {
+  id: number;
+  intro: {
+    eyebrow?: string | null;
+    title: string;
+    description: string;
+  };
+  address: string;
+  phone: string;
+  phoneSecond?: string | null;
+  email: string;
+  /**
+   * Пока карта — заглушка; используется как подпись
+   */
+  mapCaption?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1098,9 +1203,78 @@ export interface PartnersSelect<T extends boolean = true> {
     | {
         name?: T;
         logo?: T;
+        tint?: T;
         url?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about_select".
+ */
+export interface AboutSelect<T extends boolean = true> {
+  intro?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+      };
+  production?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              tint?: T;
+              text?: T;
+              id?: T;
+            };
+      };
+  certificates?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              tint?: T;
+              id?: T;
+            };
+      };
+  whereToBuy?:
+    | T
+    | {
+        title?: T;
+        aside?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contacts_select".
+ */
+export interface ContactsSelect<T extends boolean = true> {
+  intro?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+      };
+  address?: T;
+  phone?: T;
+  phoneSecond?: T;
+  email?: T;
+  mapCaption?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

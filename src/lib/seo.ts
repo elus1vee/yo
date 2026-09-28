@@ -22,6 +22,11 @@ export interface PageMetaInput {
   /** Open Graph type; articles also carry their publication date. */
   type?: "website" | "article";
   publishedTime?: string;
+  /**
+   * Share-preview image, relative or absolute (resolved against
+   * `metadataBase`, set in the root layout).
+   */
+  image?: string;
 }
 
 /**
@@ -35,6 +40,7 @@ export function pageMetadata({
   absolute,
   type = "website",
   publishedTime,
+  image,
 }: PageMetaInput): Metadata {
   return {
     title: absolute ? { absolute: title } : title,
@@ -48,6 +54,10 @@ export function pageMetadata({
       description,
       url: path,
       ...(type === "article" && publishedTime ? { publishedTime } : {}),
+      ...(image ? { images: [{ url: image }] } : {}),
     },
+    ...(image
+      ? { twitter: { card: "summary_large_image", images: [image] } }
+      : {}),
   };
 }

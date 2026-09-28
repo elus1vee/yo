@@ -20,13 +20,20 @@ import {
   productsSection,
 } from "@/content/home";
 import { homeSeo } from "@/content/seo";
-import { contactForm } from "@/content/site";
-import { news, products } from "@/lib/mock-data";
+import { homeContactFormCopy } from "@/content/site";
+import { getContactFacts } from "@/lib/cms-content";
+import { getFeaturedProducts, getLatestNews } from "@/lib/mock-data";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({ ...homeSeo, absolute: true });
 
-export default function Home() {
+export default async function Home() {
+  const [products, news, contactFacts] = await Promise.all([
+    getFeaturedProducts(),
+    getLatestNews(),
+    getContactFacts(),
+  ]);
+
   return (
     <>
       <Hero {...hero} />
@@ -71,7 +78,7 @@ export default function Home() {
       </Section>
 
       <Section id="contact">
-        <ContactForm copy={contactForm.copy} contacts={contactForm.contacts} />
+        <ContactForm copy={homeContactFormCopy} contacts={contactFacts} />
       </Section>
     </>
   );

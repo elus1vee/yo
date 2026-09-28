@@ -1,29 +1,23 @@
 import type { Metadata } from "next";
-import { CardGrid } from "@/components/blocks/card-grid";
-import { ContactDetails } from "@/components/blocks/contact-details";
-import { ContactForm } from "@/components/blocks/contact-form";
-import { PageIntro } from "@/components/blocks/page-intro";
-import { Section } from "@/components/blocks/section";
-import {
-  contactDetails,
-  contactsForm,
-  contactsIntro,
-} from "@/content/contacts";
+import { ContactsPageLive } from "@/components/live/contacts-page-live";
+import { contactsForm } from "@/content/contacts";
 import { contactsSeo } from "@/content/seo";
+import { getContactMessengers, getContactsRaw } from "@/lib/cms-content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(contactsSeo);
 
-export default function ContactsPage() {
+export default async function ContactsPage() {
+  const [contacts, messengers] = await Promise.all([
+    getContactsRaw(),
+    getContactMessengers(),
+  ]);
+
   return (
-    <>
-      <PageIntro {...contactsIntro} />
-      <Section inset="page" rhythm="form">
-        <CardGrid layout="contacts">
-          <ContactDetails {...contactDetails} />
-          <ContactForm variant="card" copy={contactsForm} />
-        </CardGrid>
-      </Section>
-    </>
+    <ContactsPageLive
+      initialContacts={contacts}
+      messengers={messengers}
+      formCopy={contactsForm}
+    />
   );
 }

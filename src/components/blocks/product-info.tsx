@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Card } from "@/components/ui/card";
-import { type Copy, ResponsiveText } from "@/components/ui/responsive-text";
+import { RichText, type RichTextProps } from "@/components/ui/rich-text";
 import { type FilterOption, FilterGroup } from "./filter-group";
 import { type LinkAction } from "./types";
 
@@ -28,8 +28,7 @@ export interface ProductInfoProps {
   /** Small caps line above the title, e.g. "Наполнители · для кошек". */
   eyebrow: string;
   title: string;
-  /** May be shorter on mobile: { desktop, mobile }. */
-  description?: Copy;
+  description?: RichTextProps["data"];
   groups?: OptionGroup[];
   specs?: SpecItem[];
   cta: LinkAction;
@@ -70,11 +69,7 @@ export function ProductInfo({
           {title}
         </h1>
         {description && (
-          <ResponsiveText
-            as="p"
-            text={description}
-            className="text-text-muted tablet:leading-[1.65] text-body"
-          />
+          <RichText data={description} className="tablet:leading-[1.65]" />
         )}
       </div>
 
