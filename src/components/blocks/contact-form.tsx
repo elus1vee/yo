@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { type Copy, ResponsiveText } from "@/components/ui/responsive-text";
 import { SafeLink } from "@/components/ui/safe-link";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 import {
   type ContactErrorMessages,
   type ContactErrors,
@@ -28,9 +29,11 @@ export interface ContactFormCopy {
   /** Visible field labels — used by the `card` variant only. */
   nameLabel?: string;
   phoneLabel?: string;
+  emailLabel?: string;
   messageLabel?: string;
   namePlaceholder: string;
   phonePlaceholder: string;
+  emailPlaceholder: string;
   messagePlaceholder: string;
   consent: Copy;
   submit: string;
@@ -60,6 +63,7 @@ export interface ContactFormProps {
 const emptyValues: ContactFormValues = {
   name: "",
   phone: "",
+  email: "",
   message: "",
   consent: false,
 };
@@ -79,11 +83,13 @@ export function ContactForm({
 
   const nameRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
   const messageRef = useRef<HTMLTextAreaElement>(null);
   const consentRef = useRef<HTMLInputElement>(null);
   const refs = {
     name: nameRef,
     phone: phoneRef,
+    email: emailRef,
     message: messageRef,
     consent: consentRef,
   };
@@ -116,7 +122,7 @@ export function ContactForm({
     setErrors(found);
 
     const firstInvalid = (
-      ["name", "phone", "message", "consent"] as const
+      ["name", "phone", "email", "message", "consent"] as const
     ).find((field) => found[field]);
     if (firstInvalid) {
       refs[firstInvalid].current?.focus();
@@ -126,6 +132,7 @@ export function ContactForm({
     onSubmit?.({
       name: values.name.trim(),
       phone: values.phone.trim(),
+      email: values.email.trim(),
       message: values.message.trim(),
       consent: values.consent,
     });
@@ -136,6 +143,7 @@ export function ContactForm({
   // give its fields an accessible name; the card variant uses real labels.
   const nameA11y = isCard ? {} : { "aria-label": copy.namePlaceholder };
   const phoneA11y = isCard ? {} : { "aria-label": copy.phonePlaceholder };
+  const emailA11y = isCard ? {} : { "aria-label": copy.emailPlaceholder };
   const messageA11y = isCard ? {} : { "aria-label": copy.messagePlaceholder };
 
   const formFields = (
@@ -176,6 +184,23 @@ export function ContactForm({
           onChange={(e) => update("phone", e.target.value)}
           onBlur={() => handleBlur("phone")}
           className={isCard ? undefined : pillField}
+        />
+        <Input
+          ref={emailRef}
+          name="email"
+          type="email"
+          autoComplete="email"
+          inputMode="email"
+          label={isCard ? copy.emailLabel : undefined}
+          {...emailA11y}
+          placeholder={copy.emailPlaceholder}
+          value={values.email}
+          error={errors.email}
+          onChange={(e) => update("email", e.target.value)}
+          onBlur={() => handleBlur("email")}
+          className={
+            isCard ? "tablet:col-span-2" : cn(pillField, "tablet:col-span-2")
+          }
         />
       </div>
       <Textarea

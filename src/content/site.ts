@@ -62,6 +62,7 @@ export const homeContactFormCopy: ContactFormCopy = {
   },
   namePlaceholder: "Имя",
   phonePlaceholder: "Телефон",
+  emailPlaceholder: "Email",
   messagePlaceholder: "Сообщение",
   consent: {
     desktop:
@@ -74,6 +75,8 @@ export const homeContactFormCopy: ContactFormCopy = {
     nameRequired: "Введите имя",
     phoneRequired: "Введите телефон",
     phoneInvalid: "Проверьте формат номера: +375 XX XXX XX XX",
+    emailRequired: "Введите email",
+    emailInvalid: "Проверьте формат email",
     messageTooLong: "Сообщение слишком длинное",
     consentRequired: "Отметьте согласие на обработку данных",
   },

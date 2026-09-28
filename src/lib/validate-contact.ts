@@ -6,6 +6,7 @@
 export interface ContactFormValues {
   name: string;
   phone: string;
+  email: string;
   message: string;
   consent: boolean;
 }
@@ -17,6 +18,8 @@ export interface ContactErrorMessages {
   nameRequired: string;
   phoneRequired: string;
   phoneInvalid: string;
+  emailRequired: string;
+  emailInvalid: string;
   messageTooLong: string;
   consentRequired: string;
 }
@@ -34,6 +37,11 @@ export function isValidPhone(value: string): boolean {
   return /^(?:\+?375|80)\d{9}$/.test(v.replace(/[\s()-]/g, ""));
 }
 
+/** Deliberately simple (UX check only, not RFC 5322): local@domain.tld */
+export function isValidEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+}
+
 export function validateField(
   field: ContactField,
   values: ContactFormValues,
@@ -45,6 +53,9 @@ export function validateField(
     case "phone":
       if (!values.phone.trim()) return messages.phoneRequired;
       return isValidPhone(values.phone) ? undefined : messages.phoneInvalid;
+    case "email":
+      if (!values.email.trim()) return messages.emailRequired;
+      return isValidEmail(values.email) ? undefined : messages.emailInvalid;
     case "message":
       return values.message.length > MESSAGE_MAX_LENGTH
         ? messages.messageTooLong
@@ -54,7 +65,7 @@ export function validateField(
   }
 }
 
-const FIELDS: ContactField[] = ["name", "phone", "message", "consent"];
+const FIELDS: ContactField[] = ["name", "phone", "email", "message", "consent"];
 
 export function validateContactForm(
   values: ContactFormValues,

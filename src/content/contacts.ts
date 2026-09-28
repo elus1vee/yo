@@ -10,9 +10,11 @@ export const contactsForm: ContactFormCopy = {
   description: "",
   nameLabel: "Имя",
   phoneLabel: "Телефон",
+  emailLabel: "Email",
   messageLabel: "Сообщение",
   namePlaceholder: "Как к вам обращаться",
   phonePlaceholder: "+375 __ ___ __ __",
+  emailPlaceholder: "you@example.com",
   messagePlaceholder: "Коротко о вопросе",
   consent: {
     desktop:
@@ -25,6 +27,8 @@ export const contactsForm: ContactFormCopy = {
     nameRequired: "Введите имя",
     phoneRequired: "Введите телефон",
     phoneInvalid: "Проверьте формат номера: +375 XX XXX XX XX",
+    emailRequired: "Введите email",
+    emailInvalid: "Проверьте формат email",
     messageTooLong: "Сообщение слишком длинное",
     consentRequired: "Отметьте согласие на обработку данных",
   },
