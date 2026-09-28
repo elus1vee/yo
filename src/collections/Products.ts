@@ -109,6 +109,21 @@ export const Products: CollectionConfig = {
       fields: [{ name: "volume", label: "Объём или вес", type: "text" }],
     },
     {
+      name: "variantsUnit",
+      label: "Что меняется в вариантах",
+      type: "select",
+      defaultValue: "volume",
+      options: [
+        { label: "Объём", value: "volume" },
+        { label: "Вес", value: "weight" },
+      ],
+      admin: {
+        position: "sidebar",
+        description:
+          "Подпись переключателя на странице товара, когда в «Вариантах объёма / веса» больше одного значения",
+      },
+    },
+    {
       name: "specs",
       label: "Характеристики",
       type: "group",

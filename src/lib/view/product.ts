@@ -99,28 +99,38 @@ export function galleryOf(product: Product): GalleryImage[] {
   }));
 }
 
+/** "Объём" or "Вес" — whichever `variantsUnit` says the switcher below is. */
+const amountLabel = (product: Product) =>
+  product.variantsUnit === "weight" ? "Вес" : "Объём";
+
 export function groupsOf(product: Product): OptionGroup[] {
   const groups: OptionGroup[] = [];
   const volumes = volumeValues(product.variants);
   if (volumes.length > 1)
     groups.push({
-      id: "volume",
-      label: "Объём",
+      id: "amount",
+      label: amountLabel(product),
       options: volumes.map((v) => ({ id: v, label: v })),
     });
   return groups;
 }
 
 export function specsOf(product: Product, groups: OptionGroup[]): SpecItem[] {
-  const hasVolumeGroup = groups.some((g) => g.id === "volume");
+  const hasAmountGroup = groups.some((g) => g.id === "amount");
   const specs: SpecItem[] = [];
 
-  if (hasVolumeGroup) specs.push({ label: "Объём", fromGroup: "volume" });
-  else if (product.specs?.volume)
-    specs.push({ label: "Объём", value: product.specs.volume });
-
-  if (product.specs?.weight)
-    specs.push({ label: "Вес", value: product.specs.weight });
+  if (hasAmountGroup) {
+    // The switcher above already shows the selected value — no separate
+    // static "Объём"/"Вес" row, or the two would disagree (this was the bug:
+    // the row was always labeled "Объём", even for products measured by
+    // weight).
+    specs.push({ label: amountLabel(product), fromGroup: "amount" });
+  } else {
+    if (product.specs?.volume)
+      specs.push({ label: "Объём", value: product.specs.volume });
+    if (product.specs?.weight)
+      specs.push({ label: "Вес", value: product.specs.weight });
+  }
 
   if (product.scent) specs.push({ label: "Аромат", value: product.scent });
 

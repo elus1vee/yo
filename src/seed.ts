@@ -161,6 +161,8 @@ async function main() {
     images?: number[];
     description?: Product["description"];
     variants?: { volume?: string }[];
+    /** Only matters when `variants` has more than one entry. */
+    variantsUnit?: "volume" | "weight";
     specs?: { weight?: string; volume?: string };
   }[] = [
     {
@@ -236,6 +238,7 @@ async function main() {
       tint: "neutral",
       subtitle: "сушёное",
       variants: [{ volume: "100 г" }, { volume: "250 г" }],
+      variantsUnit: "weight",
       specs: { weight: "100 г" },
     },
     {

@@ -193,6 +193,10 @@ export interface Product {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Подпись переключателя на странице товара, когда в «Вариантах объёма / веса» больше одного значения
+   */
+  variantsUnit?: ('volume' | 'weight') | null;
   specs?: {
     weight?: string | null;
     volume?: string | null;
@@ -688,6 +692,7 @@ export interface ProductsSelect<T extends boolean = true> {
         volume?: T;
         id?: T;
       };
+  variantsUnit?: T;
   specs?:
     | T
     | {
