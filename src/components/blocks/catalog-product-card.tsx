@@ -41,13 +41,17 @@ export function CatalogProductCard({
       tint={product.tint}
       image={product.image}
       imageCaption={product.imageCaption}
-      tags={[
-        {
-          label: product.volume,
-          tone: product.tagTone,
-          strong: product.tagStrong,
-        },
-      ]}
+      tags={
+        product.volume
+          ? [
+              {
+                label: product.volume,
+                tone: product.tagTone,
+                strong: product.tagStrong,
+              },
+            ]
+          : []
+      }
       ctaLabel={ctaLabel}
     />
   );

@@ -32,7 +32,7 @@ const variantStyles = {
     body: "gap-2 tablet:gap-2.5",
     title:
       "text-base leading-[1.24] font-medium tablet:min-h-12 tablet:text-[19px]",
-    tag: "px-2.75 py-1.25 text-[11px] text-text tablet:px-3 tablet:py-1.5 tablet:text-xs",
+    tag: "px-2.75 py-1.25 text-[11px] tablet:px-3 tablet:py-1.5 tablet:text-xs",
     cta: "h-[42px] text-[13px] tablet:h-12 tablet:text-[14px]",
   },
 } as const;
@@ -76,10 +76,13 @@ export function ProductCard({
   image,
   imageCaption,
   badge,
-  tags = [],
+  tags: tagsProp = [],
   ctaLabel,
   className,
 }: ProductCardProps) {
+  // An empty label (e.g. a product with no volume/variant data) would
+  // otherwise render as a blank colored pill.
+  const tags = tagsProp.filter((tag) => tag.label.trim());
   const styles = variantStyles[variant];
 
   return (
