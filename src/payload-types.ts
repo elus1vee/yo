@@ -201,6 +201,10 @@ export interface Product {
     weight?: string | null;
     volume?: string | null;
   };
+  /**
+   * Заполняется скриптом переноса из WordPress (scripts/migrate-wp.ts); держит перенос идемпотентным
+   */
+  wpId?: number | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -220,6 +224,10 @@ export interface Product {
 export interface Media {
   id: number;
   alt: string;
+  /**
+   * Заполняется скриптом переноса из WordPress; не даёт скачать один и тот же файл дважды при повторном запуске
+   */
+  sourceUrl?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -699,6 +707,7 @@ export interface ProductsSelect<T extends boolean = true> {
         weight?: T;
         volume?: T;
       };
+  wpId?: T;
   meta?:
     | T
     | {
@@ -759,6 +768,7 @@ export interface PagesSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  sourceUrl?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

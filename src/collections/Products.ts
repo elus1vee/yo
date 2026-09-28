@@ -132,5 +132,17 @@ export const Products: CollectionConfig = {
         { name: "volume", label: "Объём", type: "text" },
       ],
     },
+    {
+      name: "wpId",
+      label: "ID в WordPress",
+      type: "number",
+      unique: true,
+      admin: {
+        position: "sidebar",
+        readOnly: true,
+        description:
+          "Заполняется скриптом переноса из WordPress (scripts/migrate-wp.ts); держит перенос идемпотентным",
+      },
+    },
   ],
 };

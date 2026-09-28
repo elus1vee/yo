@@ -25,5 +25,16 @@ export const Media: CollectionConfig = {
       type: "text",
       required: true,
     },
+    {
+      name: "sourceUrl",
+      label: "Исходный URL",
+      type: "text",
+      unique: true,
+      admin: {
+        readOnly: true,
+        description:
+          "Заполняется скриптом переноса из WordPress; не даёт скачать один и тот же файл дважды при повторном запуске",
+      },
+    },
   ],
 };

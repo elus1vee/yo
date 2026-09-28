@@ -5,6 +5,7 @@ import { formBuilderPlugin } from "@payloadcms/plugin-form-builder";
 import { redirectsPlugin } from "@payloadcms/plugin-redirects";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 import { Media } from "./collections/Media";
@@ -75,5 +76,15 @@ export default buildConfig({
     }),
     formBuilderPlugin({ fields: { payment: false } }),
     redirectsPlugin({ collections: pageCollections }),
+    // Vercel's filesystem is read-only/ephemeral in production, so uploads
+    // saved to disk (Media's default) vanish between deploys. This plugin
+    // stores them in Vercel Blob instead — but only once BLOB_READ_WRITE_TOKEN
+    // is set (Vercel adds it automatically once a Blob store is attached to
+    // the project); without it, it no-ops and Media keeps using local disk,
+    // which is what you want for local dev.
+    vercelBlobStorage({
+      collections: { media: true },
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    }),
   ],
 });
