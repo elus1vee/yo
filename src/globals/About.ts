@@ -1,4 +1,5 @@
 import type { GlobalConfig } from "payload";
+import { revalidateAboutPage } from "./hooks/revalidate";
 
 const tintOptions = [
   { label: "Персик", value: "peach" },
@@ -12,6 +13,7 @@ export const About: GlobalConfig = {
   slug: "about",
   label: "О компании",
   access: { read: () => true },
+  hooks: { afterChange: [revalidateAboutPage] },
   fields: [
     {
       name: "intro",

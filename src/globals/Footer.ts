@@ -1,9 +1,11 @@
 import type { GlobalConfig } from "payload";
+import { revalidateSiteLayout } from "./hooks/revalidate";
 
 export const Footer: GlobalConfig = {
   slug: "footer",
   label: "Подвал",
   access: { read: () => true },
+  hooks: { afterChange: [revalidateSiteLayout] },
   fields: [
     {
       name: "requisites",

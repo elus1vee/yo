@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 import { publishedOrEditor } from "./access";
 import { slugField } from "./fields";
+import { revalidateProduct, revalidateProductDelete } from "./hooks/revalidate";
 
 /** Same 4 colors used across the site for product-line photos/cards. */
 const tintOptions = [
@@ -21,6 +22,10 @@ export const Products: CollectionConfig = {
   // Preview needs to show unsaved edits before a document is published.
   versions: { drafts: true },
   access: { read: publishedOrEditor },
+  hooks: {
+    afterChange: [revalidateProduct],
+    afterDelete: [revalidateProductDelete],
+  },
   fields: [
     { name: "title", label: "Название", type: "text", required: true },
     slugField(),

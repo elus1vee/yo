@@ -1,10 +1,16 @@
 import type { GlobalConfig } from "payload";
+import { revalidateSiteLayout } from "./hooks/revalidate";
 
-/** Content of the "Контакты" page and the contact facts shown in the footer. */
+/**
+ * Content of the "Контакты" page — also the phone/email shown in the shared
+ * Header and Footer (see lib/cms-content.ts), hence the layout-wide
+ * revalidation rather than just /contacts.
+ */
 export const Contacts: GlobalConfig = {
   slug: "contacts",
   label: "Контакты",
   access: { read: () => true },
+  hooks: { afterChange: [revalidateSiteLayout] },
   fields: [
     {
       name: "intro",

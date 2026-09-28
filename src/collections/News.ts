@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 import { publishedOrEditor } from "./access";
 import { slugField } from "./fields";
+import { revalidateNews, revalidateNewsDelete } from "./hooks/revalidate";
 
 const tintOptions = [
   { label: "Персик", value: "peach" },
@@ -19,6 +20,10 @@ export const News: CollectionConfig = {
   defaultSort: "-publishedAt",
   versions: { drafts: true },
   access: { read: publishedOrEditor },
+  hooks: {
+    afterChange: [revalidateNews],
+    afterDelete: [revalidateNewsDelete],
+  },
   fields: [
     { name: "title", label: "Заголовок", type: "text", required: true },
     slugField(),

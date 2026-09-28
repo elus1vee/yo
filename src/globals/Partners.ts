@@ -1,9 +1,11 @@
 import type { GlobalConfig } from "payload";
+import { revalidateAboutPage } from "./hooks/revalidate";
 
 export const Partners: GlobalConfig = {
   slug: "partners",
   label: "Партнёры",
   access: { read: () => true },
+  hooks: { afterChange: [revalidateAboutPage] },
   fields: [
     {
       name: "partners",
