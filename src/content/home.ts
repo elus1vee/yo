@@ -36,6 +36,12 @@ export const hero: HeroProps = {
     { label: "Смотреть товары", href: "/catalog", variant: "dark" },
     { label: "Где купить", href: "/about#where-to-buy", variant: "light" },
   ],
+  media: {
+    src: "/hero-image.jpg",
+    alt: "Хозяйка гладит двух рыжих кошек дома на диване",
+  },
+  // Unused while `media` is set — Hero only shows it under the striped
+  // placeholder; kept so removing the photo doesn't also lose the caption.
   mediaCaption: "фото / видео: кот и хозяин, 4:3",
   facts: [
     { value: "30 дней", label: "один пакет наполнителя" },
