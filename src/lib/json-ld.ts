@@ -10,7 +10,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/seo";
 export const copyToText = (copy: Copy): string =>
   typeof copy === "string" ? copy : (copy.desktop ?? copy.mobile ?? "");
 
-const absoluteUrl = (path: string) =>
+export const absoluteUrl = (path: string) =>
   path.startsWith("http")
     ? path
     : `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
@@ -101,6 +101,25 @@ export function productJsonLd(input: ProductJsonLdInput) {
     url: absoluteUrl(input.path),
     brand: { "@type": "Brand", name: SITE_NAME },
     ...(input.category ? { category: input.category } : {}),
+  };
+}
+
+export interface ItemListEntry {
+  name: string;
+  path: string;
+}
+
+/** Product listing on the catalog page — helps search engines index it as a category, not just a page. */
+export function itemListJsonLd(items: ItemListEntry[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      url: absoluteUrl(item.path),
+    })),
   };
 }
 

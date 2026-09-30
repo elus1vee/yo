@@ -81,6 +81,7 @@ export function Hero({
                 fill
                 sizes="(min-width: 1024px) 600px, 100vw"
                 className="object-cover"
+                priority
               />
             ) : (
               <ImagePlaceholder caption={mediaCaption} align="bottom" />

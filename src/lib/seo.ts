@@ -11,6 +11,9 @@ export const SITE_URL = (
 
 export const SITE_NAME = "Йо!";
 
+/** Falls back for pages that don't set their own (see `pageMetadata` below). */
+const DEFAULT_OG_IMAGE = "/hero-image.jpg";
+
 export interface PageMetaInput {
   /** Page title; the root template appends " — Йо!" unless `absolute`. */
   title: string;
@@ -40,7 +43,7 @@ export function pageMetadata({
   absolute,
   type = "website",
   publishedTime,
-  image,
+  image = DEFAULT_OG_IMAGE,
 }: PageMetaInput): Metadata {
   return {
     title: absolute ? { absolute: title } : title,

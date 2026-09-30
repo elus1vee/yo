@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CatalogBrowser } from "@/components/blocks/catalog-browser";
 import { PageIntro } from "@/components/blocks/page-intro";
+import { JsonLd } from "@/components/seo/json-ld";
 import {
   animalOptions,
   catalogCopy,
@@ -8,6 +9,7 @@ import {
   typeOptions,
 } from "@/content/catalog";
 import { catalogSeo } from "@/content/seo";
+import { itemListJsonLd } from "@/lib/json-ld";
 import { getCatalogProducts } from "@/lib/mock-data";
 import { pageMetadata } from "@/lib/seo";
 
@@ -26,6 +28,11 @@ export default async function CatalogPage(props: PageProps<"/catalog">) {
 
   return (
     <>
+      <JsonLd
+        data={itemListJsonLd(
+          catalogProducts.map((p) => ({ name: p.name, path: p.href })),
+        )}
+      />
       <PageIntro {...catalogIntro} />
       <CatalogBrowser
         products={catalogProducts}

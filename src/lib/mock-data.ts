@@ -78,6 +78,21 @@ export async function getProductSlugs(): Promise<string[]> {
   return docs.map((p) => p.slug);
 }
 
+/** slug + updatedAt for every product, for the sitemap's `lastModified`. */
+export async function getProductSitemapEntries(): Promise<
+  { slug: string; updatedAt: string }[]
+> {
+  const payload = await getCms();
+  const { docs } = await payload.find({
+    collection: "products",
+    limit: 0,
+    depth: 0,
+    select: { slug: true, updatedAt: true },
+    overrideAccess: false,
+  });
+  return docs.map((p) => ({ slug: p.slug, updatedAt: p.updatedAt }));
+}
+
 /** Same categoryType first, then any other published product, up to `RELATED_COUNT`. */
 async function relatedProductsOf(
   categoryType: string,
