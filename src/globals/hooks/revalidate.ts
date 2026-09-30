@@ -18,3 +18,9 @@ export const revalidateAboutPage: GlobalAfterChangeHook = ({ doc }) => {
   safeRevalidatePath("/about");
   return doc;
 };
+
+/** Home's decorative photos (hero, animal cards) only ever show on /. */
+export const revalidateHome: GlobalAfterChangeHook = ({ doc }) => {
+  safeRevalidatePath("/");
+  return doc;
+};

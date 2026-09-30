@@ -102,6 +102,7 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    home: Home;
     partners: Partner;
     about: About;
     contacts: Contact;
@@ -109,6 +110,7 @@ export interface Config {
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    home: HomeSelect<false> | HomeSelect<true>;
     partners: PartnersSelect<false> | PartnersSelect<true>;
     about: AboutSelect<false> | AboutSelect<true>;
     contacts: ContactsSelect<false> | ContactsSelect<true>;
@@ -1039,6 +1041,14 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: number;
+  /**
+   * Без файла используется логотип по умолчанию
+   */
+  logo?: (number | null) | Media;
+  /**
+   * Показывается в шапке и в подвале сайта
+   */
+  clarityBadge?: (number | null) | Media;
   menuItems?:
     | {
         label: string;
@@ -1065,6 +1075,10 @@ export interface Header {
  */
 export interface Footer {
   id: number;
+  /**
+   * Без файла используется логотип по умолчанию
+   */
+  logo?: (number | null) | Media;
   requisites?:
     | {
         line: string;
@@ -1078,6 +1092,24 @@ export interface Footer {
         id?: string | null;
       }[]
     | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home".
+ */
+export interface Home {
+  id: number;
+  /**
+   * Без фото остаётся текущее фото по умолчанию
+   */
+  heroImage?: (number | null) | Media;
+  animalImages?: {
+    cats?: (number | null) | Media;
+    dogs?: (number | null) | Media;
+    rodents?: (number | null) | Media;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1117,6 +1149,7 @@ export interface About {
     title: string;
     items?:
       | {
+          image?: (number | null) | Media;
           tint: 'peach' | 'lavender' | 'primary' | 'neutral';
           text: string;
           id?: string | null;
@@ -1178,6 +1211,8 @@ export interface Contact {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  logo?: T;
+  clarityBadge?: T;
   menuItems?:
     | T
     | {
@@ -1201,6 +1236,7 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  logo?: T;
   requisites?:
     | T
     | {
@@ -1213,6 +1249,23 @@ export interface FooterSelect<T extends boolean = true> {
         label?: T;
         href?: T;
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home_select".
+ */
+export interface HomeSelect<T extends boolean = true> {
+  heroImage?: T;
+  animalImages?:
+    | T
+    | {
+        cats?: T;
+        dogs?: T;
+        rodents?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1255,6 +1308,7 @@ export interface AboutSelect<T extends boolean = true> {
         items?:
           | T
           | {
+              image?: T;
               tint?: T;
               text?: T;
               id?: T;

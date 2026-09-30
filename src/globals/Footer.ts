@@ -8,6 +8,13 @@ export const Footer: GlobalConfig = {
   hooks: { afterChange: [revalidateSiteLayout] },
   fields: [
     {
+      name: "logo",
+      label: "Логотип «Йо!» (подвал, светлый вариант)",
+      type: "upload",
+      relationTo: "media",
+      admin: { description: "Без файла используется логотип по умолчанию" },
+    },
+    {
       name: "requisites",
       label: "Реквизиты",
       type: "array",

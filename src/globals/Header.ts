@@ -8,6 +8,20 @@ export const Header: GlobalConfig = {
   hooks: { afterChange: [revalidateSiteLayout] },
   fields: [
     {
+      name: "logo",
+      label: "Логотип «Йо!» (шапка)",
+      type: "upload",
+      relationTo: "media",
+      admin: { description: "Без файла используется логотип по умолчанию" },
+    },
+    {
+      name: "clarityBadge",
+      label: "Бейдж Clarity",
+      type: "upload",
+      relationTo: "media",
+      admin: { description: "Показывается в шапке и в подвале сайта" },
+    },
+    {
       name: "menuItems",
       label: "Пункты меню",
       type: "array",

@@ -1,7 +1,15 @@
 import type { FeatureTileProps } from "@/components/blocks/feature-tile";
 import type { PageIntroProps } from "@/components/blocks/page-intro";
 import type { PhotoCardProps } from "@/components/blocks/photo-card";
-import type { About } from "@/payload-types";
+import type { About, Media } from "@/payload-types";
+
+function imageOf(
+  value: number | Media | null | undefined,
+): PhotoCardProps["image"] {
+  if (typeof value !== "object" || value === null || !value.url)
+    return undefined;
+  return { src: value.url, alt: value.alt };
+}
 
 /**
  * Pure Payload-doc → view-prop mapper for the About global — no fetching, so
@@ -30,6 +38,7 @@ export function aboutToView(about: About): AboutContent {
       items: (about.production.items ?? []).map((i) => ({
         tint: i.tint,
         text: i.text,
+        image: imageOf(i.image),
       })),
     },
     certificates: {

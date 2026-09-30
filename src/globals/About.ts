@@ -48,8 +48,14 @@ export const About: GlobalConfig = {
           minRows: 1,
           fields: [
             {
+              name: "image",
+              label: "Фото",
+              type: "upload",
+              relationTo: "media",
+            },
+            {
               name: "tint",
-              label: "Цвет",
+              label: "Цвет (пока нет фото)",
               type: "select",
               required: true,
               options: tintOptions,

@@ -17,6 +17,7 @@ import { About } from "./globals/About";
 import { Contacts } from "./globals/Contacts";
 import { Footer } from "./globals/Footer";
 import { Header } from "./globals/Header";
+import { Home } from "./globals/Home";
 import { Partners } from "./globals/Partners";
 import { SITE_URL } from "./lib/seo";
 
@@ -52,7 +53,7 @@ export default buildConfig({
     },
   },
   collections: [Products, News, Pages, Media, Users],
-  globals: [Header, Footer, Partners, About, Contacts],
+  globals: [Header, Footer, Home, Partners, About, Contacts],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET ?? "",
   db: postgresAdapter({

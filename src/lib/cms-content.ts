@@ -2,13 +2,43 @@ import { cache } from "react";
 import type { FooterProps } from "@/components/blocks/footer";
 import type { HeaderProps } from "@/components/blocks/header";
 import type { PartnerTileProps } from "@/components/blocks/partner-tile";
-import type { Messenger, MessengerKind } from "@/components/blocks/types";
+import type {
+  CardImage,
+  ImageAsset,
+  Messenger,
+  MessengerKind,
+} from "@/components/blocks/types";
 import { telHref } from "@/lib/safe-url";
 import { getCms } from "@/lib/payload";
 import { brand, siteNav, siteUiLabels } from "@/content/site";
 import { aboutToView, type AboutContent } from "@/lib/view/about";
 import { contactsToView, type ContactsContent } from "@/lib/view/contacts";
-import type { About, Contact } from "@/payload-types";
+import type { About, Contact, Media } from "@/payload-types";
+
+/** A Payload upload relation, as it comes back once `depth >= 1` resolves it. */
+type UploadRelation = number | Media | null | undefined;
+
+function isPopulatedMedia(value: UploadRelation): value is Media {
+  return typeof value === "object" && value !== null && Boolean(value.url);
+}
+
+/** Resolves an upload field to a full-size `ImageAsset`, falling back to a static default. */
+function mediaToImage(value: UploadRelation, fallback: ImageAsset): ImageAsset {
+  if (!isPopulatedMedia(value)) return fallback;
+  return {
+    src: value.url ?? fallback.src,
+    alt: value.alt || fallback.alt,
+    width: value.width ?? fallback.width,
+    height: value.height ?? fallback.height,
+  };
+}
+
+/** Resolves an upload field to a `CardImage`, or `undefined` (renders the placeholder). */
+function mediaToCardImage(value: UploadRelation): CardImage | undefined {
+  return isPopulatedMedia(value)
+    ? { src: value.url ?? "", alt: value.alt }
+    : undefined;
+}
 
 /**
  * Site globals from Payload (Header, Footer, Partners, About, Contacts).
@@ -33,12 +63,25 @@ export const messengerVisibleLabel: Record<MessengerKind, string> = {
 
 const getHeaderGlobal = cache(async () => {
   const payload = await getCms();
-  return payload.findGlobal({ slug: "header", overrideAccess: false });
+  return payload.findGlobal({
+    slug: "header",
+    depth: 1,
+    overrideAccess: false,
+  });
 });
 
 const getFooterGlobal = cache(async () => {
   const payload = await getCms();
-  return payload.findGlobal({ slug: "footer", overrideAccess: false });
+  return payload.findGlobal({
+    slug: "footer",
+    depth: 1,
+    overrideAccess: false,
+  });
+});
+
+const getHomeGlobal = cache(async () => {
+  const payload = await getCms();
+  return payload.findGlobal({ slug: "home", depth: 1, overrideAccess: false });
 });
 
 const getPartnersGlobal = cache(async () => {
@@ -52,7 +95,11 @@ const getPartnersGlobal = cache(async () => {
 
 const getAboutGlobal = cache(async (): Promise<About> => {
   const payload = await getCms();
-  return payload.findGlobal({ slug: "about", overrideAccess: false });
+  return payload.findGlobal({
+    slug: "about",
+    depth: 1,
+    overrideAccess: false,
+  });
 });
 
 const getContactsGlobal = cache(async (): Promise<Contact> => {
@@ -67,8 +114,8 @@ export async function getHeaderContent(): Promise<HeaderProps> {
   ]);
   return {
     home: { href: "/", label: `«${brand.name}» — на главную` },
-    yoLogo: brand.yoMark,
-    clarityLogo: brand.clarityBadge,
+    yoLogo: mediaToImage(header.logo, brand.yoMark),
+    clarityLogo: mediaToImage(header.clarityBadge, brand.clarityBadge),
     nav:
       header.menuItems?.map(({ label, href }) => ({ label, href })) ?? siteNav,
     phone: contacts.phone,
@@ -91,8 +138,8 @@ export async function getFooterContent(): Promise<FooterProps> {
     header.menuItems?.map(({ label, href }) => ({ label, href })) ?? siteNav;
 
   return {
-    yoLogo: brand.yoMarkCream,
-    clarityLogo: brand.clarityBadge,
+    yoLogo: mediaToImage(footer.logo, brand.yoMarkCream),
+    clarityLogo: mediaToImage(header.clarityBadge, brand.clarityBadge),
     requisites: (footer.requisites ?? []).map((r) => r.line),
     columns: [
       { title: "Разделы", links: nav, hideOnMobile: true },
@@ -141,6 +188,28 @@ export async function getPartnersContent(): Promise<PartnerTileProps[]> {
 
 export async function getAboutContent(): Promise<AboutContent> {
   return aboutToView(await getAboutGlobal());
+}
+
+/** Decorative photos on the home page (hero, "Кому выбираем?" cards). */
+export interface HomeMedia {
+  hero?: CardImage;
+  animals: {
+    cats?: CardImage;
+    dogs?: CardImage;
+    rodents?: CardImage;
+  };
+}
+
+export async function getHomeMedia(): Promise<HomeMedia> {
+  const home = await getHomeGlobal();
+  return {
+    hero: mediaToCardImage(home.heroImage),
+    animals: {
+      cats: mediaToCardImage(home.animalImages?.cats),
+      dogs: mediaToCardImage(home.animalImages?.dogs),
+      rodents: mediaToCardImage(home.animalImages?.rodents),
+    },
+  };
 }
 
 /** Raw global doc, for the About page's Live Preview wrapper. */
