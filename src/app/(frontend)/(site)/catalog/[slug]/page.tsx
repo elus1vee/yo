@@ -5,8 +5,10 @@ import { CardGrid } from "@/components/blocks/card-grid";
 import { CatalogProductCard } from "@/components/blocks/catalog-product-card";
 import { Section } from "@/components/blocks/section";
 import { ProductDetailLive } from "@/components/live/product-detail-live";
+import { JsonLd } from "@/components/seo/json-ld";
 import { typeOptions } from "@/content/catalog";
 import { productCopy } from "@/content/product";
+import { breadcrumbListJsonLd, copyToText, productJsonLd } from "@/lib/json-ld";
 import {
   getProductDetail,
   getProductSlugs,
@@ -49,25 +51,46 @@ export default async function ProductPage(props: PageProps<"/catalog/[slug]">) {
   if (!raw || !product) notFound();
 
   const typeLabel = typeOptions.find((t) => t.id === product.type)?.label;
+  const path = `/catalog/${product.slug}`;
+
+  const breadcrumbItems = [
+    { label: productCopy.breadcrumbs.home, href: "/" },
+    { label: productCopy.breadcrumbs.catalog, href: "/catalog" },
+    ...(typeLabel
+      ? [
+          {
+            label: typeLabel,
+            href: `/catalog?type=${product.type}`,
+            hideOnMobile: true,
+          },
+        ]
+      : []),
+    { label: product.shortName },
+  ];
 
   return (
     <>
+      <JsonLd
+        data={productJsonLd({
+          name: product.name,
+          description: richTextToPlainText(raw.description),
+          image: mediaImage(raw.images?.[0])?.src,
+          path,
+          category: typeLabel,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbListJsonLd([
+          ...breadcrumbItems
+            .slice(0, -1)
+            .map((item) => ({ name: copyToText(item.label), path: item.href })),
+          { name: product.shortName, path },
+        ])}
+      />
+
       <Breadcrumbs
         label={productCopy.breadcrumbs.label}
-        items={[
-          { label: productCopy.breadcrumbs.home, href: "/" },
-          { label: productCopy.breadcrumbs.catalog, href: "/catalog" },
-          ...(typeLabel
-            ? [
-                {
-                  label: typeLabel,
-                  href: `/catalog?type=${product.type}`,
-                  hideOnMobile: true,
-                },
-              ]
-            : []),
-          { label: product.shortName },
-        ]}
+        items={breadcrumbItems}
       />
 
       <Section inset="page" rhythm="detail">

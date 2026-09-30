@@ -10,6 +10,7 @@ import type {
 } from "@/components/blocks/types";
 import { telHref } from "@/lib/safe-url";
 import { getCms } from "@/lib/payload";
+import { organizationJsonLd } from "@/lib/json-ld";
 import { brand, siteNav, siteUiLabels } from "@/content/site";
 import { aboutToView, type AboutContent } from "@/lib/view/about";
 import { contactsToView, type ContactsContent } from "@/lib/view/contacts";
@@ -247,4 +248,30 @@ export async function getContactsContent(): Promise<ContactsContent> {
 /** Raw global doc, for the Contacts page's Live Preview wrapper. */
 export async function getContactsRaw(): Promise<Contact> {
   return getContactsGlobal();
+}
+
+/** Resolved logo URL, for the NewsArticle JSON-LD `publisher.logo`. */
+export async function getPublisherLogo(): Promise<string> {
+  const header = await getHeaderGlobal();
+  return mediaToImage(header.logo, brand.yoMark).src;
+}
+
+/** Organization JSON-LD (site layout) — brand identity for search engines. */
+export async function getOrganizationJsonLd() {
+  const [header, footer, contacts] = await Promise.all([
+    getHeaderGlobal(),
+    getFooterGlobal(),
+    getContactsGlobal(),
+  ]);
+  return organizationJsonLd({
+    logo: mediaToImage(header.logo, brand.yoMark).src,
+    phone: contacts.phone,
+    email: contacts.email,
+    address: contacts.address,
+    // Footer's socials can be "#" placeholders until an editor fills in the
+    // real link — schema.org's sameAs needs an actual URL, not a stand-in.
+    sameAs: (footer.socials ?? [])
+      .map((s) => s.href)
+      .filter((href) => href.startsWith("http")),
+  });
 }

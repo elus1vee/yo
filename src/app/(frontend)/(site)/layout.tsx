@@ -1,6 +1,12 @@
 import { Footer } from "@/components/blocks/footer";
 import { Header } from "@/components/blocks/header";
-import { getFooterContent, getHeaderContent } from "@/lib/cms-content";
+import { JsonLd } from "@/components/seo/json-ld";
+import {
+  getFooterContent,
+  getHeaderContent,
+  getOrganizationJsonLd,
+} from "@/lib/cms-content";
+import { websiteJsonLd } from "@/lib/json-ld";
 
 /**
  * Shared frame of the public site: sticky header, growing <main>, footer.
@@ -13,12 +19,15 @@ export default async function SiteLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [header, footer] = await Promise.all([
+  const [header, footer, organizationSchema] = await Promise.all([
     getHeaderContent(),
     getFooterContent(),
+    getOrganizationJsonLd(),
   ]);
   return (
     <>
+      <JsonLd data={organizationSchema} />
+      <JsonLd data={websiteJsonLd()} />
       <Header {...header} />
       <main className="flex-1">{children}</main>
       <Footer {...footer} />

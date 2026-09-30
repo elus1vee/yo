@@ -5,7 +5,14 @@ import { CardGrid } from "@/components/blocks/card-grid";
 import { NewsCard } from "@/components/blocks/news-card";
 import { Section } from "@/components/blocks/section";
 import { NewsArticleLive } from "@/components/live/news-article-live";
+import { JsonLd } from "@/components/seo/json-ld";
 import { articleCopy, shareLinks } from "@/content/news";
+import { getPublisherLogo } from "@/lib/cms-content";
+import {
+  breadcrumbListJsonLd,
+  copyToText,
+  newsArticleJsonLd,
+} from "@/lib/json-ld";
 import {
   getNewsArticle,
   getNewsSlugs,
@@ -45,14 +52,35 @@ export default async function NewsArticlePage(
   props: PageProps<"/news/[slug]">,
 ) {
   const { slug } = await props.params;
-  const [raw, article] = await Promise.all([
+  const [raw, article, publisherLogo] = await Promise.all([
     getRawNewsArticle(slug),
     getNewsArticle(slug),
+    getPublisherLogo(),
   ]);
   if (!raw || !article) notFound();
 
+  const path = `/news/${article.slug}`;
+
   return (
     <>
+      <JsonLd
+        data={newsArticleJsonLd({
+          headline: article.title,
+          description: article.excerpt,
+          image: article.cover?.src,
+          path,
+          datePublished: article.dateTime,
+          publisherLogo,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbListJsonLd([
+          { name: copyToText(articleCopy.breadcrumbs.home), path: "/" },
+          { name: copyToText(articleCopy.breadcrumbs.news), path: "/news" },
+          { name: article.title, path },
+        ])}
+      />
+
       <Breadcrumbs
         label={articleCopy.breadcrumbs.label}
         items={[
