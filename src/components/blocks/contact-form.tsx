@@ -39,6 +39,8 @@ export interface ContactFormCopy {
   submit: string;
   submitting: string;
   errors: ContactErrorMessages;
+  /** Shown under the fields once the caller reports the result of sending. */
+  statusMessages: { success: string; error: string; rateLimited: string };
 }
 
 export interface ContactFormProps {
@@ -53,11 +55,16 @@ export interface ContactFormProps {
   contacts?: NavItem[];
   /**
    * Called with trimmed values once validation passes. Sending is up to the
-   * caller — this block has no submit logic of its own.
+   * caller — this block has no submit logic of its own. Resolve `true` to
+   * clear the fields after a successful send.
    */
-  onSubmit?: (values: ContactFormValues) => void;
+  onSubmit?: (
+    values: ContactFormValues,
+  ) => void | boolean | Promise<boolean | void>;
   /** Shows the loading state on the submit button while the caller sends. */
   isSubmitting?: boolean;
+  /** Result of the last send, announced under the fields. */
+  status?: "success" | "error" | "rate-limited";
 }
 
 const emptyValues: ContactFormValues = {
@@ -77,6 +84,7 @@ export function ContactForm({
   contacts = [],
   onSubmit,
   isSubmitting = false,
+  status,
 }: ContactFormProps) {
   const [values, setValues] = useState<ContactFormValues>(emptyValues);
   const [errors, setErrors] = useState<ContactErrors>({});
@@ -114,7 +122,7 @@ export function ContactForm({
     if (values[field] !== emptyValues[field]) revalidate(field, values);
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
 
@@ -129,13 +137,14 @@ export function ContactForm({
       return;
     }
 
-    onSubmit?.({
+    const sent = await onSubmit?.({
       name: values.name.trim(),
       phone: values.phone.trim(),
       email: values.email.trim(),
       message: values.message.trim(),
       consent: values.consent,
     });
+    if (sent === true) setValues(emptyValues);
   };
 
   const isCard = variant === "card";
@@ -236,6 +245,22 @@ export function ContactForm({
           }
         />
       </div>
+      {status && (
+        <p
+          role={status === "success" ? "status" : "alert"}
+          className={cn(
+            "text-sm font-semibold",
+            isCard ? undefined : "px-1.5",
+            status === "success" ? "text-primary" : "text-danger",
+          )}
+        >
+          {status === "success"
+            ? copy.statusMessages.success
+            : status === "rate-limited"
+              ? copy.statusMessages.rateLimited
+              : copy.statusMessages.error}
+        </p>
+      )}
       <Button
         type="submit"
         variant={isCard ? "primary" : "dark"}

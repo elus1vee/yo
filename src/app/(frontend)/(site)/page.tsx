@@ -3,7 +3,7 @@ import { AnimalCard } from "@/components/blocks/animal-card";
 import { AudiencePanel } from "@/components/blocks/audience-panel";
 import { CardGrid } from "@/components/blocks/card-grid";
 import { CategoryLink } from "@/components/blocks/category-link";
-import { ContactForm } from "@/components/blocks/contact-form";
+import { ContactFormConnected } from "@/components/blocks/contact-form-connected";
 import { Hero } from "@/components/blocks/hero";
 import { NewsCard } from "@/components/blocks/news-card";
 import { PhPromo } from "@/components/blocks/ph-promo";
@@ -91,7 +91,10 @@ export default async function Home() {
       </Section>
 
       <Section id="contact">
-        <ContactForm copy={homeContactFormCopy} contacts={contactFacts} />
+        <ContactFormConnected
+          copy={homeContactFormCopy}
+          contacts={contactFacts}
+        />
       </Section>
     </>
   );

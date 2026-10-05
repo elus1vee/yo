@@ -3,10 +3,8 @@
 import { useLivePreview } from "@payloadcms/live-preview-react";
 import { CardGrid } from "@/components/blocks/card-grid";
 import { ContactDetails } from "@/components/blocks/contact-details";
-import {
-  ContactForm,
-  type ContactFormCopy,
-} from "@/components/blocks/contact-form";
+import { type ContactFormCopy } from "@/components/blocks/contact-form";
+import { ContactFormConnected } from "@/components/blocks/contact-form-connected";
 import { PageIntro } from "@/components/blocks/page-intro";
 import { Section } from "@/components/blocks/section";
 import { type Messenger } from "@/components/blocks/types";
@@ -39,7 +37,7 @@ export function ContactsPageLive({
       <Section inset="page" rhythm="form">
         <CardGrid layout="contacts">
           <ContactDetails {...details} />
-          <ContactForm variant="card" copy={formCopy} />
+          <ContactFormConnected variant="card" copy={formCopy} />
         </CardGrid>
       </Section>
     </>

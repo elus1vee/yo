@@ -23,6 +23,12 @@ export const contactsForm: ContactFormCopy = {
   },
   submit: "Отправить",
   submitting: "Отправка…",
+  statusMessages: {
+    success: "Спасибо! Сообщение отправлено, мы свяжемся с вами.",
+    error:
+      "Не удалось отправить сообщение. Попробуйте позже или позвоните нам.",
+    rateLimited: "Слишком много попыток. Попробуйте через несколько минут.",
+  },
   errors: {
     nameRequired: "Введите имя",
     phoneRequired: "Введите телефон",
