@@ -4,6 +4,11 @@ import { homeSeo } from "@/content/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 import "@/styles/globals.css";
 
+// Pages read the CMS database, which isn't reachable while the Docker image
+// builds (and a deploy shouldn't be needed to show an admin edit), so every
+// public page renders per request instead of being pre-rendered.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: homeSeo.title, template: `%s — ${SITE_NAME}` },

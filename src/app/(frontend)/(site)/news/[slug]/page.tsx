@@ -13,18 +13,10 @@ import {
   copyToText,
   newsArticleJsonLd,
 } from "@/lib/json-ld";
-import {
-  getNewsArticle,
-  getNewsSlugs,
-  getRawNewsArticle,
-} from "@/lib/mock-data";
+import { getNewsArticle, getRawNewsArticle } from "@/lib/mock-data";
 import { pageMetadata } from "@/lib/seo";
 import { newsToView } from "@/lib/view/news";
 import { mediaImage } from "@/lib/view/product";
-
-export async function generateStaticParams() {
-  return (await getNewsSlugs()).map((slug) => ({ slug }));
-}
 
 export async function generateMetadata(
   props: PageProps<"/news/[slug]">,

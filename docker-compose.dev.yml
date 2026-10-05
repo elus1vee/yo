@@ -1,0 +1,6 @@
+# Local development only: publishes PostgreSQL on 127.0.0.1 (this machine, not the
+# network) so `npm run dev` can reach it. Use via `npm run db:up`.
+services:
+  postgres:
+    ports:
+      - "127.0.0.1:5433:5432"

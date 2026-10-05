@@ -9,18 +9,10 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { typeOptions } from "@/content/catalog";
 import { productCopy } from "@/content/product";
 import { breadcrumbListJsonLd, copyToText, productJsonLd } from "@/lib/json-ld";
-import {
-  getProductDetail,
-  getProductSlugs,
-  getRawProduct,
-} from "@/lib/mock-data";
+import { getProductDetail, getRawProduct } from "@/lib/mock-data";
 import { richTextToPlainText } from "@/lib/rich-text";
 import { pageMetadata } from "@/lib/seo";
 import { mediaImage, productToView } from "@/lib/view/product";
-
-export async function generateStaticParams() {
-  return (await getProductSlugs()).map((slug) => ({ slug }));
-}
 
 export async function generateMetadata(
   props: PageProps<"/catalog/[slug]">,

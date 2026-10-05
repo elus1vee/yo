@@ -536,12 +536,13 @@ async function main() {
   // --- Admin user -------------------------------------------------------
   const { totalDocs } = await payload.count({ collection: "users" });
   if (totalDocs === 0) {
-    const email = "admin@yo.by";
-    const password = "ChangeMe123!";
+    const email = process.env.SEED_ADMIN_EMAIL ?? "admin@yo.by";
+    const password = process.env.SEED_ADMIN_PASSWORD;
+    if (!password) {
+      throw new Error("Set SEED_ADMIN_PASSWORD to seed the first admin user");
+    }
     await payload.create({ collection: "users", data: { email, password } });
-    console.log(
-      `✓ admin user created — ${email} / ${password} (change this password)`,
-    );
+    console.log(`✓ admin user created — ${email}`);
   } else {
     console.log("• admin user already exists, skipped");
   }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { connection } from "next/server";
 import { Header } from "@/components/blocks/header";
 import { StatusPage } from "@/components/blocks/status-page";
 import { notFoundCopy } from "@/content/legal";
@@ -14,6 +15,8 @@ export const metadata: Metadata = { title: "Страница не найдена
  * — it renders its own <html>. Same content as (frontend)/not-found.tsx.
  */
 export default async function GlobalNotFound() {
+  // Reads the CMS: render per request, not while the image builds.
+  await connection();
   const header = await getHeaderContent();
   return (
     <html

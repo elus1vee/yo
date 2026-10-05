@@ -6,6 +6,9 @@ import {
 } from "@/lib/mock-data";
 import { SITE_URL } from "@/lib/seo";
 
+// Reads the database, so it can't be generated at build time.
+export const dynamic = "force-dynamic";
+
 const staticPaths = ["/", "/catalog", "/news", "/about", "/contacts"];
 
 /** Every indexable page. Built from the same data the pages are generated from. */

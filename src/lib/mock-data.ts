@@ -66,18 +66,6 @@ export async function getCatalogProducts(): Promise<CatalogProduct[]> {
   return docs.map(catalogProductOf);
 }
 
-export async function getProductSlugs(): Promise<string[]> {
-  const payload = await getCms();
-  const { docs } = await payload.find({
-    collection: "products",
-    limit: 0,
-    depth: 0,
-    select: { slug: true },
-    overrideAccess: false,
-  });
-  return docs.map((p) => p.slug);
-}
-
 /** slug + updatedAt for every product, for the sitemap's `lastModified`. */
 export async function getProductSitemapEntries(): Promise<
   { slug: string; updatedAt: string }[]
@@ -194,18 +182,6 @@ export async function getNewsList(): Promise<NewsCardProps[]> {
     overrideAccess: false,
   });
   return docs.map((a) => newsCardOf(a, true));
-}
-
-export async function getNewsSlugs(): Promise<string[]> {
-  const payload = await getCms();
-  const { docs } = await payload.find({
-    collection: "news",
-    limit: 0,
-    depth: 0,
-    select: { slug: true },
-    overrideAccess: false,
-  });
-  return docs.map((a) => a.slug);
 }
 
 export interface NewsArticlePage extends NewsArticleView {

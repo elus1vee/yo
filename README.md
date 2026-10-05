@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Йо!
 
-## Getting Started
+Сайт бренда «Йо!»: Next.js 16 + Payload CMS 3 (админка на `/admin`) + PostgreSQL.
 
-First, run the development server:
+## Локальная разработка
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env     # заполнить PAYLOAD_SECRET (openssl rand -hex 32)
+npm install
+npm run db:up            # PostgreSQL в Docker, порт только на 127.0.0.1:5433
+npm run payload -- migrate
+npm run dev              # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Демо-контент и первый админ: `SEED_ADMIN_PASSWORD=... npm run seed`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Деплой на VPS (Ubuntu + Docker)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Все настройки и секреты — в `.env` (шаблон `.env.example`), в репозиторий он не попадает.
 
-## Learn More
+1. **Сервер.** Установить Docker (с плагином compose), открыть в файрволе только 22, 80, 443
+   (`ufw allow 22,80,443/tcp && ufw allow 443/udp && ufw enable`). A-запись домена должна
+   указывать на IP сервера.
+2. **Код.** `git clone <репозиторий> /opt/yo && cd /opt/yo`
+3. **Настройки.** `cp .env.example .env` и заполнить:
+   - `POSTGRES_PASSWORD` — `openssl rand -hex 16` (только буквы и цифры);
+   - `PAYLOAD_SECRET` — `openssl rand -hex 32`;
+   - `NEXT_PUBLIC_SITE_URL=https://ваш-домен` и `DOMAIN=ваш-домен`;
+   - `CONTACT_FORM_TO` и `SMTP_*` — почта для заявок с формы.
+     Строку `DATABASE_URI` оставлять не нужно — в Docker приложение собирает её само.
+4. **Запуск.** `docker compose up -d --build`. Миграции применяются автоматически при старте,
+   HTTPS-сертификат Caddy получает сам. PostgreSQL наружу не публикуется.
+5. **Контент.** Открыть `https://ваш-домен/admin` и создать первого администратора.
+   Пока не заполнены глобалы (минимум «Контакты»), страницы сайта отдают ошибку.
+   Чтобы перенести готовый контент с локальной машины:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   # на локальной машине
+   docker exec yo-postgres-1 pg_dump -U yo -d yo --clean --if-exists --no-owner > yo.sql
+   tar czf media.tar.gz media
+   scp yo.sql media.tar.gz user@сервер:/opt/yo/
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   # на сервере, в /opt/yo
+   docker compose stop app
+   docker compose exec -T postgres sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"' < yo.sql
+   tar xzf media.tar.gz -C /tmp && docker compose cp /tmp/media/. app:/app/media/
+   docker compose run --rm -u root --no-deps --entrypoint chown app -R node:node /app/media
+   docker compose start app
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+6. **Бэкапы.** `scripts/backup.sh` кладёт дамп базы и архив загрузок в `backups/` (хранит 14 дней).
+   Добавить в cron (`crontab -e`): `0 3 * * * /opt/yo/scripts/backup.sh`, и копировать
+   `backups/` за пределы сервера.
 
-## Deploy on Vercel
+### Обновление
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+git pull && docker compose up -d --build
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Смена домена (`NEXT_PUBLIC_SITE_URL`) требует пересборки — значение вшивается в сборку.
+
+### Заметки
+
+- Страницы сайта рендерятся на каждый запрос, поэтому правки из админки видны сразу, а образ
+  собирается без базы данных.
+- Логи: `docker compose logs -f app`.

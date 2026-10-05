@@ -19,9 +19,23 @@ import { Footer } from "./globals/Footer";
 import { Header } from "./globals/Header";
 import { Home } from "./globals/Home";
 import { Partners } from "./globals/Partners";
+import { migrations } from "./migrations";
 import { SITE_URL } from "./lib/seo";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Signs admin sessions. Refuse to run a production server with a missing or
+// guessable one (not checked during `next build`, which has no secrets).
+const secret = process.env.PAYLOAD_SECRET ?? "";
+if (
+  process.env.NODE_ENV === "production" &&
+  process.env.NEXT_PHASE !== "phase-production-build" &&
+  secret.length < 32
+) {
+  throw new Error(
+    "PAYLOAD_SECRET must be set to a random string of 32+ characters (openssl rand -hex 32)",
+  );
+}
 
 /** Collections that have their own public page (SEO tab, redirect targets). */
 const pageCollections = ["products", "news", "pages"];
@@ -55,7 +69,7 @@ export default buildConfig({
   collections: [Products, News, Pages, Media, Users],
   globals: [Header, Footer, Home, Partners, About, Contacts],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET ?? "",
+  secret,
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URI },
     migrationDir: path.resolve(dirname, "migrations"),
@@ -65,6 +79,9 @@ export default buildConfig({
     // without a migration file, which then makes `migrate` fail with
     // "column already exists" the next time it runs.
     push: false,
+    // Applies pending migrations when the production server starts, so a
+    // deploy is just `docker compose up -d --build`.
+    prodMigrations: migrations,
   }),
   sharp,
   typescript: { outputFile: path.resolve(dirname, "payload-types.ts") },
