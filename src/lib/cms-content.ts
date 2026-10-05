@@ -14,6 +14,7 @@ import { organizationJsonLd } from "@/lib/json-ld";
 import { brand, siteNav, siteUiLabels } from "@/content/site";
 import { aboutToView, type AboutContent } from "@/lib/view/about";
 import { contactsToView, type ContactsContent } from "@/lib/view/contacts";
+import type { DeepPartial } from "@/lib/utils";
 import type { About, Contact, Media } from "@/payload-types";
 
 /** A Payload upload relation, as it comes back once `depth >= 1` resolves it. */
@@ -94,7 +95,7 @@ const getPartnersGlobal = cache(async () => {
   });
 });
 
-const getAboutGlobal = cache(async (): Promise<About> => {
+const getAboutGlobal = cache(async (): Promise<DeepPartial<About>> => {
   const payload = await getCms();
   return payload.findGlobal({
     slug: "about",
@@ -103,7 +104,7 @@ const getAboutGlobal = cache(async (): Promise<About> => {
   });
 });
 
-const getContactsGlobal = cache(async (): Promise<Contact> => {
+const getContactsGlobal = cache(async (): Promise<DeepPartial<Contact>> => {
   const payload = await getCms();
   return payload.findGlobal({ slug: "contacts", overrideAccess: false });
 });
@@ -147,7 +148,9 @@ export async function getFooterContent(): Promise<FooterProps> {
       {
         title: "Контакты",
         links: [
-          { label: contacts.phone, href: telHref(contacts.phone) },
+          ...(contacts.phone
+            ? [{ label: contacts.phone, href: telHref(contacts.phone) }]
+            : []),
           ...(contacts.phoneSecond
             ? [
                 {
@@ -156,7 +159,9 @@ export async function getFooterContent(): Promise<FooterProps> {
                 },
               ]
             : []),
-          { label: contacts.email, href: `mailto:${contacts.email}` },
+          ...(contacts.email
+            ? [{ label: contacts.email, href: `mailto:${contacts.email}` }]
+            : []),
         ],
       },
       {
@@ -214,7 +219,7 @@ export async function getHomeMedia(): Promise<HomeMedia> {
 }
 
 /** Raw global doc, for the About page's Live Preview wrapper. */
-export async function getAboutRaw(): Promise<About> {
+export async function getAboutRaw(): Promise<DeepPartial<About>> {
   return getAboutGlobal();
 }
 
@@ -222,8 +227,12 @@ export async function getAboutRaw(): Promise<About> {
 export async function getContactFacts() {
   const contacts = await getContactsGlobal();
   return [
-    { label: contacts.phone, href: telHref(contacts.phone) },
-    { label: contacts.email, href: `mailto:${contacts.email}` },
+    ...(contacts.phone
+      ? [{ label: contacts.phone, href: telHref(contacts.phone) }]
+      : []),
+    ...(contacts.email
+      ? [{ label: contacts.email, href: `mailto:${contacts.email}` }]
+      : []),
   ];
 }
 
@@ -246,7 +255,7 @@ export async function getContactsContent(): Promise<ContactsContent> {
 }
 
 /** Raw global doc, for the Contacts page's Live Preview wrapper. */
-export async function getContactsRaw(): Promise<Contact> {
+export async function getContactsRaw(): Promise<DeepPartial<Contact>> {
   return getContactsGlobal();
 }
 

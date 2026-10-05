@@ -17,9 +17,9 @@ export const absoluteUrl = (path: string) =>
 
 export interface OrganizationInfo {
   logo?: string;
-  phone: string;
-  email: string;
-  address: string;
+  phone?: string;
+  email?: string;
+  address?: string;
   /** Social/marketplace profile URLs (Footer's "Соцсети" links). */
   sameAs: string[];
 }
@@ -32,19 +32,27 @@ export function organizationJsonLd(info: OrganizationInfo) {
     name: SITE_NAME,
     url: SITE_URL,
     ...(info.logo ? { logo: absoluteUrl(info.logo) } : {}),
-    contactPoint: {
-      "@type": "ContactPoint",
-      contactType: "customer service",
-      telephone: info.phone,
-      email: info.email,
-      areaServed: "BY",
-      availableLanguage: ["ru"],
-    },
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: info.address,
-      addressCountry: "BY",
-    },
+    ...(info.phone || info.email
+      ? {
+          contactPoint: {
+            "@type": "ContactPoint",
+            contactType: "customer service",
+            ...(info.phone ? { telephone: info.phone } : {}),
+            ...(info.email ? { email: info.email } : {}),
+            areaServed: "BY",
+            availableLanguage: ["ru"],
+          },
+        }
+      : {}),
+    ...(info.address
+      ? {
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: info.address,
+            addressCountry: "BY",
+          },
+        }
+      : {}),
     ...(info.sameAs.length > 0 ? { sameAs: info.sameAs } : {}),
   };
 }

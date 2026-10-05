@@ -12,17 +12,18 @@ import { PhotoCard } from "@/components/blocks/photo-card";
 import { Section } from "@/components/blocks/section";
 import { WHERE_TO_BUY_ID } from "@/content/site";
 import { aboutToView } from "@/lib/view/about";
+import type { DeepPartial } from "@/lib/utils";
 import type { About } from "@/payload-types";
 
 interface AboutPageLiveProps {
-  initialAbout: About;
+  initialAbout: DeepPartial<About>;
   /** Not part of the About global (it's Partners'), so not live-updated. */
   partners: PartnerTileProps[];
 }
 
 /** Whole About page body — see ProductDetailLive for how/why. */
 export function AboutPageLive({ initialAbout, partners }: AboutPageLiveProps) {
-  const { data } = useLivePreview<About>({
+  const { data } = useLivePreview<DeepPartial<About>>({
     initialData: initialAbout,
     serverURL: typeof window !== "undefined" ? window.location.origin : "",
     depth: 0,
@@ -33,31 +34,35 @@ export function AboutPageLive({ initialAbout, partners }: AboutPageLiveProps) {
     <>
       <PageIntro {...intro} />
 
-      <Section
-        title={production.title}
-        titleSize="md"
-        inset="page"
-        rhythm="stack"
-      >
-        <CardGrid layout="triple">
-          {production.items.map((item, i) => (
-            <PhotoCard key={i} {...item} />
-          ))}
-        </CardGrid>
-      </Section>
+      {production.items.length > 0 && (
+        <Section
+          title={production.title}
+          titleSize="md"
+          inset="page"
+          rhythm="stack"
+        >
+          <CardGrid layout="triple">
+            {production.items.map((item, i) => (
+              <PhotoCard key={i} {...item} />
+            ))}
+          </CardGrid>
+        </Section>
+      )}
 
-      <Section
-        title={certificates.title}
-        titleSize="md"
-        inset="page"
-        rhythm="stack"
-      >
-        <CardGrid layout="tiles">
-          {certificates.items.map((item) => (
-            <FeatureTile key={item.title} {...item} />
-          ))}
-        </CardGrid>
-      </Section>
+      {certificates.items.length > 0 && (
+        <Section
+          title={certificates.title}
+          titleSize="md"
+          inset="page"
+          rhythm="stack"
+        >
+          <CardGrid layout="tiles">
+            {certificates.items.map((item) => (
+              <FeatureTile key={item.title} {...item} />
+            ))}
+          </CardGrid>
+        </Section>
+      )}
 
       {partners.length > 0 && (
         <Section

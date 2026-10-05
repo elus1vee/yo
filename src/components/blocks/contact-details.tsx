@@ -66,57 +66,59 @@ export function ContactDetails({
 
   return (
     <div className="split:gap-4 flex flex-col gap-6">
-      <Card className="tablet:gap-6 tablet:rounded-panel tablet:p-8 flex flex-col gap-5 rounded-md p-5.5">
-        {items.map((item) => {
-          const Icon = icons[item.icon];
-          return (
-            <div key={item.label} className="tablet:gap-4 flex gap-3.5">
-              <div
-                className={cn(
-                  "text-text tablet:size-11 flex size-10 shrink-0 items-center justify-center rounded-full",
-                  cardTintClass[item.tint],
-                )}
-              >
-                <Icon size={20} />
+      {items.length > 0 && (
+        <Card className="tablet:gap-6 tablet:rounded-panel tablet:p-8 flex flex-col gap-5 rounded-md p-5.5">
+          {items.map((item) => {
+            const Icon = icons[item.icon];
+            return (
+              <div key={item.label} className="tablet:gap-4 flex gap-3.5">
+                <div
+                  className={cn(
+                    "text-text tablet:size-11 flex size-10 shrink-0 items-center justify-center rounded-full",
+                    cardTintClass[item.tint],
+                  )}
+                >
+                  <Icon size={20} />
+                </div>
+                <div className="flex min-w-0 flex-col gap-1">
+                  <span className={label}>{item.label}</span>
+                  {item.lines.map((line) =>
+                    line.href ? (
+                      <SafeLink
+                        key={line.text}
+                        href={line.href}
+                        className="tap-area font-heading text-text hover:text-primary tablet:text-lg w-fit text-base transition-colors"
+                      >
+                        {line.text}
+                      </SafeLink>
+                    ) : (
+                      <span
+                        key={line.text}
+                        className="font-heading tablet:text-lg text-base leading-[1.4]"
+                      >
+                        {line.text}
+                      </span>
+                    ),
+                  )}
+                </div>
               </div>
-              <div className="flex min-w-0 flex-col gap-1">
-                <span className={label}>{item.label}</span>
-                {item.lines.map((line) =>
-                  line.href ? (
-                    <SafeLink
-                      key={line.text}
-                      href={line.href}
-                      className="tap-area font-heading text-text hover:text-primary tablet:text-lg w-fit text-base transition-colors"
-                    >
-                      {line.text}
-                    </SafeLink>
-                  ) : (
-                    <span
-                      key={line.text}
-                      className="font-heading tablet:text-lg text-base leading-[1.4]"
-                    >
-                      {line.text}
-                    </span>
-                  ),
-                )}
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
 
-        {messengers.links.length > 0 && (
-          <div className="flex flex-col gap-2.5">
-            <span className={label}>{messengers.label}</span>
-            <ul className="flex flex-wrap gap-2">
-              {messengers.links.map((m) => (
-                <li key={m.kind}>
-                  <MessengerLink messenger={m} shape="pill" />
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </Card>
+          {messengers.links.length > 0 && (
+            <div className="flex flex-col gap-2.5">
+              <span className={label}>{messengers.label}</span>
+              <ul className="flex flex-wrap gap-2">
+                {messengers.links.map((m) => (
+                  <li key={m.kind}>
+                    <MessengerLink messenger={m} shape="pill" />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </Card>
+      )}
 
       <div className="tablet:h-[260px] tablet:rounded-panel relative h-[200px] overflow-hidden rounded-md">
         {map.image ? (

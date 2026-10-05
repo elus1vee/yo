@@ -64,3 +64,12 @@ export function cn(...inputs: ClassValue[]) {
  * through a component that is otherwise text-only (XSS hardening).
  */
 export type SafeProps<T> = Omit<T, "dangerouslySetInnerHTML">;
+
+/**
+ * A CMS global as it really arrives on a fresh database: Payload only checks
+ * `required` when saving, so before an editor first saves a global every
+ * field may be missing even though the generated type says otherwise.
+ */
+export type DeepPartial<T> = T extends object
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : T;

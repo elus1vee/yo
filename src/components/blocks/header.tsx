@@ -16,7 +16,7 @@ export interface HeaderProps {
   clarityLogo: ImageAsset;
   nav: NavItem[];
   /** Display form, e.g. "+375 29 657 93 71"; the tel: link is derived from it. */
-  phone: string;
+  phone?: string;
   messengers: Messenger[];
   labels: {
     /** aria-label of the navigation landmark. */
@@ -133,15 +133,17 @@ export function Header({
         </nav>
 
         <div className="flex items-center gap-3.5">
-          <SafeLink
-            href={telHref(phone)}
-            className={cn(
-              "text-text nav:inline hidden rounded-full text-[15px] font-bold",
-              focusRing,
-            )}
-          >
-            {phone}
-          </SafeLink>
+          {phone && (
+            <SafeLink
+              href={telHref(phone)}
+              className={cn(
+                "text-text nav:inline hidden rounded-full text-[15px] font-bold",
+                focusRing,
+              )}
+            >
+              {phone}
+            </SafeLink>
+          )}
 
           <div className="flex gap-1.5">
             {messengers.map((m) => (
@@ -208,15 +210,17 @@ export function Header({
                 })}
               </ul>
             </nav>
-            <SafeLink
-              href={telHref(phone)}
-              className={cn(
-                "bg-primary-tint text-text mt-2 flex rounded-full px-4.5 py-3 text-[15px] font-bold",
-                focusRing,
-              )}
-            >
-              {phone}
-            </SafeLink>
+            {phone && (
+              <SafeLink
+                href={telHref(phone)}
+                className={cn(
+                  "bg-primary-tint text-text mt-2 flex rounded-full px-4.5 py-3 text-[15px] font-bold",
+                  focusRing,
+                )}
+              >
+                {phone}
+              </SafeLink>
+            )}
           </div>
         )}
       </div>

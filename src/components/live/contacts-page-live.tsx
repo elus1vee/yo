@@ -9,10 +9,11 @@ import { PageIntro } from "@/components/blocks/page-intro";
 import { Section } from "@/components/blocks/section";
 import { type Messenger } from "@/components/blocks/types";
 import { contactsToView } from "@/lib/view/contacts";
+import type { DeepPartial } from "@/lib/utils";
 import type { Contact } from "@/payload-types";
 
 interface ContactsPageLiveProps {
-  initialContacts: Contact;
+  initialContacts: DeepPartial<Contact>;
   /** Not part of the Contacts global (it's Header's), so not live-updated. */
   messengers: Messenger[];
   formCopy: ContactFormCopy;
@@ -24,7 +25,7 @@ export function ContactsPageLive({
   messengers,
   formCopy,
 }: ContactsPageLiveProps) {
-  const { data } = useLivePreview<Contact>({
+  const { data } = useLivePreview<DeepPartial<Contact>>({
     initialData: initialContacts,
     serverURL: typeof window !== "undefined" ? window.location.origin : "",
     depth: 0,
