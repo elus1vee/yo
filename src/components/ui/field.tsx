@@ -4,7 +4,7 @@ import { type ReactNode, useId } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Shared plumbing for Input / Textarea / Select: label + hint + error
+ * Shared plumbing for Input / Textarea: label + hint + error
  * wiring (`htmlFor`, `aria-describedby`, `aria-invalid`) and the control
  * styles from the design system's "Текстовое поле" states.
  *

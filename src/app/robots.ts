@@ -6,8 +6,6 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      // internal preview pages (also marked noindex)
-      disallow: ["/ui-kit", "/design-system", "/blocks"],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
   };
