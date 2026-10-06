@@ -115,7 +115,7 @@ export async function sendContact(
 
   try {
     await transport.sendMail({
-      from: process.env.SMTP_FROM ?? user,
+      from: process.env.SMTP_FROM || user,
       to,
       replyTo: values.email,
       subject: `Заявка с сайта «Йо!» — ${values.name.replace(/\s+/g, " ")}`,
