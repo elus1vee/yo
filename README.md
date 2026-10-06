@@ -25,7 +25,7 @@ npm run dev              # http://localhost:3000
 3. **Настройки.** `cp .env.example .env` и заполнить:
    - `POSTGRES_PASSWORD` — `openssl rand -hex 16` (только буквы и цифры);
    - `PAYLOAD_SECRET` — `openssl rand -hex 32`;
-   - `NEXT_PUBLIC_SITE_URL=https://ваш-домен` и `DOMAIN=ваш-домен`;
+   - `NEXT_PUBLIC_SITE_URL=https://ваш-домен`, `DOMAIN=ваш-домен` и `WWW_DOMAIN=www.ваш-домен` (редирект www на основной адрес);
    - `CONTACT_FORM_TO` и `SMTP_*` — почта для заявок с формы.
      Строку `DATABASE_URI` оставлять не нужно — в Docker приложение собирает её само.
 4. **Запуск.** `docker compose up -d --build`. Миграции применяются автоматически при старте,

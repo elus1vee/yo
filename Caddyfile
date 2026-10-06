@@ -1,6 +1,12 @@
-# DOMAIN comes from .env. Caddy obtains and renews the HTTPS certificate itself
-# (DNS A record must point at this server, ports 80/443 open).
+# DOMAIN and WWW_DOMAIN come from .env. Caddy obtains and renews the HTTPS
+# certificates itself (DNS A records must point at this server, ports 80/443 open).
 {$DOMAIN} {
 	encode zstd gzip
 	reverse_proxy app:3000
+}
+
+# www -> the bare domain, so search engines see one site, not two. Defaults to
+# a local-only name in .env-less / IP-only setups, where it never matches.
+{$WWW_DOMAIN} {
+	redir https://{$DOMAIN}{uri} permanent
 }
