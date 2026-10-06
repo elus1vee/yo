@@ -46,3 +46,9 @@ next-env.d.ts
 
 # Payload uploads (local disk storage)
 /media
+
+# Database dumps and backups (contain real data) — never commit
+*.sql
+*.sql.gz
+*.tar.gz
+/backups
