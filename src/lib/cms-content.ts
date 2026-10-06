@@ -15,7 +15,7 @@ import { brand, siteNav, siteUiLabels } from "@/content/site";
 import { aboutToView, type AboutContent } from "@/lib/view/about";
 import { contactsToView, type ContactsContent } from "@/lib/view/contacts";
 import type { DeepPartial } from "@/lib/utils";
-import type { About, Contact, Media } from "@/payload-types";
+import type { About, Contact, Header, Media } from "@/payload-types";
 
 /** A Payload upload relation, as it comes back once `depth >= 1` resolves it. */
 type UploadRelation = number | Media | null | undefined;
@@ -109,6 +109,16 @@ const getContactsGlobal = cache(async (): Promise<DeepPartial<Contact>> => {
   return payload.findGlobal({ slug: "contacts", overrideAccess: false });
 });
 
+/** Header menu, or the default nav while the global has no items yet (Payload returns [] for an empty array field). */
+function navItems(
+  items: DeepPartial<Header>["menuItems"],
+): { label: string; href: string }[] {
+  const mapped = (items ?? []).flatMap((item) =>
+    item?.label && item.href ? [{ label: item.label, href: item.href }] : [],
+  );
+  return mapped.length > 0 ? mapped : siteNav;
+}
+
 export async function getHeaderContent(): Promise<HeaderProps> {
   const [header, contacts] = await Promise.all([
     getHeaderGlobal(),
@@ -118,8 +128,7 @@ export async function getHeaderContent(): Promise<HeaderProps> {
     home: { href: "/", label: `«${brand.name}» — на главную` },
     yoLogo: mediaToImage(header.logo, brand.yoMark),
     clarityLogo: mediaToImage(header.clarityBadge, brand.clarityBadge),
-    nav:
-      header.menuItems?.map(({ label, href }) => ({ label, href })) ?? siteNav,
+    nav: navItems(header.menuItems),
     phone: contacts.phone,
     messengers: (header.messengers ?? []).map((m): Messenger => ({
       kind: m.kind,
@@ -136,8 +145,7 @@ export async function getFooterContent(): Promise<FooterProps> {
     getFooterGlobal(),
     getContactsGlobal(),
   ]);
-  const nav =
-    header.menuItems?.map(({ label, href }) => ({ label, href })) ?? siteNav;
+  const nav = navItems(header.menuItems);
 
   return {
     yoLogo: mediaToImage(footer.logo, brand.yoMarkCream),
