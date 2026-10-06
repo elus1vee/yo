@@ -6,6 +6,7 @@ import { redirectsPlugin } from "@payloadcms/plugin-redirects";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
+import { ru } from "@payloadcms/translations/languages/ru";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 import { Media } from "./collections/Media";
@@ -69,6 +70,25 @@ export default buildConfig({
   collections: [Products, News, Pages, Media, Users],
   globals: [Header, Footer, Home, Partners, About, Contacts],
   editor: lexicalEditor(),
+  // Admin UI in Russian only (the editors are Russian speakers). To offer
+  // English too, add `en` here — it also adds a language picker to Account.
+  i18n: {
+    supportedLanguages: { ru },
+    fallbackLanguage: "ru",
+    translations: {
+      ru: {
+        // @payloadcms/plugin-redirects ships no Russian strings.
+        "plugin-redirects": {
+          customUrl: "Свой адрес (URL)",
+          documentToRedirect: "Страница, на которую ведёт редирект",
+          fromUrl: "Старый адрес (откуда), например /product/old-name",
+          internalLink: "Страница сайта",
+          redirectType: "Тип редиректа",
+          toUrlType: "Куда ведёт",
+        },
+      },
+    },
+  },
   secret,
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URI },
@@ -90,10 +110,31 @@ export default buildConfig({
       collections: pageCollections,
       uploadsCollection: "media",
       tabbedUI: true,
+      // The plugin's field labels are hardcoded English.
+      fields: ({ defaultFields }) =>
+        defaultFields.map((field) => {
+          const labels: Record<string, string> = {
+            title: "Заголовок страницы (title)",
+            description: "Описание (description)",
+            image: "Картинка для превью",
+          };
+          return "name" in field && field.name && field.name in labels
+            ? { ...field, label: labels[field.name] }
+            : field;
+        }) as typeof defaultFields,
       generateTitle: ({ doc }) => `${doc?.title ?? ""} — Йо!`,
     }),
-    formBuilderPlugin({ fields: { payment: false } }),
-    redirectsPlugin({ collections: pageCollections }),
+    // The site's own contact form is a server action (lib/send-contact.ts), so
+    // the Form Builder collections are unused — hidden from the admin menu.
+    formBuilderPlugin({
+      fields: { payment: false },
+      formOverrides: { admin: { hidden: true } },
+      formSubmissionOverrides: { admin: { hidden: true } },
+    }),
+    redirectsPlugin({
+      collections: pageCollections,
+      overrides: { labels: { singular: "Редирект", plural: "Редиректы" } },
+    }),
     // Vercel's filesystem is read-only/ephemeral in production, so uploads
     // saved to disk (Media's default) vanish between deploys. This plugin
     // stores them in Vercel Blob instead — but only once BLOB_READ_WRITE_TOKEN

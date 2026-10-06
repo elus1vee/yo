@@ -111,6 +111,7 @@ export const Products: CollectionConfig = {
       name: "variants",
       label: "Варианты объёма / веса",
       type: "array",
+      labels: { singular: "Вариант", plural: "Варианты" },
       fields: [{ name: "volume", label: "Объём или вес", type: "text" }],
     },
     {

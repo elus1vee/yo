@@ -11,6 +11,7 @@ export const Partners: GlobalConfig = {
       name: "partners",
       label: "Партнёры",
       type: "array",
+      labels: { singular: "Партнёр", plural: "Партнёры" },
       fields: [
         { name: "name", label: "Название", type: "text", required: true },
         {

@@ -18,12 +18,14 @@ export const Footer: GlobalConfig = {
       name: "requisites",
       label: "Реквизиты",
       type: "array",
+      labels: { singular: "Строка", plural: "Строки" },
       fields: [{ name: "line", label: "Строка", type: "text", required: true }],
     },
     {
       name: "socials",
       label: "Соцсети",
       type: "array",
+      labels: { singular: "Соцсеть", plural: "Соцсети" },
       fields: [
         { name: "label", label: "Название", type: "text", required: true },
         { name: "href", label: "Ссылка", type: "text", required: true },

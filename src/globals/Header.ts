@@ -25,6 +25,7 @@ export const Header: GlobalConfig = {
       name: "menuItems",
       label: "Пункты меню",
       type: "array",
+      labels: { singular: "Пункт меню", plural: "Пункты меню" },
       fields: [
         { name: "label", label: "Название", type: "text", required: true },
         {
@@ -40,6 +41,7 @@ export const Header: GlobalConfig = {
       name: "messengers",
       label: "Мессенджеры",
       type: "array",
+      labels: { singular: "Мессенджер", plural: "Мессенджеры" },
       fields: [
         {
           name: "kind",

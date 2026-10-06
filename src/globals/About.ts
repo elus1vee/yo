@@ -45,6 +45,7 @@ export const About: GlobalConfig = {
           name: "items",
           label: "Карточки",
           type: "array",
+          labels: { singular: "Карточка", plural: "Карточки" },
           minRows: 1,
           fields: [
             {
@@ -80,6 +81,7 @@ export const About: GlobalConfig = {
           name: "items",
           label: "Карточки",
           type: "array",
+          labels: { singular: "Карточка", plural: "Карточки" },
           minRows: 1,
           fields: [
             { name: "title", label: "Название", type: "text", required: true },
