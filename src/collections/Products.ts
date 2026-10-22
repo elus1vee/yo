@@ -76,12 +76,6 @@ export const Products: CollectionConfig = {
       admin: { position: "sidebar" },
     },
     {
-      name: "subtitle",
-      label: "Подзаголовок",
-      type: "text",
-      admin: { description: 'Короткое пояснение, например "комкующийся"' },
-    },
-    {
       name: "scent",
       label: "Аромат",
       type: "text",
@@ -96,7 +90,8 @@ export const Products: CollectionConfig = {
       type: "text",
       admin: {
         position: "sidebar",
-        description: 'Например "Хит"; пусто — плашки нет',
+        description:
+          'Например "Хит"; пусто — плашки нет. Показывается только на карточке товара в блоке «Любимое у покупателей» на главной (с планшета и шире)',
       },
     },
     {
@@ -105,6 +100,10 @@ export const Products: CollectionConfig = {
       type: "upload",
       relationTo: "media",
       hasMany: true,
+      admin: {
+        description:
+          "Первое фото — на карточках в каталоге и на главной; все остальные — в галерее на странице товара",
+      },
     },
     { name: "description", label: "Описание", type: "richText" },
     {
@@ -112,6 +111,10 @@ export const Products: CollectionConfig = {
       label: "Варианты объёма / веса",
       type: "array",
       labels: { singular: "Вариант", plural: "Варианты" },
+      admin: {
+        description:
+          "Все объёмы или веса, в которых продаётся товар, например «6 л / 2,5 кг». На карточках показываются первые два (остальные — как «+1»), на странице товара — переключатель, если вариантов больше одного",
+      },
       fields: [{ name: "volume", label: "Объём или вес", type: "text" }],
     },
     {
@@ -126,17 +129,8 @@ export const Products: CollectionConfig = {
       admin: {
         position: "sidebar",
         description:
-          "Подпись переключателя на странице товара, когда в «Вариантах объёма / веса» больше одного значения",
+          "Подпись на странице товара над вариантами: «Объём» или «Вес»",
       },
-    },
-    {
-      name: "specs",
-      label: "Характеристики",
-      type: "group",
-      fields: [
-        { name: "weight", label: "Вес", type: "text" },
-        { name: "volume", label: "Объём", type: "text" },
-      ],
     },
     {
       name: "wpId",

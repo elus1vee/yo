@@ -1,7 +1,7 @@
 import type { NewsCardProps } from "@/components/blocks/news-card";
 import { typeOptions } from "@/content/catalog";
 import { richTextToParagraphs } from "@/lib/rich-text";
-import { mediaImage } from "@/lib/view/product";
+import { mediaImage, volumeValues } from "@/lib/view/product";
 import type { News } from "@/payload-types";
 
 /** Pure Payload-doc → view-prop mappers for news — see view/product.ts. */
@@ -67,13 +67,14 @@ export function newsToView(article: News): NewsArticleView {
     tint: article.tint,
     cover: mediaImage(article.cover),
     body: paragraphs.length > 0 ? paragraphs : [article.excerpt],
-    product:
-      linked && linked.specs
-        ? {
-            name: linked.title,
-            meta: [linked.specs.volume, typeLabel].filter(Boolean).join(" · "),
-            href: `/catalog/${linked.slug}`,
-          }
-        : undefined,
+    product: linked
+      ? {
+          name: linked.title,
+          meta: [volumeValues(linked.variants)[0], typeLabel]
+            .filter(Boolean)
+            .join(" · "),
+          href: `/catalog/${linked.slug}`,
+        }
+      : undefined,
   };
 }

@@ -154,16 +154,14 @@ async function main() {
     categoryAnimal: ("cats" | "dogs" | "rodents")[];
     categoryType: "litter" | "treats" | "food" | "care" | "home";
     tint: "peach" | "lavender" | "primary" | "neutral";
-    subtitle?: string;
     /** One aroma per product — the same base product in another scent is a separate document. */
     scent?: string;
     badge?: string;
     images?: number[];
     description?: Product["description"];
     variants?: { volume?: string }[];
-    /** Only matters when `variants` has more than one entry. */
+    /** Label of the variants on the product page: "Объём" or "Вес". */
     variantsUnit?: "volume" | "weight";
-    specs?: { weight?: string; volume?: string };
   }[] = [
     {
       slug: "tofu-peach",
@@ -172,7 +170,6 @@ async function main() {
       categoryAnimal: ["cats"],
       categoryType: "litter",
       tint: "peach",
-      subtitle: "комкующийся",
       scent: "Peach",
       badge: "Хит",
       images: [peachPhoto.id],
@@ -180,7 +177,6 @@ async function main() {
         "Комкующийся наполнитель на основе тофу с ароматом персика. Быстро формирует плотные комки, не пылит и легко убирается совком. Подходит для ежедневного использования.",
       ),
       variants: [{ volume: "6 л / 2,5 кг" }, { volume: "12 л / 5 кг" }],
-      specs: { volume: "6 л / 2,5 кг" },
     },
     {
       slug: "tofu-lavender",
@@ -188,10 +184,8 @@ async function main() {
       categoryAnimal: ["cats"],
       categoryType: "litter",
       tint: "lavender",
-      subtitle: "комкующийся",
       scent: "Lavender",
       variants: [{ volume: "6 л / 2,5 кг" }],
-      specs: { volume: "6 л / 2,5 кг" },
     },
     {
       slug: "tofu-green-tea",
@@ -199,10 +193,8 @@ async function main() {
       categoryAnimal: ["cats"],
       categoryType: "litter",
       tint: "primary",
-      subtitle: "комкующийся",
       scent: "Green tea",
       variants: [{ volume: "6 л / 2,5 кг" }],
-      specs: { volume: "6 л / 2,5 кг" },
     },
     {
       slug: "silica-lavender",
@@ -211,14 +203,12 @@ async function main() {
       categoryAnimal: ["cats"],
       categoryType: "litter",
       tint: "lavender",
-      subtitle: "силикагель",
       images: [lavenderPhoto.id],
       variants: [
         { volume: "4 л" },
         { volume: "8 л" },
         { volume: "12 л / 4,5 кг" },
       ],
-      specs: { volume: "12 л / 4,5 кг" },
     },
     {
       slug: "wood-rodents",
@@ -226,8 +216,7 @@ async function main() {
       categoryAnimal: ["rodents"],
       categoryType: "litter",
       tint: "primary",
-      subtitle: "древесный",
-      specs: { volume: "5 л" },
+      variants: [{ volume: "5 л" }],
     },
     {
       slug: "bull-root",
@@ -236,10 +225,8 @@ async function main() {
       categoryAnimal: ["dogs"],
       categoryType: "treats",
       tint: "neutral",
-      subtitle: "сушёное",
       variants: [{ volume: "100 г" }, { volume: "250 г" }],
       variantsUnit: "weight",
-      specs: { weight: "100 г" },
     },
     {
       slug: "chicken-papaya",
@@ -247,7 +234,8 @@ async function main() {
       categoryAnimal: ["cats"],
       categoryType: "treats",
       tint: "peach",
-      specs: { weight: "50 г" },
+      variants: [{ volume: "50 г" }],
+      variantsUnit: "weight",
     },
     {
       slug: "dry-lamb-cats",
@@ -255,7 +243,8 @@ async function main() {
       categoryAnimal: ["cats"],
       categoryType: "food",
       tint: "lavender",
-      specs: { weight: "1,5 кг" },
+      variants: [{ volume: "1,5 кг" }],
+      variantsUnit: "weight",
     },
     {
       slug: "dry-turkey-dogs",
@@ -263,7 +252,8 @@ async function main() {
       categoryAnimal: ["dogs"],
       categoryType: "food",
       tint: "primary",
-      specs: { weight: "2 кг" },
+      variants: [{ volume: "2 кг" }],
+      variantsUnit: "weight",
     },
     {
       slug: "balm",
@@ -272,7 +262,7 @@ async function main() {
       categoryAnimal: ["cats", "dogs"],
       categoryType: "care",
       tint: "primary",
-      specs: { volume: "500 мл" },
+      variants: [{ volume: "500 мл" }],
     },
     {
       slug: "shampoo",
@@ -280,7 +270,7 @@ async function main() {
       categoryAnimal: ["cats", "dogs"],
       categoryType: "care",
       tint: "lavender",
-      specs: { volume: "250 мл" },
+      variants: [{ volume: "250 мл" }],
     },
     {
       slug: "odor-spray",
@@ -288,7 +278,7 @@ async function main() {
       categoryAnimal: ["cats", "dogs", "rodents"],
       categoryType: "home",
       tint: "neutral",
-      specs: { volume: "300 мл" },
+      variants: [{ volume: "300 мл" }],
     },
   ];
 

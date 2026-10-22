@@ -151,7 +151,7 @@ export interface Product {
   id: number;
   title: string;
   /**
-   * Латиницей: буквы, цифры и дефисы, например tofu-peach
+   * Заполняется автоматически из названия — можно оставить пустым. Свой вариант: латиница, цифры и дефисы, например tofu-peach
    */
   slug: string;
   /**
@@ -162,17 +162,16 @@ export interface Product {
   categoryType: 'litter' | 'treats' | 'food' | 'care' | 'home';
   tint: 'peach' | 'lavender' | 'primary' | 'neutral';
   /**
-   * Короткое пояснение, например "комкующийся"
-   */
-  subtitle?: string | null;
-  /**
    * Один аромат на товар; товар в другом аромате — отдельная карточка
    */
   scent?: string | null;
   /**
-   * Например "Хит"; пусто — плашки нет
+   * Например "Хит"; пусто — плашки нет. Показывается только на карточке товара в блоке «Любимое у покупателей» на главной (с планшета и шире)
    */
   badge?: string | null;
+  /**
+   * Первое фото — на карточках в каталоге и на главной; все остальные — в галерее на странице товара
+   */
   images?: (number | Media)[] | null;
   description?: {
     root: {
@@ -189,6 +188,9 @@ export interface Product {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Все объёмы или веса, в которых продаётся товар, например «6 л / 2,5 кг». На карточках показываются первые два (остальные — как «+1»), на странице товара — переключатель, если вариантов больше одного
+   */
   variants?:
     | {
         volume?: string | null;
@@ -196,13 +198,9 @@ export interface Product {
       }[]
     | null;
   /**
-   * Подпись переключателя на странице товара, когда в «Вариантах объёма / веса» больше одного значения
+   * Подпись на странице товара над вариантами: «Объём» или «Вес»
    */
   variantsUnit?: ('volume' | 'weight') | null;
-  specs?: {
-    weight?: string | null;
-    volume?: string | null;
-  };
   /**
    * Заполняется скриптом переноса из WordPress (scripts/migrate-wp.ts); держит перенос идемпотентным
    */
@@ -268,7 +266,7 @@ export interface News {
   id: number;
   title: string;
   /**
-   * Латиницей: буквы, цифры и дефисы, например tofu-peach
+   * Заполняется автоматически из названия — можно оставить пустым. Свой вариант: латиница, цифры и дефисы, например tofu-peach
    */
   slug: string;
   /**
@@ -318,7 +316,7 @@ export interface Page {
   id: number;
   title: string;
   /**
-   * Латиницей: буквы, цифры и дефисы, например tofu-peach
+   * Заполняется автоматически из названия — можно оставить пустым. Свой вариант: латиница, цифры и дефисы, например tofu-peach
    */
   slug: string;
   content?: {
@@ -691,7 +689,6 @@ export interface ProductsSelect<T extends boolean = true> {
   categoryAnimal?: T;
   categoryType?: T;
   tint?: T;
-  subtitle?: T;
   scent?: T;
   badge?: T;
   images?: T;
@@ -703,12 +700,6 @@ export interface ProductsSelect<T extends boolean = true> {
         id?: T;
       };
   variantsUnit?: T;
-  specs?:
-    | T
-    | {
-        weight?: T;
-        volume?: T;
-      };
   wpId?: T;
   meta?:
     | T

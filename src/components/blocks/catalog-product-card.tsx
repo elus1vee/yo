@@ -11,7 +11,8 @@ export interface CatalogProduct {
   animals: string[];
   /** Id from the "types" filter options. */
   type: string;
-  volume: string;
+  /** Every volume / weight variant; the card shows the first few. */
+  volumes: string[];
   tint: CardTint;
   tagTone: BadgeTone;
   tagStrong?: boolean;
@@ -41,17 +42,11 @@ export function CatalogProductCard({
       tint={product.tint}
       image={product.image}
       imageCaption={product.imageCaption}
-      tags={
-        product.volume
-          ? [
-              {
-                label: product.volume,
-                tone: product.tagTone,
-                strong: product.tagStrong,
-              },
-            ]
-          : []
-      }
+      tags={product.volumes.map((label) => ({
+        label,
+        tone: product.tagTone,
+        strong: product.tagStrong,
+      }))}
       ctaLabel={ctaLabel}
     />
   );

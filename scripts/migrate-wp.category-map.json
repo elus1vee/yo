@@ -5,10 +5,8 @@
     "actually returns today. Edit this file, then re-run the script — it is",
     "read fresh on every run, nothing is hardcoded in migrate-wp.ts.",
     "",
-    "Each entry: { \"animal\": \"cats\"|\"dogs\"|\"rodents\", \"type\": \"litter\"|\"treats\"|\"food\"|\"care\"|\"home\", \"subtitle\": string, \"skip\": true }",
+    "Each entry: { \"animal\": \"cats\"|\"dogs\"|\"rodents\", \"type\": \"litter\"|\"treats\"|\"food\"|\"care\"|\"home\", \"skip\": true }",
     "- animal/type feed Products.categoryAnimal / categoryType.",
-    "- subtitle feeds Products.subtitle (used for napolniteli's two children,",
-    "  which aren't an animal or a type, just how the litter is textured).",
     "- skip: true means the category itself carries no product data (e.g. the",
     "  site's catch-all 'Все товары') — products keep any OTHER category they",
     "  have; a product left with zero usable categories after skipping is",
@@ -31,6 +29,6 @@
   "lakomstva": { "type": "treats" },
   "kosmetika-i-uhod": { "type": "care" },
   "dlya-doma": { "type": "home" },
-  "komkoyuschiesya": { "subtitle": "комкующийся" },
-  "silikagelevye": { "subtitle": "силикагелевый" }
+  "komkoyuschiesya": { "skip": true },
+  "silikagelevye": { "skip": true }
 }

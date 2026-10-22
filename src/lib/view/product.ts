@@ -45,8 +45,6 @@ export function productCardOf(product: Product): ProductCardProps {
   return {
     name: product.title,
     href: `/catalog/${product.slug}`,
-    volume: product.specs?.volume ?? volumes[0],
-    kind: product.subtitle ?? undefined,
     tint: product.tint,
     image: mediaImage(product.images?.[0]),
     badge: product.badge ?? undefined,
@@ -68,7 +66,7 @@ export function catalogProductOf(product: Product): CatalogProduct {
     href: `/catalog/${product.slug}`,
     animals: product.categoryAnimal,
     type: product.categoryType,
-    volume: product.specs?.volume ?? volumeValues(product.variants)[0] ?? "",
+    volumes: volumeValues(product.variants),
     tint: product.tint,
     tagTone: product.tint,
     tagStrong: true,
@@ -99,7 +97,7 @@ export function galleryOf(product: Product): GalleryImage[] {
   }));
 }
 
-/** "Объём" or "Вес" — whichever `variantsUnit` says the switcher below is. */
+/** "Объём" or "Вес" — whichever `variantsUnit` says the variants are. */
 const amountLabel = (product: Product) =>
   product.variantsUnit === "weight" ? "Вес" : "Объём";
 
@@ -116,20 +114,15 @@ export function groupsOf(product: Product): OptionGroup[] {
 }
 
 export function specsOf(product: Product, groups: OptionGroup[]): SpecItem[] {
-  const hasAmountGroup = groups.some((g) => g.id === "amount");
+  const volumes = volumeValues(product.variants);
   const specs: SpecItem[] = [];
 
-  if (hasAmountGroup) {
-    // The switcher above already shows the selected value — no separate
-    // static "Объём"/"Вес" row, or the two would disagree (this was the bug:
-    // the row was always labeled "Объём", even for products measured by
-    // weight).
+  if (groups.some((g) => g.id === "amount")) {
+    // The switcher above already shows the selected value — a static row
+    // would only repeat it, and could disagree with it.
     specs.push({ label: amountLabel(product), fromGroup: "amount" });
-  } else {
-    if (product.specs?.volume)
-      specs.push({ label: "Объём", value: product.specs.volume });
-    if (product.specs?.weight)
-      specs.push({ label: "Вес", value: product.specs.weight });
+  } else if (volumes[0]) {
+    specs.push({ label: amountLabel(product), value: volumes[0] });
   }
 
   if (product.scent) specs.push({ label: "Аромат", value: product.scent });

@@ -28,7 +28,7 @@ import {
   isEmptyLexicalDoc,
   type PayloadRichText,
 } from "./lib/html-to-lexical";
-import { slugify } from "./lib/transliterate";
+import { slugify } from "../src/lib/transliterate";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -53,7 +53,6 @@ type CategoryType = "litter" | "treats" | "food" | "care" | "home";
 interface CategoryRule {
   animal?: Animal;
   type?: CategoryType;
-  subtitle?: string;
   skip?: boolean;
 }
 
@@ -150,7 +149,6 @@ async function fetchAllSeoMeta(): Promise<Map<number, YoastMeta>> {
 interface Mapped {
   animals: Animal[];
   type?: CategoryType;
-  subtitle?: string;
   unresolvedSlugs: string[];
 }
 
@@ -160,7 +158,6 @@ function mapCategories(
 ): Mapped {
   const animals = new Set<Animal>();
   let type: CategoryType | undefined;
-  let subtitle: string | undefined;
   const unresolvedSlugs: string[] = [];
 
   for (const cat of categories) {
@@ -172,9 +169,8 @@ function mapCategories(
     if (rule.skip) continue;
     if (rule.animal) animals.add(rule.animal);
     if (rule.type && !type) type = rule.type;
-    if (rule.subtitle && !subtitle) subtitle = rule.subtitle;
   }
-  return { animals: [...animals], type, subtitle, unresolvedSlugs };
+  return { animals: [...animals], type, unresolvedSlugs };
 }
 
 // ---------------------------------------------------------------------------
@@ -188,7 +184,6 @@ interface Plan {
   slug?: string;
   animals?: Animal[];
   type?: CategoryType;
-  subtitle?: string;
   description?: PayloadRichText;
   seo?: YoastMeta;
 }
@@ -200,7 +195,7 @@ function planProduct(
   takenSlugs: Set<string>,
 ): Plan {
   const oldPath = new URL(wp.permalink).pathname;
-  const { animals, type, subtitle, unresolvedSlugs } = mapCategories(
+  const { animals, type, unresolvedSlugs } = mapCategories(
     wp.categories,
     rules,
   );
@@ -231,7 +226,7 @@ function planProduct(
   for (let n = 2; takenSlugs.has(slug); n++) slug = `${base}-${n}`;
   takenSlugs.add(slug);
 
-  return { wp, oldPath, slug, animals, type, subtitle, description, seo };
+  return { wp, oldPath, slug, animals, type, description, seo };
 }
 
 // ---------------------------------------------------------------------------
@@ -356,7 +351,7 @@ async function main() {
       const action = existingIds.has(p.wp.id) ? "ОБНОВИТЬ" : "СОЗДАТЬ";
       console.log(
         `  · [${p.wp.id}] ${action} slug="${p.slug}" животные=${p.animals!.join(",")} ` +
-          `тип=${p.type} подзаголовок=${p.subtitle ?? "—"} картинок=${p.wp.images.length} ` +
+          `тип=${p.type} картинок=${p.wp.images.length} ` +
           `старый URL=${p.oldPath}`,
       );
     }
@@ -394,7 +389,6 @@ async function main() {
         categoryAnimal: plan.animals!,
         categoryType: plan.type!,
         tint: TINT_BY_TYPE[plan.type!],
-        subtitle: plan.subtitle,
         images: mediaIds,
         description: plan.description!,
         meta: {

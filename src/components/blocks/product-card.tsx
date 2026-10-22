@@ -14,8 +14,8 @@ export interface ProductTag {
 }
 
 /**
- * `feature` is the home-page card (bigger photo, corner badge, meta line);
- * `catalog` is the denser listing card (type label above the title, one tag).
+ * `feature` is the home-page card (bigger photo, corner badge);
+ * `catalog` is the denser listing card (type label above the title).
  */
 const variantStyles = {
   feature: {
@@ -37,6 +37,9 @@ const variantStyles = {
   },
 } as const;
 
+/** Tags beyond this many collapse into a "+N" badge. */
+const MAX_VISIBLE_TAGS = 2;
+
 export interface ProductCardProps {
   name: string;
   /** Product page. The whole card is clickable through the CTA link. */
@@ -44,10 +47,6 @@ export interface ProductCardProps {
   variant?: keyof typeof variantStyles;
   /** Small caps line above the title, e.g. the product type ("Наполнители"). */
   eyebrow?: string;
-  /** e.g. "6 л / 2,5 кг". */
-  volume?: string;
-  /** Product type, shown after the volume from `tablet` up, e.g. "комкующийся". */
-  kind?: string;
   /** Photo background; pick the product line's color. */
   tint?: CardTint;
   image?: CardImage;
@@ -70,8 +69,6 @@ export function ProductCard({
   href,
   variant = "feature",
   eyebrow,
-  volume,
-  kind,
   tint = "neutral",
   image,
   imageCaption,
@@ -82,7 +79,9 @@ export function ProductCard({
 }: ProductCardProps) {
   // An empty label (e.g. a product with no volume/variant data) would
   // otherwise render as a blank colored pill.
-  const tags = tagsProp.filter((tag) => tag.label.trim());
+  const allTags = tagsProp.filter((tag) => tag.label.trim());
+  const tags = allTags.slice(0, MAX_VISIBLE_TAGS);
+  const hiddenLabels = allTags.slice(MAX_VISIBLE_TAGS).map((tag) => tag.label);
   const styles = variantStyles[variant];
 
   return (
@@ -141,13 +140,7 @@ export function ProductCard({
         >
           {name}
         </h3>
-        {volume && (
-          <p className="text-text-muted tablet:text-sm text-xs [overflow-wrap:anywhere]">
-            {volume}
-            {kind && <span className="tablet:inline hidden"> · {kind}</span>}
-          </p>
-        )}
-        {tags.length > 0 && (
+        {allTags.length > 0 && (
           <ul className="tablet:gap-2 flex flex-wrap gap-1.5">
             {tags.map((tag) => (
               <li key={tag.label}>
@@ -160,6 +153,14 @@ export function ProductCard({
                 </Badge>
               </li>
             ))}
+            {hiddenLabels.length > 0 && (
+              <li>
+                <Badge title={hiddenLabels.join(", ")} className={styles.tag}>
+                  <span aria-hidden="true">+{hiddenLabels.length}</span>
+                  <span className="sr-only">{hiddenLabels.join(", ")}</span>
+                </Badge>
+              </li>
+            )}
           </ul>
         )}
         <ButtonLink
