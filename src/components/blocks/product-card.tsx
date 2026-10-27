@@ -20,7 +20,7 @@ export interface ProductTag {
 const variantStyles = {
   feature: {
     card: "rounded-panel p-3 tablet:gap-4 tablet:rounded-lg tablet:p-4",
-    media: "w-[130px] rounded-tile tablet:h-[250px] tablet:rounded-md",
+    media: "w-[130px] rounded-tile tablet:aspect-[4/5] tablet:rounded-md",
     body: "gap-2 tablet:gap-3",
     title: "text-h3",
     tag: "px-2.75 py-1.5 text-[11px] tablet:px-3.25 tablet:py-1.75 tablet:text-xs",
@@ -28,7 +28,8 @@ const variantStyles = {
   },
   catalog: {
     card: "rounded-card-sm p-3 tablet:gap-3.5 tablet:rounded-md tablet:p-4",
-    media: "w-[120px] rounded-photo-sm tablet:h-[210px] tablet:rounded-photo",
+    media:
+      "w-[120px] rounded-photo-sm tablet:aspect-[4/5] tablet:rounded-photo",
     body: "gap-2 tablet:gap-2.5",
     title:
       "text-base leading-[1.24] font-medium tablet:min-h-12 tablet:text-[19px]",

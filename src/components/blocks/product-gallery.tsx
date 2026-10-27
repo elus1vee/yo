@@ -138,7 +138,7 @@ export function ProductGallery({ images, label }: ProductGalleryProps) {
     <div className="tablet:gap-3.5 flex min-w-0 flex-col gap-3">
       <div
         className={cn(
-          "tablet:h-[440px] tablet:rounded-lg rounded-panel-sm relative h-[340px] overflow-hidden",
+          "tablet:rounded-lg rounded-panel-sm relative aspect-[4/5] overflow-hidden",
           cardTintClass[active.tint],
         )}
       >
@@ -167,7 +167,7 @@ export function ProductGallery({ images, label }: ProductGalleryProps) {
                     revealThumb(event.currentTarget.parentElement!);
                   }}
                   className={cn(
-                    "tablet:size-[100px] rounded-photo-sm block size-[76px] border-2 p-0 transition-colors",
+                    "tablet:w-20 rounded-photo-sm block aspect-[4/5] w-[61px] border-2 p-0 transition-colors",
                     "focus-ring",
                     image.id === active.id
                       ? "border-primary"
