@@ -18,8 +18,9 @@ RUN npm run build
 
 FROM base AS runner
 ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0
-# Admin uploads land in /app/media — mounted as a volume in docker-compose.yml.
-RUN mkdir -p /app/media && chown node:node /app/media
+# Admin uploads land in /app/media and resized images (next/image) in
+# /app/.next/cache — both mounted as volumes in docker-compose.yml.
+RUN mkdir -p /app/media /app/.next/cache && chown node:node /app/media /app/.next/cache
 COPY --from=build --chown=node:node /app/.next/standalone ./
 COPY --from=build --chown=node:node /app/.next/static ./.next/static
 COPY --from=build --chown=node:node /app/public ./public

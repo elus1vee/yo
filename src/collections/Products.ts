@@ -14,6 +14,8 @@ const tintOptions = [
 export const Products: CollectionConfig = {
   slug: "products",
   labels: { singular: "Товар", plural: "Товары" },
+  // Drag-and-drop order in the admin list; the storefront sorts by it (`_order`).
+  orderable: true,
   admin: {
     useAsTitle: "title",
     defaultColumns: ["title", "categoryAnimal", "categoryType", "_status"],

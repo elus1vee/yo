@@ -28,6 +28,17 @@ export const mediaImage = (media: Media | number | null | undefined) =>
     ? { src: media.url, alt: media.alt }
     : undefined;
 
+/**
+ * Photo for a product card: the 800px "card" size Payload generates on upload
+ * (~100 KB) instead of the original (up to 2560px). next/image resizes whatever
+ * it is given on the first request, so a smaller source keeps that cheap on a
+ * small server. Falls back to the original for files without the size.
+ */
+export const cardImage = (media: Media | number | null | undefined) =>
+  media && typeof media === "object" && media.url
+    ? { src: media.sizes?.card?.url || media.url, alt: media.alt }
+    : undefined;
+
 /** Distinct, non-empty volumes/weights, in first-seen order. */
 export function volumeValues(variants: Product["variants"]) {
   const seen = new Set<string>();
@@ -46,7 +57,7 @@ export function productCardOf(product: Product): ProductCardProps {
     name: product.title,
     href: `/catalog/${product.slug}`,
     tint: product.tint,
-    image: mediaImage(product.images?.[0]),
+    image: cardImage(product.images?.[0]),
     badge: product.badge ?? undefined,
     tags: volumes.map((label, i) => ({
       label,
@@ -59,7 +70,7 @@ export function productCardOf(product: Product): ProductCardProps {
 
 /** Catalog-listing shape (catalog page, product page's "related" grid). */
 export function catalogProductOf(product: Product): CatalogProduct {
-  const image = mediaImage(product.images?.[0]);
+  const image = cardImage(product.images?.[0]);
   return {
     slug: product.slug,
     name: product.title,

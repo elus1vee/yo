@@ -28,7 +28,7 @@ const RELATED_COUNT = 4;
 // Products
 // ---------------------------------------------------------------------------
 
-/** 4 cards for the home page: featured products first, latest ones fill the rest. */
+/** 4 cards for the home page: featured products first, the rest by the admin's manual order. */
 export async function getFeaturedProducts(
   limit = 4,
 ): Promise<ProductCardProps[]> {
@@ -36,7 +36,7 @@ export async function getFeaturedProducts(
   const featured = await payload.find({
     collection: "products",
     where: { featured: { equals: true } },
-    sort: "-createdAt",
+    sort: "_order",
     limit,
     overrideAccess: false,
   });
@@ -46,7 +46,7 @@ export async function getFeaturedProducts(
   const rest = await payload.find({
     collection: "products",
     where: { id: { not_in: featured.docs.map((p) => p.id) } },
-    sort: "-createdAt",
+    sort: "_order",
     limit: limit - featured.docs.length,
     overrideAccess: false,
   });
@@ -58,7 +58,7 @@ export async function getCatalogProducts(): Promise<CatalogProduct[]> {
   const payload = await getCms();
   const { docs } = await payload.find({
     collection: "products",
-    sort: "title",
+    sort: "_order",
     limit: 200,
     depth: 1,
     overrideAccess: false,
@@ -95,7 +95,7 @@ async function relatedProductsOf(
         { id: { not_equals: excludeId } },
       ],
     },
-    sort: "-createdAt",
+    sort: "_order",
     limit: RELATED_COUNT,
     depth: 1,
     overrideAccess: false,
@@ -111,7 +111,7 @@ async function relatedProductsOf(
         { id: { not_in: sameType.docs.map((p) => p.id) } },
       ],
     },
-    sort: "-createdAt",
+    sort: "_order",
     limit: RELATED_COUNT - sameType.docs.length,
     depth: 1,
     overrideAccess: false,

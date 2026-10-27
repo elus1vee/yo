@@ -149,6 +149,7 @@ export interface UserAuthOperations {
  */
 export interface Product {
   id: number;
+  _order?: string | null;
   title: string;
   /**
    * Заполняется автоматически из названия — можно оставить пустым. Свой вариант: латиница, цифры и дефисы, например tofu-peach
@@ -683,6 +684,7 @@ export interface PayloadMigration {
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
+  _order?: T;
   title?: T;
   slug?: T;
   featured?: T;

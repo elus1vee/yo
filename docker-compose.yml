@@ -46,6 +46,8 @@ services:
       SMTP_FROM: ${SMTP_FROM:-}
     volumes:
       - yo-media:/app/media
+      # Resized images; without it they are rebuilt (slowly) after every deploy.
+      - yo-next-cache:/app/.next/cache
 
   caddy:
     image: caddy:2
@@ -68,5 +70,6 @@ services:
 volumes:
   yo-postgres:
   yo-media:
+  yo-next-cache:
   caddy-data:
   caddy-config:
